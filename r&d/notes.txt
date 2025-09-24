@@ -1,0 +1,24 @@
+Only one operation can be performed per RISCV instruction
+
+    This means if you have a complex C line like `f=(a+b)-(c+d)`; The compiler must break this statement up into three seperate instructions, ie
+        `add t0, a, b;`
+        `add t1, c, d;`
+        `sub f, t0, t1;`
+    This creates two implicit variables.
+
+Register File Info
+    Example command: add x1, x0, x3
+    To implement this command the register file will have a mux that connects to each register in the file and send the correct output for A, B (in this case x0 and x3)
+
+    Since a Dflop can only store one bit for one cycle we need a new method to store info in a register.  To do this we add a mux to the front of a Dflop with two inputs 
+
+
+Instruction memory: For instructions(duh)
+    INPUT: read address from program counter
+    OUTPUT: word length instruction fed to different sections
+
+Data memory: For data(duh^2)
+
+make sure to install riscv64Linux
+
+

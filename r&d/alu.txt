@@ -1,0 +1,9 @@
+INPUTS: 32bit A, 32bit B, 1byte func(might change later)
+OUTPUT: 32bit OUTPUT
+
+TopLevel Mux decides which module to send inputs to, this is decided by the 1byte func selector 
+
+Barrel Shifter: rotating and shifting functions are stored in a box inside the ALU
+
+    Logical Shift Right: Given an 32bit number, a 32 bit| 1 out multiplexer with a word Selector to choose what the given offset is. 
+
