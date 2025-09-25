@@ -1,0 +1,78 @@
+m255
+K4
+z2
+!s11f MIXED_VERSIONS
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/sjols/Desktop/veriVerto
+valu32
+Z1 !s110 1758765683
+!i10b 1
+!s100 _E4ZnFXB`7M<R_iRI:3N21
+Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
+I<`dHLZ3hNLkd06TmTmjmj1
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+R0
+w1758765349
+8.\src\alu32.v
+F.\src\alu32.v
+!i122 4
+L0 1 14
+Z4 OV;L;2020.1;71
+r1
+!s85 0
+31
+Z5 !s108 1758765683.000000
+!s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
+Z6 !s90 .\src\alu1.v|.\src\alu32.v|.\tb\alu_tb.v|
+!i113 1
+Z7 tCvgOpt 0
+valu32_tb
+R1
+!i10b 1
+!s100 4nhln20?Fk[PG<7QHJ7Xd3
+R2
+I1fJeU9YBe9CBlhiNd56H72
+R3
+R0
+w1758765441
+8.\tb\alu_tb.v
+F.\tb\alu_tb.v
+!i122 4
+L0 3 62
+R4
+r1
+!s85 0
+31
+R5
+Z8 !s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
+R6
+!i113 1
+R7
+vBitALU
+R1
+!i10b 1
+!s100 R2_b_K>fShmdN2Gb>`1Hg0
+R2
+IlIOkW8hHEl[Vg=ZOCFVaT1
+R3
+R0
+w1758765347
+8.\src\alu1.v
+F.\src\alu1.v
+!i122 4
+L0 1 23
+R4
+r1
+!s85 0
+31
+R5
+R8
+R6
+!i113 1
+R7
+n@bit@a@l@u
