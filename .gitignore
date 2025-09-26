@@ -1,0 +1,33 @@
+# Compiled simulation outputs
+work/
+vsim.wlf
+transcript
+*.log
+*.vcd
+*.wlf
+
+# ModelSim configs
+modelsim.ini
+*.ini.bak
+
+# Temporary build files
+*.o
+*.elf
+*.img
+*.hex
+*.map
+*.out
+
+# Generated dumps
+dumpfile
+*.dump
+
+# Editor/OS files
+*~
+*.swp
+.DS_Store
+Thumbs.db
+
+# R&D scratch
+r&d/*
+!r&d/README.md

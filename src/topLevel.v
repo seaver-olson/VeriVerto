@@ -1,2 +1,1 @@
-memory2c instructMem();
-regfile regFile();
+alu32 ALU();
