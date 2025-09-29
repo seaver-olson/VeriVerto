@@ -10,5 +10,5 @@ module alu32 (input wire[31:0] A, input wire[31:0] B, input wire[2:0]  Op, outpu
         end
     endgenerate
     assign Cout = carry[31];
-    assign Zero = (Result == 32'b0);//useful to have for branching and ==
+    assign Zero = (Result == 32'b0);//useful for branching and ==
 endmodule
