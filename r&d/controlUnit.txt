@@ -1,0 +1,46 @@
+The Control Unit looks at the opcode AKA the lowest 7 bits(in RISCV) and produces the corresponding control signal
+
+it does NOT computer, it sets flags
+
+To be more specific, the output of the control unit consist of 
+    two 1-bit signals that are used to control multiplexors(ALUSrc and MemtoReg)
+    three signals for controlling reads and writes in the register file and data memory(RegWrite, MemRead, MemWrite)
+    one 1-bit signal to check if branch needs to happen
+    one 2-bit control signal for the ALU(ALUOp)
+
+An AND Gate is used to combine the branch control signal and the Zero output from the ALU
+    This AND gate controls the selection of the next PC (IMPORTANT DO NOT FORGET TO IMPLEMENT LATER SEAVER)
+
+Control Unit Output dataPaths:
+    Branch:
+
+    MemRead:
+        Tells the Data Memory to perform a read operation
+
+        When is it 1:
+            Load instructions
+        When is it 0:
+            everything else
+        Output of memory goes through the MemToReg mux to decide wheter to write to memory data or ALU result back to register file
+
+    MemtoReg:
+        See above
+
+    ALUOp:
+        Selects the A or L that the ALU performs
+    MemWrite:
+
+    ALUSrc:
+
+    RegWrite:
+        Tells the Register File if it needs to write a value into one of the registers after instruction execution
+
+        When is it 1:
+            Arithmetic instruction i.e ADD, ADDI, SUB, AND, OR
+            Loads: data from memory goes into register
+            Jumps: write return address into rd 
+            Upper-immediate instructions: place immediate into rd
+        When is it 0:
+            Stores
+            Branches
+            control flow

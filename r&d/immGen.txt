@@ -1,0 +1,12 @@
+Instruction Types :
+    R-Type: reg + reg = reg
+    I-Type: reg + immediate = reg
+    S-Type: reg = memory (address = reg address + immediate offset)
+    B-Type: branch offset (PC + immediate offset)
+    U-Type: build large constant (20 bits shifted)
+    J-Type: jump offset (PC + immediate)
+
+
+DataPath LifeCycle:
+    Control Unit looks at opcode to decide the type of Instruction
+    

@@ -28,6 +28,3 @@ dumpfile
 .DS_Store
 Thumbs.db
 
-# R&D scratch
-r&d/*
-!r&d/README.md
