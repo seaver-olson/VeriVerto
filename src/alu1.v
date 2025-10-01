@@ -14,5 +14,5 @@ module BitALU (
                     1'b0;
     
     assign cout = (op == 3'b010 || op == 3'b011) ? (a & b_in) | (b_in & cin) | (a & cin): 1'b0;//needed for multi-bit addition calculations
-
+  
 endmodule

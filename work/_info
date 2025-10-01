@@ -27,10 +27,10 @@ r1
 !s85 0
 31
 Z5 !s108 1758765683.000000
-!s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
-Z6 !s90 .\src\alu1.v|.\src\alu32.v|.\tb\alu_tb.v|
+Z6 !s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
+Z7 !s90 .\src\alu1.v|.\src\alu32.v|.\tb\alu_tb.v|
 !i113 1
-Z7 tCvgOpt 0
+Z8 tCvgOpt 0
 valu32_tb
 R1
 !i10b 1
@@ -49,10 +49,10 @@ r1
 !s85 0
 31
 R5
-Z8 !s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
 R6
-!i113 1
 R7
+!i113 1
+R8
 vBitALU
 R1
 !i10b 1
@@ -71,8 +71,52 @@ r1
 !s85 0
 31
 R5
-R8
 R6
-!i113 1
 R7
+!i113 1
+R8
 n@bit@a@l@u
+vregfile
+Z9 !s110 1759351522
+!i10b 1
+!s100 PRnmHEJ<KK:HE?KOFo1QM2
+R2
+IRBBMP5I70eh8QGzW760lS3
+R3
+R0
+w1759351118
+8src/regfile.v
+Fsrc/regfile.v
+!i122 5
+L0 1 33
+R4
+r1
+!s85 0
+31
+Z10 !s108 1759351522.000000
+!s107 .\tb\regfile_tb.v|src/regfile.v|
+Z11 !s90 src/regfile.v|.\tb\regfile_tb.v|
+!i113 1
+R8
+vtb_regfile
+R9
+!i10b 1
+!s100 CYcHTIeN7WVRGI[ABDJm62
+R2
+ICkFIG5cBDSX[ofX9URLeg1
+R3
+R0
+w1759351413
+8.\tb\regfile_tb.v
+F.\tb\regfile_tb.v
+!i122 5
+L0 4 80
+R4
+r1
+!s85 0
+31
+R10
+Z12 !s107 .\tb\regfile_tb.v|src/regfile.v|
+R11
+!i113 1
+R8

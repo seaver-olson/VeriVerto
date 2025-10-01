@@ -1,7 +1,27 @@
-# vsim alu32_tb 
-# Start time: 21:01:28 on Sep 24,2025
-# Loading work.alu32_tb
-# Loading work.alu32
-# Loading work.BitALU
-# End time: 21:15:18 on Sep 24,2025, Elapsed time: 0:13:50
+# vsim tb_regfile 
+# Start time: 15:45:47 on Oct 01,2025
+# Loading work.tb_regfile
+# Loading work.regfile
+run
+run
+run
+restart
+run
+run
+run
+run
+run
+# ReadReg1 (x5) = a5a5a5a5 (expect A5A5A5A5)
+run
+run
+# ReadReg1 (x0) = 00000000 (expect 00000000)
+run
+run
+# ReadReg1 (x10) = 12345678 (expect 12345678)
+# ReadReg2 (x5)  = a5a5a5a5 (expect A5A5A5A5)
+# ** Note: $stop    : ./tb/regfile_tb.v(81)
+#    Time: 45 ns  Iteration: 0  Instance: /tb_regfile
+# Break in Module tb_regfile at ./tb/regfile_tb.v line 81
+# Break key hit
+# End time: 16:00:45 on Oct 01,2025, Elapsed time: 0:14:58
 # Errors: 0, Warnings: 0
