@@ -16,7 +16,10 @@ module regfile(
     //writes only happen on positive clock edge to sync
     always @(posedge clk) begin
         if (!rst) begin
-
+            //if opCode and system isn't trying to write r0
+            if (rd_we && (writeReg != 5'b0)) begin
+                regs[writeReg] <= writeData;//non-blocking assignment
+            end
         end else begin
             //account for garbage starting in the registers
             for (counter=0;counter<32;counter=counter+1) begin
@@ -25,9 +28,6 @@ module regfile(
         end
     end
 
-    assign regOut1;
-    assign regOut2;
-
-
-
+    assign regOut1 = ;
+    assign regOut2 = ;
 endmodule
