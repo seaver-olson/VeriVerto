@@ -1,7 +1,7 @@
 //memory2c had a lot of overhead as it accounted for writing as well however other than the inital load of instructions instruction memory should be read only
 module instructionMemory(
     input wire [31:0] readAddress, //hook to PC later
-    output reg [31:0] instruction
+    output wire [31:0] instruction
 );
     reg [31:0] memory [0:16383];//64K bytes of memory
 
@@ -14,6 +14,6 @@ module instructionMemory(
     end
 
     always @(*) begin
-        instruction = memory[readAddress[15:2]]; //word - 2 bit offset
+        assign instruction = memory[readAddress[15:2]]; //word - 2 bit offset
     end
 endmodule

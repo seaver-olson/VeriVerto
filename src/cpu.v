@@ -10,7 +10,7 @@ module cpu(input wire clk, input wire rst);
     wire MemRead;
     wire MemWrite;
     wire Branch;
-    wire ALUOp;
+    wire [1:0] ALUOp;
     wire [2:0] ALUControl;
 
     wire [4:0] readReg1 = instructions[19:15];
@@ -31,6 +31,11 @@ module cpu(input wire clk, input wire rst);
 
     wire [31:0] dmemALU_wb;//write back mux for data memory and ALU
 
+    //instruction memory 
+    instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
+    //control unit
+    wire [6:0] opcode = instructions[6:0];
+    controlUnit ctrlUnit(.opcode(opcode), .Branch(Branch), .MemtoRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
 
