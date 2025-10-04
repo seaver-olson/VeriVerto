@@ -2,8 +2,6 @@ module cpu(input wire clk, input wire rst);
 
     reg [31:0] pc;
 
-    wire [31:0] instructions;
-
     wire ALUSrc;
     wire MemtoReg;
     wire RegWrite;
@@ -13,18 +11,25 @@ module cpu(input wire clk, input wire rst);
     wire [1:0] ALUOp;
     wire [2:0] ALUControl;
 
+    wire [31:0] instructions;
     wire [4:0] readReg1 = instructions[19:15];
     wire [4:0] readReg2 = instructions[24:20];
     wire [4:0] writeReg = instructions[11:7];
+    wire [6:0] opcode = instructions[6:0];
+    
     wire [31:0] regOut1;
     wire [31:0] regOut2;
 
     // Immediate generator (fix later)
     wire [31:0] immgen_out;
 
+    //ALU + ALU Control Unit wires
+    wire [2:0] funct3 = instructions[14:2];
+    wire funct7 = instructions[30];
     wire [31:0] ALU_Bin;//for mux between regfile and immgen
-    wire [31:0] ALU_out;
+    wire [31:0] ALU_out;//dont forget to set this to dataMemory
     wire alu_zero;//zero flag for equalities
+
 
     //data memory 
     wire[31:0] dmem_out;
@@ -33,9 +38,9 @@ module cpu(input wire clk, input wire rst);
 
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
-    //control unit
-    wire [6:0] opcode = instructions[6:0];
+    //control unit + ALU control unit
     controlUnit ctrlUnit(.opcode(opcode), .Branch(Branch), .MemtoRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
 

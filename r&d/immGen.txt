@@ -1,0 +1,28 @@
+Every RISCV Instruction is 32bits(1 word)
+
+R-Type:
+    Register to Register (no immediate)
+    Example: add, sub, and, or, xor, sll, srl, slt, sra, sltu
+
+    Instruction[6:0]   = opcode   (7 bits)
+    Instruction[11:7]  = rd       (5 bits) - destination register (0-31, 2^5 = 32)
+    Instruction[14:12] = funct3   (3 bits) - function code (helps specify operation)
+    Instruction[19:15] = rs1      (5 bits) - source register 1
+    Instruction[24:20] = rs2      (5 bits) - source register 2
+    Instruction[31:25] = funct7   (7 bits) - function code (distinguishes add/sub, etc.)
+
+I-Type:
+    Instruction[6:0]   = opcode   (7 bits)
+    Instruction[11:7]  = rd       (5 bits) - destination register
+    Instruction[14:12] = funct3   (3 bits) - function code
+    Instruction[19:15] = rs1      (5 bits) - source register 1
+    Instruction[31:20] = imm[11:0] (12 bits) - immediate value (sign-extended to 32 bits)
+
+S-Type:
+    Instruction[6:0]   = opcode     (7 bits)
+    Instruction[11:7]  = imm[4:0]   (5 bits) - immediate lower bits
+    Instruction[14:12] = funct3     (3 bits) - function code
+    Instruction[19:15] = rs1        (5 bits) - base address register
+    Instruction[24:20] = rs2        (5 bits) - source register (data to store)
+    Instruction[31:25] = imm[11:5]  (7 bits) - immediate upper bits
+

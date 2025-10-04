@@ -1,0 +1,18 @@
+ALU Design Notes (RISCV)
+
+Inputs:
+    A: 32-bit int 
+    B: 32-bit int
+    func: 8-bit function selector (ALUControl)
+
+Output:
+    Result: 32-bit int 
+
+
+ALU Control unit
+    ALUOp (2bits) - grab from main control unit 
+    funct3 (3bits) - from instruction[14:12] - specific operation
+    funct7 (1bit) from instruction[30] negative control
+
+    Output: ALUControl (3bits) - operation code the ALU recieves
+    

@@ -1,0 +1,13 @@
+Inputs:
+    - Address (ALU Output)
+    - Write Data (regOut2)
+    - MemWrite - When do I write
+    - MemRead - When do I read
+    - clock - for sync
+
+Output:
+    - Read Data 
+
+According to page 250 of CompOrgandDesign (RiscV), a data race occurs between two threads at the same spot in memory if at least one is a write and they occur one after another
+
+When writing you need to make sure the address and data are stable, for this writes can only happen on posedge
