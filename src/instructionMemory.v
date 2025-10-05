@@ -4,16 +4,16 @@ module instructionMemory(
     output wire [31:0] instruction
 );
     reg [31:0] memory [0:16383];//64K bytes of memory
-
+    integer i;
+    
     initial begin
-        integer i;
+        
         for (i = 0; i < 16384; i=i+1) begin
             memory[i] = 32'd0;
         end
         $readmemh("loadfile_all.img", memory);
     end
 
-    always @(*) begin
-        assign instruction = memory[readAddress[15:2]]; //word - 2 bit offset
-    end
+    assign instruction = memory[readAddress[15:2]]; //word - 2 bit offset
+
 endmodule

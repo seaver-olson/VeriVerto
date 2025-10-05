@@ -7,12 +7,11 @@ module dataMemory(
     output wire [31:0] readData
 );
     reg [31:0] memory [0:16383];
-
+    integer i;
     //init memory and delete garbage
     initial begin
-        integer i;
         for (i = 0; i < 16384; i = i + 1) begin
-            memory[i] - 32'd0 //note: later look into a calloc like command
+            memory[i] = 32'd0; //note: later look into a calloc like command
         end
     end
 

@@ -10,7 +10,8 @@ module controlUnit(
 );
     always @(*) begin
         case (instruction)
-
+            default:
+                $display("Test");
         endcase
     end
 endmodule

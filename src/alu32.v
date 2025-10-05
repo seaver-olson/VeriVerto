@@ -21,7 +21,7 @@ module ALU32 (
             4'b0001: Result = A | B;                            
             4'b0010: Result = sum;                                
             4'b0110: Result = sum;                                
-            4'b0111: Result = ($signed(A) < $signed(B)) ? 32'h1 : 32'h0; 
+            4'b0111: Result = ($signed(A) < $signed(B)) ? 32'h1 : 32'h0;//this is my first compromise. For now I do not want to venture into signed slt so I will let verilog synt
             4'b1100: Result = ~(A | B);    
             default: Result = 32'h00000000;
         endcase

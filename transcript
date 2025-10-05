@@ -1,27 +1,76 @@
-# vsim tb_regfile 
-# Start time: 15:45:47 on Oct 01,2025
-# Loading work.tb_regfile
+# vsim tb_cpu 
+# Start time: 00:27:49 on Oct 05,2025
+# Loading work.tb_cpu
+# Loading work.cpu
+# Loading work.instructionMemory
+# Loading work.controlUnit
+# Loading work.aluControl
 # Loading work.regfile
+# ** Error: (vsim-3033) Instantiation of 'ALU' failed. The design unit was not found.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut File: src/cpu.v Line: 51
+#         Searched libraries:
+#             C:/Users/sjols/Desktop/veriVerto/work
+# Loading work.dataMemory
+# Error loading design
+# End time: 00:27:49 on Oct 05,2025, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+vsim work.tb_cpu
+# vsim work.tb_cpu 
+# Start time: 00:27:56 on Oct 05,2025
+# Loading work.tb_cpu
+# Loading work.cpu
+# Loading work.instructionMemory
+# Loading work.controlUnit
+# Loading work.aluControl
+# Loading work.regfile
+# ** Error: (vsim-3033) Instantiation of 'ALU' failed. The design unit was not found.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut File: src/cpu.v Line: 51
+#         Searched libraries:
+#             C:/Users/sjols/Desktop/veriVerto/work
+# Loading work.dataMemory
+# Error loading design
+# End time: 00:27:56 on Oct 05,2025, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0
+vsim work.alu32
+# vsim work.alu32 
+# Start time: 00:28:09 on Oct 05,2025
+# Loading work.alu32
+# Loading work.BitALU
+vsim work.ALU32
+# End time: 00:28:21 on Oct 05,2025, Elapsed time: 0:00:12
+# Errors: 0, Warnings: 0
+# vsim work.ALU32 
+# Start time: 00:28:21 on Oct 05,2025
+# Loading work.ALU32
 run
 run
 run
+run
+run
+run
+run
+run
+run
+run
+run
+add wave -position end  sim:/ALU32/A
+add wave -position end  sim:/ALU32/B
+add wave -position end  sim:/ALU32/Op
+add wave -position end  sim:/ALU32/Result
+add wave -position end  sim:/ALU32/Zero
+add wave -position end  sim:/ALU32/Cout
+add wave -position end  sim:/ALU32/B_in
+add wave -position end  sim:/ALU32/sum
+add wave -position end  sim:/ALU32/carry
+add wave -position end  sim:/ALU32/i
 restart
 run
+# GetModuleFileName: The specified module could not be found.
+# 
+# 
 run
 run
 run
 run
-# ReadReg1 (x5) = a5a5a5a5 (expect A5A5A5A5)
-run
-run
-# ReadReg1 (x0) = 00000000 (expect 00000000)
-run
-run
-# ReadReg1 (x10) = 12345678 (expect 12345678)
-# ReadReg2 (x5)  = a5a5a5a5 (expect A5A5A5A5)
-# ** Note: $stop    : ./tb/regfile_tb.v(81)
-#    Time: 45 ns  Iteration: 0  Instance: /tb_regfile
-# Break in Module tb_regfile at ./tb/regfile_tb.v line 81
-# Break key hit
-# End time: 16:00:45 on Oct 01,2025, Elapsed time: 0:14:58
+# End time: 00:29:11 on Oct 05,2025, Elapsed time: 0:00:50
 # Errors: 0, Warnings: 0
