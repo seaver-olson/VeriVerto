@@ -15,4 +15,5 @@ ALU Control unit
     funct7 (1bit) from instruction[30] negative control
 
     Output: ALUControl (3bits) - operation code the ALU recieves
+
     

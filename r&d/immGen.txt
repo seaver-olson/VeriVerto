@@ -1,5 +1,17 @@
 Every RISCV Instruction is 32bits(1 word)
 
+opcode, funct3 and funct7 will all be in the same spots for each instruction type
+
+The first register operand is always in bit positions 19:15(rs1) for R-Type instructions and branch instructions
+    - This field also specifies the base register for load and store instructions
+
+The second register operand is always in bit positions 24:20(rs2) for R-Type instructions and branch instructions.
+    - This field also specifies the register operand that gets copied to memory for store instructions.
+
+Another operand can also be 12-bit offset for branch or load-store instructions
+
+The dest reg is always in bit positions 11:7 (rd) for R-type instructions and load instructions
+
 R-Type:
     Register to Register (no immediate)
     Example: add, sub, and, or, xor, sll, srl, slt, sra, sltu

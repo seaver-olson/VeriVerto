@@ -1,0 +1,33 @@
+
+by definition the following effect table is only true on positive clock edges since they are writes
+
+Effect Table:
+    RegWrite:
+        effect when deasserted:
+            None
+        effect when asserted:
+            The register on the Write register input is written with the value on the Write data input
+    ALUSrc:
+        effect when deasserted:
+            The second ALU operand comes from the second register file output (Read Data 2)
+        effect when asserted:
+            The second ALU operand is the sign-extended 12 bits of the instruction(immgen)
+    PCSrc:
+        effect when deasserted:
+
+        effect when asserted:
+
+    MemRead:
+        effect when deasserted:
+            None
+        effect when asserted:
+
+    MemWrite:
+        effect when deasserted:
+            None
+        effect when asserted:
+
+    MemtoReg:
+        effect when deasserted:
+
+        effect when asserted:
