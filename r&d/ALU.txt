@@ -8,12 +8,10 @@ Inputs:
 Output:
     Result: 32-bit int 
 
-
+  
 ALU Control unit
     ALUOp (2bits) - grab from main control unit 
     funct3 (3bits) - from instruction[14:12] - specific operation
     funct7 (1bit) from instruction[30] negative control
 
-    Output: ALUControl (3bits) - operation code the ALU recieves
-
-    
+    Output: ALUControl (4bits) - Switched to 4bits to match pattersons

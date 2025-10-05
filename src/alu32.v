@@ -1,14 +1,33 @@
-module alu32 (input wire[31:0] A, input wire[31:0] B, input wire[2:0]  Op, output wire[31:0] Result, output wire Zero, output wire Cout);
+module ALU32 (
+    input  wire [31:0] A, 
+    input  wire [31:0] B, 
+    input  wire [3:0]  Op,
+    output reg  [31:0] Result,
+    output wire Zero,
+    output reg  Cout
+);
+    wire [31:0] B_in;
+    wire [31:0] sum;
     wire [31:0] carry;
-    //first bit
-    BitALU alu_bit0 (.a(A[0]), .b(B[0]),.cin(1'b0), .op(Op),.result(Result[0]),.cout(carry[0]));
-    //generate bit 1-31
-    genvar i;
-    generate
-        for (i = 1; i < 32; i = i + 1) begin
-            BitALU alu_bit (.a(A[i]), .b(B[i]),.cin(carry[i-1]), .op(Op),.result(Result[i]),.cout(carry[i]));
-        end
-    endgenerate
-    assign Cout = carry[31];
-    assign Zero = (Result == 32'b0);//useful for branching and ==
+    integer i;
+
+    assign B_in = (Op == 4'b0110 || Op == 4'b0111) ? ~B : B;
+
+    assign {Cout, sum} = A + B_in + ((Op == 4'b0110 || Op == 4'b0111) ? 1'b1 : 1'b0);
+
+    always @(*) begin
+        case (Op)
+            4'b0000: Result = A & B;                           
+            4'b0001: Result = A | B;                            
+            4'b0010: Result = sum;                                
+            4'b0110: Result = sum;                                
+            4'b0111: Result = ($signed(A) < $signed(B)) ? 32'h1 : 32'h0; 
+            4'b1100: Result = ~(A | B);    
+            default: Result = 32'h00000000;
+        endcase
+    end
+
+    // Zero flag for branching
+    assign Zero = (Result == 32'h00000000);
+
 endmodule

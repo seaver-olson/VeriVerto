@@ -22,3 +22,5 @@ Data memory: For data(duh^2)
 make sure to install riscv64Linux
 
 x0 is reserved for 0 so that CPU does not need to call immediate generator for 0
+
+Design Principle 3: Good design demands good compromises

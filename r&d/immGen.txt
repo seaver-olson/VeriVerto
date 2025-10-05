@@ -1,5 +1,8 @@
 Every RISCV Instruction is 32bits(1 word)
 
+inputs: instruction 32 bits 
+output: immgenOut 32 bits
+
 opcode, funct3 and funct7 will all be in the same spots for each instruction type
 
 The first register operand is always in bit positions 19:15(rs1) for R-Type instructions and branch instructions
