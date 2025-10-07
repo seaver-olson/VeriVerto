@@ -27,7 +27,7 @@ A single-cycle RISC-V CPU implementation in Verilog
     - [x] Word-aligned addressing
     - [x] Synchronous write, asynchronous read
     - [x] MemRead/MemWrite control
-- [x] **ALU Control Unit**
+- [x] ALU Control Unit
     - [x] Two-level control decode
     - [x] ALUOp interpretation
     - [x] funct3/funct7 decoding
@@ -40,11 +40,11 @@ A single-cycle RISC-V CPU implementation in Verilog
   - [ ] J-type immediate extraction
   - [ ] Sign extension logic
 - [ ] Control Unit
-  - [ ] Opcode decoding
+  - [x] Opcode decoding
   - [ ] Control signal generation (ALUSrc, MemtoReg, RegWrite, etc.)
   - [ ] Branch control logic
 - [ ] Program Counter (PC)
-  - [ ] PC increment (+4)
+  - [x] PC increment (+4)
   - [ ] Branch target calculation
   - [ ] Jump target calculation
-  - [ ] PC update logic
+  - [x] PC update logic
