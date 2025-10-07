@@ -2,16 +2,16 @@ module alu32 (
     input wire[31:0] A, 
     input wire[31:0] B, 
     input wire[3:0]  Op, //4-bit opcode to match textbook 
-    input wire [1:0]
     output wire[31:0] Result, 
     output wire Zero, 
     output wire Cout
 );
+    wire slt;
     wire [31:0] carry;
     //first bit
     BitALU alu_bit0 (.a(A[0]), 
                     .b(B[0]),
-                    .cin((Op==4'b0110) ? 1'b1 : 1'b0),
+                    .cin((Op==4'b0110 || Op == 4'b0111) ? 1'b1 : 1'b0),
                     .op(Op),
                     .result(Result[0]),
                     .cout(carry[0])
@@ -23,6 +23,7 @@ module alu32 (
             BitALU alu_bit (.a(A[i]), .b(B[i]),.cin(carry[i-1]), .op(Op),.result(Result[i]),.cout(carry[i]));
         end
     endgenerate
+    assign slt = (carry[30] ^ carry[31]) ^ Result[31]; //fix
     assign Cout = carry[31];
     assign Zero = (Result == 32'b0);//useful for branching and ==
 endmodule

@@ -44,7 +44,7 @@ module cpu(input wire clk, input wire rst);
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
     //control unit + ALU control unit
-    controlUnit ctrlUnit(.opcode(opcode), .Branch(Branch), .MemtoRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    controlUnit ctrlUnit(.opcode(opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
