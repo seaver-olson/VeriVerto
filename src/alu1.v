@@ -1,5 +1,3 @@
-//no longer in use, bit slicing turned out to be way too slow
-
 module BitALU (
     input  wire a,
     input  wire b,  

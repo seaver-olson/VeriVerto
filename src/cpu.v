@@ -39,7 +39,8 @@ module cpu(input wire clk, input wire rst);
 
     //write back mux
     assign dmemALU_wb = (MemtoReg) ? dmem_out : ALU_out;
-
+    //pc Note: I have not implemented branching yet since the immgen is still in progress
+    pc programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .branchDest(immgen_out), .pc(pc));
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
     //control unit + ALU control unit

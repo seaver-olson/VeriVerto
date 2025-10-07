@@ -1,0 +1,13 @@
+SIMD (Single Instruction Multiple Data)
+
+
+Basic Concept:
+    128-bit register = [8bit*16];
+
+    Instruction 1: ADD
+        -> Element 0: data[0] + data[1]
+        -> ...
+        -> Element 16: data[30] + data[31]
+
+    All 16 additions happen at the same time
+

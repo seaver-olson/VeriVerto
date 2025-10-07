@@ -1,0 +1,7 @@
+PC Register -> two datapaths
+    Instruction Memory (fetch instruction)
+    Add +4 (next line)
+
+Two Muxes connected to PC logic:
+    1. Add MUX : selects between PC+4 or branch if instruction requires
+    2. Shift left 1 / add sum : final pc selection
