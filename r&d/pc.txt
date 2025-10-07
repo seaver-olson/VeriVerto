@@ -5,3 +5,24 @@ PC Register -> two datapaths
 Two Muxes connected to PC logic:
     1. Add MUX : selects between PC+4 or branch if instruction requires
     2. Shift left 1 / add sum : final pc selection
+
+Jumping vs Branching:
+    Jumps:
+        Unconditionally change the PC to a new address
+        use cases: function calls, returns, Unconditional loops 
+        Instructions:
+            JAL - jump and link
+                Sets rd = PC + 4, then jumps to PC + offset 
+
+            JALR - jump and link register
+                sets rd = PC + 4, then jumps to rs1 + offset. Used for function returns
+    Branches:
+        Coditionally change the PC based on a comparison
+        use cases: if, while, for or conditional loops
+        Instructions:
+            BEQ - Branch if equal
+            BNE - Branch if not equal 
+            BLT - Branch if less than 
+            BGE - Branch if greater or equal
+            BLTU - Branch if less than (unsigned)
+            BGEU - Branch if greater or equal (unsigned)

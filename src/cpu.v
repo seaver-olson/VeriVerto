@@ -34,7 +34,7 @@ module cpu(input wire clk, input wire rst);
     wire [31:0] dmem_out;
     wire [31:0] dmemALU_wb;//write back mux for data memory and ALU
 
-     //ALU B Input Mux between regfile and immgen
+    //ALU B Input Mux between regfile and immgen
     assign ALU_Bin = (ALUSrc) ? immgen_out : regOut2;
 
     //write back mux

@@ -11,7 +11,7 @@ module controlUnit(
     always @(*) begin
         //I found the instruction opcodes for rv32I systems at https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf
         case (instruction)
-            7'b0110011: begin
+            7'b0110011: begin 
                 Branch = 0;
                 MemRead = 0;
                 MemtoReg = 0;
