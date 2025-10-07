@@ -1,0 +1,8 @@
+1. Immediate addressing, where the operand is a constant within the
+instruction itself.
+2. Register addressing, where the operand is a register.
+3. Base or displacement addressing, where the operand is at the
+memory location whose address is the sum of a register and a
+constant in the instruction.
+4. PC-relative addressing, where the branch address is the sum of the
+PC and a constant in the instruction.
