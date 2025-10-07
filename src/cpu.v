@@ -9,14 +9,13 @@ module cpu(input wire clk, input wire rst);
     wire MemWrite;
     wire Branch;
     wire [1:0] ALUOp;
-    wire [2:0] ALUControl;
+    wire [3:0] ALUControl;
 
     wire [31:0] instructions;
     wire [4:0] readReg1 = instructions[19:15];
     wire [4:0] readReg2 = instructions[24:20];
     wire [4:0] writeReg = instructions[11:7];
-    wire [6:0] opcode = instructions[6:0];
-    
+
     wire [31:0] regOut1;
     wire [31:0] regOut2;
 
@@ -40,11 +39,11 @@ module cpu(input wire clk, input wire rst);
     //write back mux
     assign dmemALU_wb = (MemtoReg) ? dmem_out : ALU_out;
     //pc Note: I have not implemented branching yet since the immgen is still in progress
-    pc programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .branchDest(immgen_out), .pc(pc));
+    pcUnit programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .branchDest(immgen_out), .pc(pc));
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
     //control unit + ALU control unit
-    controlUnit ctrlUnit(.opcode(opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    controlUnit ctrlUnit(.opcode(instruction[6:0]), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));

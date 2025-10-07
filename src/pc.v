@@ -19,7 +19,7 @@ module pcUnit(
         if (rst) begin
             pc <= 32'h0;
         end else begin
-            pc <= pc_next;
+            pc <= pcNext;
         end
     end
 
