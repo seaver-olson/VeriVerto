@@ -5,10 +5,10 @@ module immgen(
     case (instruction[6:0])
         //R-Type
         7'b0110011: begin
-            immgenOut < 32'
+            immgenOut < 32'h0;
         end
-        7b'b0010011 : begin
-
+        7'b0010011 : begin
+            immgenOut = {{20{instruction[31]}}, instruction[31:20]};
         end
         //SB-Type (conditional branches)
         7'b1100111: begin
