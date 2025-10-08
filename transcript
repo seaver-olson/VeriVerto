@@ -1,76 +1,17 @@
 # vsim tb_cpu 
-# Start time: 00:27:49 on Oct 05,2025
+# Start time: 00:20:15 on Oct 08,2025
 # Loading work.tb_cpu
 # Loading work.cpu
+# Loading work.pcUnit
 # Loading work.instructionMemory
 # Loading work.controlUnit
 # Loading work.aluControl
 # Loading work.regfile
-# ** Error: (vsim-3033) Instantiation of 'ALU' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut File: src/cpu.v Line: 51
-#         Searched libraries:
-#             C:/Users/sjols/Desktop/veriVerto/work
-# Loading work.dataMemory
-# Error loading design
-# End time: 00:27:49 on Oct 05,2025, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-vsim work.tb_cpu
-# vsim work.tb_cpu 
-# Start time: 00:27:56 on Oct 05,2025
-# Loading work.tb_cpu
-# Loading work.cpu
-# Loading work.instructionMemory
-# Loading work.controlUnit
-# Loading work.aluControl
-# Loading work.regfile
-# ** Error: (vsim-3033) Instantiation of 'ALU' failed. The design unit was not found.
-#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut File: src/cpu.v Line: 51
-#         Searched libraries:
-#             C:/Users/sjols/Desktop/veriVerto/work
-# Loading work.dataMemory
-# Error loading design
-# End time: 00:27:56 on Oct 05,2025, Elapsed time: 0:00:00
-# Errors: 1, Warnings: 0
-vsim work.alu32
-# vsim work.alu32 
-# Start time: 00:28:09 on Oct 05,2025
 # Loading work.alu32
 # Loading work.BitALU
-vsim work.ALU32
-# End time: 00:28:21 on Oct 05,2025, Elapsed time: 0:00:12
-# Errors: 0, Warnings: 0
-# vsim work.ALU32 
-# Start time: 00:28:21 on Oct 05,2025
-# Loading work.ALU32
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-add wave -position end  sim:/ALU32/A
-add wave -position end  sim:/ALU32/B
-add wave -position end  sim:/ALU32/Op
-add wave -position end  sim:/ALU32/Result
-add wave -position end  sim:/ALU32/Zero
-add wave -position end  sim:/ALU32/Cout
-add wave -position end  sim:/ALU32/B_in
-add wave -position end  sim:/ALU32/sum
-add wave -position end  sim:/ALU32/carry
-add wave -position end  sim:/ALU32/i
-restart
-run
-# GetModuleFileName: The specified module could not be found.
-# 
-# 
-run
-run
-run
-run
-# End time: 00:29:11 on Oct 05,2025, Elapsed time: 0:00:50
-# Errors: 0, Warnings: 0
+# Loading work.dataMemory
+# ** Error (suppressible): (vsim-3053) Illegal output or inout port connection for port 'pc'.
+#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut/programCounter File: src/cpu.v Line: 43
+# Error loading design
+# End time: 00:20:15 on Oct 08,2025, Elapsed time: 0:00:00
+# Errors: 1, Warnings: 0

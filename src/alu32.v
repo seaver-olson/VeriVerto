@@ -3,9 +3,10 @@ module alu32 (
     input wire[31:0] B, 
     input wire[3:0]  Op, //4-bit opcode to match textbook 
     output wire[31:0] Result, 
-    output wire Zero, 
-    output wire Cout
+    output wire Zero
+    //output wire Cout
 );
+    
     wire slt;
     wire [31:0] carry;
     //first bit
@@ -24,6 +25,6 @@ module alu32 (
         end
     endgenerate
     assign slt = (carry[30] ^ carry[31]) ^ Result[31]; //fix
-    assign Cout = carry[31];
+    //assign Cout = carry[31];
     assign Zero = (Result == 32'b0);//useful for branching and ==
 endmodule

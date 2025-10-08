@@ -27,6 +27,7 @@ module cpu(input wire clk, input wire rst);
     wire funct7 = instructions[30];
     wire [31:0] ALU_Bin;//for mux between regfile and immgen
     wire [31:0] ALU_out;//dont forget to set this to dataMemory
+    wire alu_cout;
     wire alu_zero;//zero flag for equalities
 
     //data memory wires
@@ -43,15 +44,12 @@ module cpu(input wire clk, input wire rst);
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
     //control unit + ALU control unit
-    controlUnit ctrlUnit(.opcode(instruction[6:0]), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    controlUnit ctrlUnit(.instruction(instructions[6:0]), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
     //ALU instance
-    ALU alu(.a(regOut1), .b(ALU_Bin), .op(ALUControl), .result(ALU_out), .zero(alu_zero));
+    alu32 alu(.A(regOut1), .B(ALU_Bin), .Op(ALUControl), .Result(ALU_out), .Zero(alu_zero));
     //data memory instance
     dataMemory dataMem(.clk(clk), .MemWrite(MemWrite), .MemRead(MemRead), .address(ALU_out), .writeData(regOut2), .readData(dmem_out));
 endmodule
-
-
-

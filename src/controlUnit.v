@@ -3,7 +3,7 @@ module controlUnit(
     output reg Branch, // enables pc branch
     output reg MemRead,//enables reading data memory
     output reg MemtoReg, //chooses what to write back: 0 ALU result 1 =data memory
-    output reg ALUOp,
+    output reg [1:0] ALUOp,
     output reg MemWrite,//enables writing data memory
     output reg ALUSrc, // Chooses ALU's 2nd input: 0 = register file2, 1= immediate
     output reg RegWrite // enables writing to register file
@@ -49,7 +49,7 @@ module controlUnit(
                 MemWrite = 1'b1;
                 ALUSrc = 1'b1;
                 RegWrite = 1'b0;
-                ALUOp = 1'b00;// add for address
+                ALUOp = 2'b00;// add for address
             end
             //BRANCH
             7'b1100011: begin
@@ -62,7 +62,7 @@ module controlUnit(
                 ALUOp = 2'b01;//subtract for comp
             end
             //JAL ( I DO NOT HAVE JUMP IMPLEMENTED)
-            7'1101111: begin
+            7'b1101111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;
                 MemtoReg = 1'b0;

@@ -6,7 +6,7 @@ module pcUnit(
     input wire zero,
     
     input wire [31:0] branchDest,
-    output wire [31:0] pc
+    output reg [31:0] pc
 );
     wire [31:0] pcPlus4;
     wire [31:0] pcNext;
