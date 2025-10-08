@@ -16,6 +16,9 @@ Jumping vs Branching:
 
             JALR - jump and link register
                 sets rd = PC + 4, then jumps to rs1 + offset. Used for function returns
+        Alternatively if the jump is very far, you can use the LUI in two seperate lines to jump to any valid 32bit number plus a constant
+            `lui x20, 2000`
+            `jal x0, x20, 
     Branches:
         Coditionally change the PC based on a comparison
         use cases: if, while, for or conditional loops

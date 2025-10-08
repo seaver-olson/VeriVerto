@@ -40,4 +40,8 @@ S-Type:
     Instruction[19:15] = rs1        (5 bits) - base address register
     Instruction[24:20] = rs2        (5 bits) - source register (data to store)
     Instruction[31:25] = imm[11:5]  (7 bits) - immediate upper bits
+SB-Type:
+    Instruction[6:0]   = opcode     (7 bits) - 1100111
 
+UJ-Type
+    Instruction[6:0]   = opcode     (7 bits) - 1101111

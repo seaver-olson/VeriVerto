@@ -12,11 +12,6 @@ Effect Table:
             The second ALU operand comes from the second register file output (Read Data 2)
         effect when asserted:
             The second ALU operand is the sign-extended 12 bits of the instruction(immgen)
-    PCSrc:
-        effect when deasserted:
-
-        effect when asserted:
-
     MemRead:
         effect when deasserted:
             None
@@ -26,8 +21,9 @@ Effect Table:
         effect when deasserted:
             None
         effect when asserted:
-
+            Allows data to be written into data memory
     MemtoReg:
         effect when deasserted:
-
+            Write back comes from ALU output
         effect when asserted:
+            Write back comes from data memory

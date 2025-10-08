@@ -61,7 +61,7 @@ module controlUnit(
                 RegWrite = 1'b0;
                 ALUOp = 2'b01;//subtract for comp
             end
-            //JAL ( I DO NOT HAVE JUMP IMPLEMENTED)
+            //JAL (referenced page 241)
             7'b1101111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;
@@ -81,7 +81,7 @@ module controlUnit(
                 RegWrite = 1'b0;
                 ALUOp = 2'b10;
             end
-            //JALR ( I DO NOT HAVE JUMP IMPLEMENTED)
+            //JALR / SB-Type Instruction
             7'b1100111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;
