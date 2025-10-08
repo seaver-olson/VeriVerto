@@ -6,3 +6,31 @@ memory location whose address is the sum of a register and a
 constant in the instruction.
 4. PC-relative addressing, where the branch address is the sum of the
 PC and a constant in the instruction.
+
+Decoding Funct3 and Funct7:
+
+In the reference manual funct3 and funct7 gave me a lot of trouble due to the values being in hex,
+it was not intutive to me that these were the 4 bits I was looking for
+(why would you store the data in a notation where one digit is 4x the amount of storage you need!!!)
+
+funct3: 
+    0x0 = 000
+        add and subtract
+    0x1 = 001
+        sll
+    0x2 = 010
+        slt
+    0x3 = 011
+        sltu
+    0x4 = 100
+        xor 
+    0x5 = 101
+        logical and arithmetic shift
+    0x6 = 110
+        or
+    0x7 = 111
+        and
+
+funct7: bit[5] (only used for two instances)
+    0x00 = bit[5] = 0
+    0x20 = bit[5] = 1
