@@ -11,94 +11,105 @@ module controlUnit(
     always @(*) begin
         //I found the instruction opcodes for rv32I systems at https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf
         case (instruction)
+            //R-Type
             7'b0110011: begin 
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b1;
+                ALUOp = 2'b10;
             end
-
+            //I-Type
             7'b0010011: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b1; //Use immediate instead of reg read 2
+                RegWrite = 1'b1;
+                ALUOp = 2'b10;
             end
-
+            //LOAD
             7'b0000011: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b1;
+                MemtoReg = 1'b1;//writeback from data memory
+                MemWrite = 1'b0;
+                ALUSrc = 1'b1; //Use immediate for offset
+                RegWrite = 1'b1;
+                ALUOp = 2'b00; // add operation, pc + immediate offset
             end
-
+            //STORE
             7'b0100011: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b1;
+                ALUSrc = 1'b1;
+                RegWrite = 1'b0;
+                ALUOp = 1'b00;// add for address
             end
-
+            //BRANCH
             7'b1100011: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b1;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b01;//subtract for comp
             end
-
+            //JAL ( I DO NOT HAVE JUMP IMPLEMENTED)
             7'1101111: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b10;
             end
-
+            //LUI not done
             7'b0110111: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b10;
             end
-
-            7'b1110011: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+            //JALR ( I DO NOT HAVE JUMP IMPLEMENTED)
+            7'b1100111: begin
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b10;
             end
-
+            //AUIPC not done
+            7'b0010111: begin
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b10;
+            end
+            //Environmental calls need implementation later at 1110011 : ecall, ebreak
             default: begin
-                Branch = 0;
-                MemRead = 0;
-                MemtoReg = 0;
-                ALUOp = 0;
-                MemWrite = 0;
-                ALUSrc = 0;
-                RegWrite = 0;
+                Branch = 1'b0;
+                MemRead = 1'b0;
+                MemtoReg = 1'b0;
+                MemWrite = 1'b0;
+                ALUSrc = 1'b0;
+                RegWrite = 1'b0;
+                ALUOp = 2'b10;
             end
         endcase
     end
