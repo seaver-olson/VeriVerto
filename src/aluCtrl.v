@@ -1,5 +1,5 @@
 module aluControl(
-    input wire [1:0] ALUOp,
+    input wire [1:0] ALUOp,//2 bit op code
     input wire [2:0] funct3, //instruction [14:12]
     input wire funct7, //instruction [30]
     output reg [3:0] ALUControl

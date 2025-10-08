@@ -4,6 +4,7 @@ module pcUnit(
     //Mux flag: (zero AND branch)
     input wire branch,
     input wire zero,
+    
     input wire [31:0] branchDest,
     output wire [31:0] pc
 );
@@ -22,6 +23,4 @@ module pcUnit(
             pc <= pcNext;
         end
     end
-
-    
 endmodule
