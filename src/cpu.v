@@ -1,6 +1,6 @@
 module cpu(input wire clk, input wire rst);
 
-    reg [31:0] pc;
+    wire [31:0] pc;
 
     wire ALUSrc;
     wire MemtoReg;
