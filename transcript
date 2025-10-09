@@ -1,5 +1,5 @@
 # vsim tb_cpu 
-# Start time: 11:29:25 on Oct 09,2025
+# Start time: 12:04:02 on Oct 09,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
@@ -11,48 +11,46 @@
 # Loading work.alu32
 # Loading work.BitALU
 # Loading work.dataMemory
-add wave -position end  sim:/tb_cpu/dut/clk
-add wave -position end  sim:/tb_cpu/dut/rst
-add wave -position end  sim:/tb_cpu/dut/pc
-add wave -position end  sim:/tb_cpu/dut/ALUSrc
-add wave -position end  sim:/tb_cpu/dut/MemtoReg
-add wave -position end  sim:/tb_cpu/dut/RegWrite
-add wave -position end  sim:/tb_cpu/dut/MemRead
-add wave -position end  sim:/tb_cpu/dut/MemWrite
-add wave -position end  sim:/tb_cpu/dut/Branch
-add wave -position end  sim:/tb_cpu/dut/ALUOp
-add wave -position end  sim:/tb_cpu/dut/ALUControl
-add wave -position end  sim:/tb_cpu/dut/instructions
-add wave -position end  sim:/tb_cpu/dut/readReg1
-add wave -position end  sim:/tb_cpu/dut/readReg2
-add wave -position end  sim:/tb_cpu/dut/writeReg
-add wave -position end  sim:/tb_cpu/dut/regOut1
-add wave -position end  sim:/tb_cpu/dut/regOut2
-add wave -position end  sim:/tb_cpu/dut/immgen_out
-add wave -position end  sim:/tb_cpu/dut/funct3
-add wave -position end  sim:/tb_cpu/dut/funct7
-add wave -position end  sim:/tb_cpu/dut/ALU_Bin
-add wave -position end  sim:/tb_cpu/dut/ALU_out
-add wave -position end  sim:/tb_cpu/dut/alu_cout
-add wave -position end  sim:/tb_cpu/dut/alu_zero
-add wave -position end  sim:/tb_cpu/dut/opcode
-add wave -position end  sim:/tb_cpu/dut/Jump
-add wave -position end  sim:/tb_cpu/dut/dmem_out
-add wave -position end  sim:/tb_cpu/dut/dmemALU_wb
 run
-run
-run
+add wave -position end sim:/tb_cpu/dut/*
 restart
 run
-# GetModuleFileName: The specified module could not be found.
-# 
-# 
-add dataflow sim:/tb_cpu/dut/regFile/*
-# WARNING: No extended dataflow license exists
 run
-add dataflow sim:/tb_cpu/dut/ctrlUnit
-# Break key hit
-# Break key hit
-# Break key hit
-# End time: 11:41:34 on Oct 09,2025, Elapsed time: 0:12:09
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+# End time: 12:08:06 on Oct 09,2025, Elapsed time: 0:04:04
 # Errors: 0, Warnings: 0

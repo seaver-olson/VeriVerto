@@ -8,7 +8,8 @@ module immgen(
             7'b0110011: immgenOut = 32'h0;
             
             //I-Type and LOAD
-            7'b0010011, 7'b0000011: begin
+            7'b0010011, 
+            7'b0000011: begin
                 immgenOut = {{20{instruction[31]}}, instruction[31:20]};
             end
             //S-Type
@@ -22,7 +23,8 @@ module immgen(
                                 instruction[30:25], instruction[11:8], 1'b0};
             end
             //U-Type
-            7'b0110111, 7'b0010111: begin
+            7'b0110111, 
+            7'b0010111: begin
                 immgenOut = {instruction[31:12], 12'b0};
             end
                 

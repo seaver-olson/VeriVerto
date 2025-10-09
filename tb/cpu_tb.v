@@ -14,9 +14,10 @@ module tb_cpu;
 
     initial begin
         rst = 1'b1;
+        //wait for 2 cycles
+        @(posedge clk); 
+        @(posedge clk);
 
-        #10
-        //applies reset for 2 cycles
         rst = 1'b0;
 
         #20000

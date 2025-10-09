@@ -20,6 +20,6 @@ module dataMemory(
             memory[address[15:2]] <= writeData;
         end
     end 
-
+    
     assign readData = (MemRead) ? memory[address[15:2]] : 32'b0;
 endmodule

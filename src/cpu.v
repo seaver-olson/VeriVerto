@@ -54,7 +54,7 @@ module cpu(input wire clk, input wire rst);
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
     //ALU instance
-    alu32 alu(.A(regOut1), .B(ALU_Bin), .Op(ALUControl), .Result(ALU_out), .Zero(alu_zero));
+    alu32 alu(.A(regOut1), .B(ALU_Bin), .Op(ALUControl), .Result(ALU_out), .Zero(alu_zero), .Cout(alu_cout));
     //data memory instance
     dataMemory dataMem(.clk(clk), .MemWrite(MemWrite), .MemRead(MemRead), .address(ALU_out), .writeData(regOut2), .readData(dmem_out));
 endmodule
