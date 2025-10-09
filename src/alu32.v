@@ -34,3 +34,4 @@ module alu32 (
     assign Zero = (Result == 32'b0);//useful for branching and ==
     assign Cout = carry[31];
 endmodule
+

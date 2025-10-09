@@ -1,0 +1,78 @@
+Pipelining is an implementation technique in which multiple instructions are overlapped in execution
+
+throughput(pipelined) = throughput(unpipelined)/pipeline stages
+
+Pipelining is essentially processes parrellism, this means pipelining will never make one process run faster but instead allows for multiple instructions to run at the same time
+AKA pipelining improves throughput, not latency
+
+If the pipeline stages take about the same amount of time and there are enough processes to fill each stage
+the speed-up from pipelining is equal to the number of stages in the pipeline
+
+Every picosecond that the pipeline staging isn't at max capacity the performance speed up dips
+this means the start-up and wind-down of the cpu runtime affects the overall performance speedup from pipelining
+
+The formula above only works if at max capacity
+
+The five classical RISC-V stages:
+    1. Fetch instruction from memory
+    2. Read registers and decode the instruction
+    3. Execute the operation or calculate an address
+    4. Access an operand in data memory (if needed)
+    5. Write the result into a register (if needed)
+
+memory operands only appear in loads or stores in RISC-V.
+This restriction means we can use the execute stage to calculate the memory address and then access memory in the following stage.
+If we could operate on the operands in memory, stage 3 and 4 would expand to an address stage, memory stage and then execute stage. 
+There are downsides to longer pipelines, the biggest being that if a pipeline prediction fails there is a further run back time needed
+
+Pipeline Hazards:
+    There are situations in the pipeline cycle when the next instruction cannot execute in the following clock cycle.
+    These events are called hazards, there are 3 types.
+
+    Types:
+        Structural Hazards:
+            Hardware does not support the combination of instructions that are set to execute
+
+            This is very hard to trigger on Risc-V ISA because it was designed to be pipelined
+            The most common pitfall to achieve a structural hazard is if the CPU is implemented with a single memory unit
+        
+        Data Hazards:
+            Data needed for instruction not yet available
+
+            Occurs when the pipeline must be stalled because a step is waiting for another to complete
+            For example:
+                if you add 1 to a register and then immediately store that value - 2 in another register the seecond instruction would need to wait for data to be ready from first instruction
+                The add instruction doesn't write back to reg until stage 5, this means the sub and store would need to wait 3 cycles for the data
+            
+            The main solution to this is forwarding/bypassing
+                forwarding/bypassing retrieves the missing data element from the inernal buffers rather than waiting for it to arrive from the registers or memory
+
+            forwarding paths are only valid if the dest stage is later in time than the source stage.
+            If this isn't true we would be going backward in time.
+                
+            LOAD-USE data hazard:
+                since load instructions do not have data ready until the 4th cycle the bypassing would still have to stall for a cycle
+
+            pipeline stall, also called bubble : a stall initiated in order to resolve a hazard
+
+            Each RISC-V instruction writes at most one result and does this in the last stage of the pipeline
+            This makes forwarding/bypassing a lot easier since there is only one result to forwarding
+            
+        Control/Branch Hazards:
+            the instruction that was fetched is not the one that is needed
+                aka the flow of instruction addresses is not what the pipeline expected
+
+            For example a conditional branch cannot possibly know the next instruction when it just recieved the branch instruction, what if the conditional is false?
+
+            The slow but stable way to fix this is to stall the system until the PC has branched, this would dramatically slow down the CPU and make the speed-up from pipelining non existent
+
+            Solution: branch prediction
+                A method of resolving a branch hazard that assumes a given outcome for the conditional branch and proceeds from that assumption rather than waiting to ascertain the actual outcome
+
+                There are two types of branch predictions:
+                    Static:
+                        relies on stereotypical behavior and doesn't account for individuality of a specific branch instruction
+                    Dynamic:
+                        guesses depending on the behavior of each conditional branch and may change predictions for a conditional branch over the life of a program
+                    Delayed:
+                        stalls branch until conditional is decided
