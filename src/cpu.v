@@ -19,7 +19,6 @@ module cpu(input wire clk, input wire rst);
     wire [31:0] regOut1;
     wire [31:0] regOut2;
 
-    // Immediate generator (fix later)
     wire [31:0] immgen_out;
 
     //ALU + ALU Control Unit wires
@@ -46,6 +45,8 @@ module cpu(input wire clk, input wire rst);
     //control unit + ALU control unit
     controlUnit ctrlUnit(.instruction(instructions[6:0]), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
+    //immediate generator
+    immgen immediateGen(.instruction(instructions), .immgenOut(immgen_out));
     //register file
     regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
     //ALU instance

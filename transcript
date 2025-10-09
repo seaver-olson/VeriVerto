@@ -1,23 +1,65 @@
 # vsim tb_cpu 
-# Start time: 00:26:30 on Oct 08,2025
+# Start time: 21:32:08 on Oct 08,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
 # Loading work.instructionMemory
 # Loading work.controlUnit
 # Loading work.aluControl
+# Loading work.immgen
 # Loading work.regfile
 # Loading work.alu32
 # Loading work.BitALU
 # Loading work.dataMemory
 add wave -position end  sim:/tb_cpu/dut/pc
+add wave -position end  sim:/tb_cpu/dut/ALUSrc
+add wave -position end  sim:/tb_cpu/dut/MemtoReg
+add wave -position end  sim:/tb_cpu/dut/RegWrite
+add wave -position end  sim:/tb_cpu/dut/MemRead
+add wave -position end  sim:/tb_cpu/dut/MemWrite
+add wave -position end  sim:/tb_cpu/dut/Branch
+add wave -position end  sim:/tb_cpu/dut/ALUOp
+add wave -position end  sim:/tb_cpu/dut/ALUControl
+add wave -position end  sim:/tb_cpu/dut/instructions
+add wave -position end  sim:/tb_cpu/dut/readReg1
+add wave -position end  sim:/tb_cpu/dut/readReg2
+add wave -position end  sim:/tb_cpu/dut/writeReg
+add wave -position end  sim:/tb_cpu/dut/regOut1
+add wave -position end  sim:/tb_cpu/dut/regOut2
+add wave -position end  sim:/tb_cpu/dut/immgen_out
+add wave -position end  sim:/tb_cpu/dut/funct3
+add wave -position end  sim:/tb_cpu/dut/funct7
+add wave -position end  sim:/tb_cpu/dut/ALU_Bin
+add wave -position end  sim:/tb_cpu/dut/ALU_out
+add wave -position end  sim:/tb_cpu/dut/alu_cout
+add wave -position end  sim:/tb_cpu/dut/alu_zero
+add wave -position end  sim:/tb_cpu/dut/dmem_out
+add wave -position end  sim:/tb_cpu/dut/dmemALU_wb
 run
-# ** Warning: (vsim-7) Failed to open readmem file "loadfile_all.img" in read mode.
-# No such file or directory. (errno = ENOENT)    : src/instructionMemory.v(14)
-#    Time: 0 ps  Iteration: 0  Instance: /tb_cpu/dut/instrMem
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
 # ** Note: $finish    : ./tb/cpu_tb.v(21)
 #    Time: 210 ps  Iteration: 0  Instance: /tb_cpu
 # 1
 # Break in Module tb_cpu at ./tb/cpu_tb.v line 21
-# End time: 00:28:35 on Oct 08,2025, Elapsed time: 0:02:05
-# Errors: 0, Warnings: 1
+# Break key hit
+# End time: 21:36:06 on Oct 08,2025, Elapsed time: 0:03:58
+# Errors: 0, Warnings: 0

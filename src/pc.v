@@ -14,7 +14,7 @@ module pcUnit(
 
     assign pcPlus4 = pc+4;
     assign branchSelect = branch & zero; //AND gate seen top right of diagram
-    assign pcNext = (branchSelect) ? branchDest : pcPlus4;//If branchSelect then pc = branch dest else pc = pc + 4
+    assign pcNext = (branchSelect) ? (pc + branchDest) : pcPlus4;//If branchSelect then pc = branch dest else pc = pc + 4
     always @(posedge clk) begin
         if (rst) begin
             pc <= 32'h0;

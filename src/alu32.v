@@ -9,12 +9,13 @@ module alu32 (
     
     wire slt;
     wire [31:0] carry;
+    wire sltRes;
     //first bit
     BitALU alu_bit0 (.a(A[0]), 
                     .b(B[0]),
                     .cin((Op==4'b0110 || Op == 4'b0111) ? 1'b1 : 1'b0),
                     .op(Op),
-                    .result(Result[0]),
+                    .result(sltRes),
                     .cout(carry[0])
                     );
     //generate bit 1-31
@@ -24,7 +25,8 @@ module alu32 (
             BitALU alu_bit (.a(A[i]), .b(B[i]),.cin(carry[i-1]), .op(Op),.result(Result[i]),.cout(carry[i]));
         end
     endgenerate
-    assign slt = (carry[30] ^ carry[31]) ^ Result[31]; //fix
-    //assign Cout = carry[31];
+    //if A < B (signed)
+    assign slt = (carry[30] ^ carry[31]) ^ Result[31];
+    assign Result = (Op == 4'b0111) ? {31'b0, slt} : Result;
     assign Zero = (Result == 32'b0);//useful for branching and ==
 endmodule
