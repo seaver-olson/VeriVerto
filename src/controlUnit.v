@@ -68,18 +68,18 @@ module controlUnit(
                 MemtoReg = 1'b0;
                 MemWrite = 1'b0;
                 ALUSrc = 1'b0;
-                RegWrite = 1'b0;
+                RegWrite = 1'b1;
                 ALUOp = 2'b10;
             end
-            //LUI not done
+            //LUI
             7'b0110111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;
                 MemtoReg = 1'b0;
                 MemWrite = 1'b0;
-                ALUSrc = 1'b0;
-                RegWrite = 1'b0;
-                ALUOp = 2'b10;
+                ALUSrc = 1'b1;
+                RegWrite = 1'b1;
+                ALUOp = 2'b11;
             end
             //JALR / SB-Type Instruction
             7'b1100111: begin
@@ -87,19 +87,19 @@ module controlUnit(
                 MemRead = 1'b0;
                 MemtoReg = 1'b0;
                 MemWrite = 1'b0;
-                ALUSrc = 1'b0;
-                RegWrite = 1'b0;
-                ALUOp = 2'b10;
+                ALUSrc = 1'b1;
+                RegWrite = 1'b1;
+                ALUOp = 2'b00;
             end
-            //AUIPC not done
+            //AUIPC
             7'b0010111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;
                 MemtoReg = 1'b0;
                 MemWrite = 1'b0;
-                ALUSrc = 1'b0;
-                RegWrite = 1'b0;
-                ALUOp = 2'b10;
+                ALUSrc = 1'b1;
+                RegWrite = 1'b1;
+                ALUOp = 2'b00;
             end
             //Environmental calls need implementation later at 1110011 : ecall, ebreak
             default: begin
@@ -109,7 +109,7 @@ module controlUnit(
                 MemWrite = 1'b0;
                 ALUSrc = 1'b0;
                 RegWrite = 1'b0;
-                ALUOp = 2'b10;
+                ALUOp = 2'b00;
             end
         endcase
     end

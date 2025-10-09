@@ -1,3 +1,5 @@
+`timescale 1ps/1ps
+
 module tb_cpu;
 
     reg clk;
@@ -17,7 +19,7 @@ module tb_cpu;
         //applies reset for 2 cycles
         rst = 1'b0;
 
-        #200
+        #20000
         $finish;
     end 
 endmodule

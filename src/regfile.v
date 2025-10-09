@@ -30,4 +30,4 @@ module regfile(
 
     assign regOut1 = (readReg1 == 5'd0) ? 32'b0 : registers[readReg1];
     assign regOut2 = (readReg2 == 5'd0) ? 32'b0 : registers[readReg2];
-endmodule
+endmodule 

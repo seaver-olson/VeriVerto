@@ -1,5 +1,5 @@
 # vsim tb_cpu 
-# Start time: 21:32:08 on Oct 08,2025
+# Start time: 11:29:25 on Oct 09,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
@@ -11,6 +11,8 @@
 # Loading work.alu32
 # Loading work.BitALU
 # Loading work.dataMemory
+add wave -position end  sim:/tb_cpu/dut/clk
+add wave -position end  sim:/tb_cpu/dut/rst
 add wave -position end  sim:/tb_cpu/dut/pc
 add wave -position end  sim:/tb_cpu/dut/ALUSrc
 add wave -position end  sim:/tb_cpu/dut/MemtoReg
@@ -33,33 +35,24 @@ add wave -position end  sim:/tb_cpu/dut/ALU_Bin
 add wave -position end  sim:/tb_cpu/dut/ALU_out
 add wave -position end  sim:/tb_cpu/dut/alu_cout
 add wave -position end  sim:/tb_cpu/dut/alu_zero
+add wave -position end  sim:/tb_cpu/dut/opcode
+add wave -position end  sim:/tb_cpu/dut/Jump
 add wave -position end  sim:/tb_cpu/dut/dmem_out
 add wave -position end  sim:/tb_cpu/dut/dmemALU_wb
 run
 run
 run
+restart
 run
+# GetModuleFileName: The specified module could not be found.
+# 
+# 
+add dataflow sim:/tb_cpu/dut/regFile/*
+# WARNING: No extended dataflow license exists
 run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-# ** Note: $finish    : ./tb/cpu_tb.v(21)
-#    Time: 210 ps  Iteration: 0  Instance: /tb_cpu
-# 1
-# Break in Module tb_cpu at ./tb/cpu_tb.v line 21
+add dataflow sim:/tb_cpu/dut/ctrlUnit
 # Break key hit
-# End time: 21:36:06 on Oct 08,2025, Elapsed time: 0:03:58
+# Break key hit
+# Break key hit
+# End time: 11:41:34 on Oct 09,2025, Elapsed time: 0:12:09
 # Errors: 0, Warnings: 0
