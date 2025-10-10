@@ -11,7 +11,26 @@ module cpu(input wire clk, input wire rst);
     wire [1:0] ALUOp;
     wire [3:0] ALUControl;
     
+    //if/id pipeline
+    reg [31:0] IF_ID_PC;
+    reg [31:0] IF_ID_INSTRUCTION;
 
+    //id/ex pipeline
+    reg [31:0] ID_EX_PC;
+    reg [31:0] ID_EX_RD1;
+    reg [31:0] ID_EX_RD2;
+    reg [31:0] ID_EX_IMM;
+
+    //ex/mem pipeline
+    reg [31:0] EX_MEM_PC;
+    reg [31:0] EX_MEM_OUT;//alu output
+    reg [31:0] EX_MEM_RD2;//goes to write data (data memor)
+    reg EX_MEM_ZERO;//zero flag
+
+    //mem/wb pipeline
+    reg [31:0] MEM_WB_RD;//data memory read dead
+    reg [31:0] MEM_WB_ALUOUT;
+    
     wire [31:0] instructions;
     wire [4:0] readReg1 = instructions[19:15];
     wire [4:0] readReg2 = instructions[24:20];
