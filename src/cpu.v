@@ -1,6 +1,7 @@
 module cpu(input wire clk, input wire rst);
 
     wire [31:0] pc;
+    wire [31:0] instr_fetch; 
 
     wire ALUSrc;
     wire MemtoReg;
@@ -8,6 +9,7 @@ module cpu(input wire clk, input wire rst);
     wire MemRead;
     wire MemWrite;
     wire Branch;
+
     wire [1:0] ALUOp;
     wire [3:0] ALUControl;
     
@@ -15,65 +17,73 @@ module cpu(input wire clk, input wire rst);
     reg [31:0] IF_ID_PC;
     reg [31:0] IF_ID_INSTRUCTION;
 
+    wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
+    wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
+    wire [4:0] ID_writeReg = IF_ID_INSTRUCTIONp[11:7];
+    wire [6:0] ID_opcode = IF_ID_INSTRUCTION[6:0];
+    wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
+    wire ID_funct7 = IF_ID_INSTRUCTION[30];
+
+    wire [31:0] ID_EX_regOut1;
+    wire [31:0] ID_EX_regOut2;
+    wire [31:0] ID_imm;
+
     //id/ex pipeline
     reg [31:0] ID_EX_PC;
     reg [31:0] ID_EX_RD1;
     reg [31:0] ID_EX_RD2;
     reg [31:0] ID_EX_IMM;
 
+    reg [1:0] ID_EX_WB;//writeback stage: regWrite+memtoreg
+    reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
+    reg [5:0] ID_EX_EX;//execution/address calculation stage: ALUOp + ALUSrc
+    reg [4:0] ID_EX_readData1;
+    reg [4:0] ID_EX_readData2;
+    reg [4:0] ID_EX_writeReg;
+
+    wire [31:0] EX_aluA;
+    wire [31:0] EX_aluB;
+    wire [31:0] EX_out;
+    wire EX_zero;
     //ex/mem pipeline
     reg [31:0] EX_MEM_PC;
     reg [31:0] EX_MEM_OUT;//alu output
     reg [31:0] EX_MEM_RD2;//goes to write data (data memor)
     reg EX_MEM_ZERO;//zero flag
+    reg [4:0] EX_MEM_writeReg;
+
+    reg [1:0]EX_MEM_WB;
+    reg [2:0]EX_MEM_M;
+
+    wire [31:0] MEM_readData;
 
     //mem/wb pipeline
     reg [31:0] MEM_WB_RD;//data memory read dead
     reg [31:0] MEM_WB_ALUOUT;
-    
-    wire [31:0] instructions;
-    wire [4:0] readReg1 = instructions[19:15];
-    wire [4:0] readReg2 = instructions[24:20];
-    wire [4:0] writeReg = instructions[11:7];
+    reg [1:0] MEM_WB_WB;
+    reg [4:0] MEM_WB_writeReg;
 
-    wire [31:0] regOut1;
-    wire [31:0] regOut2;
+    wire [31:0] WB_writeData;
+    wire WB_regWrite;
+    wire WB_memToReg;
 
-    wire [31:0] immgen_out;
-
-    //ALU + ALU Control Unit wires
-    wire [2:0] funct3 = instructions[14:12];
-    wire funct7 = instructions[30];
-    wire [31:0] ALU_Bin;//for mux between regfile and immgen
-    wire [31:0] ALU_out;//dont forget to set this to dataMemory
-    wire alu_cout;
-    wire alu_zero;//zero flag for equalities
-    wire [6:0] opcode;
-    assign opcode = instructions[6:0];
+    wire alu_cout;//i need to do this eventually
 
     assign Jump = (opcode == 7'b1101111) || (opcode == 7'b1100111);
-    //data memory wires
-    wire [31:0] dmem_out;
-    wire [31:0] dmemALU_wb;//write back mux for data memory and ALU
-
-    //ALU B Input Mux between regfile and immgen
-    assign ALU_Bin = (ALUSrc) ? immgen_out : regOut2;
-
-    //write back mux
-    assign dmemALU_wb = (MemtoReg) ? dmem_out : ALU_out;
-    //pc Note: I have not implemented branching yet since the immgen is still in progress
-    pcUnit programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .jump(Jump), .branchDest(immgen_out), .jumpBase(regOut1), .jalrFlag(opcode==7'b1100111), .pc(pc));
+    
+    //pc
+    pcUnit programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .jump(Jump), .branchDest(immgen_out), .jumpBase(ID_EX_RD1), .jalrFlag(opcode==7'b1100111), .pc(pc));
     //instruction memory 
-    instructionMemory instrMem(.readAddress(pc), .instruction(instructions));
+    instructionMemory instrMem(.readAddress(pc), .instruction(IF_ID_INSTRUCTION));
     //control unit + ALU control unit
-    controlUnit ctrlUnit(.instruction(opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    controlUnit ctrlUnit(.instruction(opcode), .Branch(ID_EX_M), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
     //immediate generator
-    immgen immediateGen(.instruction(instructions), .immgenOut(immgen_out));
+    immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_EX_IMM));
     //register file
-    regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(regOut1), .regOut2(regOut2));
+    regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(ID_EX_RD1), .regOut2(ID_EX_RD2));
     //ALU instance
-    alu32 alu(.A(regOut1), .B(ALU_Bin), .Op(ALUControl), .Result(ALU_out), .Zero(alu_zero), .Cout(alu_cout));
+    alu32 alu(.A(ID_EX_RD1), .B(ALU_Bin), .Op(ALUControl), .Result(EX_MEM_OUT), .Zero(EX_MEM_ZERO), .Cout(alu_cout));
     //data memory instance
-    dataMemory dataMem(.clk(clk), .MemWrite(MemWrite), .MemRead(MemRead), .address(ALU_out), .writeData(regOut2), .readData(dmem_out));
+    dataMemory dataMem(.clk(clk), .MemWrite(MemWrite), .MemRead(MEM_WB_RD), .address(MEM_WB_ALUOUT), .writeData(ID_EX_RD2), .readData(dmem_out));
 endmodule
