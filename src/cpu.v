@@ -48,7 +48,7 @@ module cpu(input wire clk, input wire rst);
     //ex/mem pipeline
     reg [31:0] EX_MEM_PC;
     reg [31:0] EX_MEM_OUT;//alu output
-    reg [31:0] EX_MEM_RD2;//goes to write data (data memor)
+    reg [31:0] EX_MEM_RD2;//goes to write data (data memory)
     reg EX_MEM_ZERO;//zero flag
     reg [4:0] EX_MEM_writeReg;
 
@@ -58,7 +58,7 @@ module cpu(input wire clk, input wire rst);
     wire [31:0] MEM_readData;
 
     //mem/wb pipeline
-    reg [31:0] MEM_WB_RD;//data memory read dead
+    reg [31:0] MEM_WB_writeReg;//data memory read dead
     reg [31:0] MEM_WB_ALUOUT;
     reg [1:0] MEM_WB_WB;
     reg [4:0] MEM_WB_writeReg;
@@ -87,6 +87,6 @@ module cpu(input wire clk, input wire rst);
 
     assign WB_memToReg = MEM_WB_WB[0];
     assign WB_regWrite = MEM_WB_WB[1];
-    assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT
+    assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT;
 
 endmodule
