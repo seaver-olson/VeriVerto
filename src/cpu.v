@@ -68,22 +68,25 @@ module cpu(input wire clk, input wire rst);
     wire WB_memToReg;
 
     wire alu_cout;//i need to do this eventually
-
-    assign Jump = (opcode == 7'b1101111) || (opcode == 7'b1100111);
+    wire Jump;
     
     //pc
-    pcUnit programCounter(.clk(clk), .rst(rst), .branch(Branch), .zero(alu_zero), .jump(Jump), .branchDest(immgen_out), .jumpBase(ID_EX_RD1), .jalrFlag(opcode==7'b1100111), .pc(pc));
+    pcUnit programCounter(.clk(clk), .rst(rst), .branch(EX_MEM_M[2]), .zero(EX_MEM_ZERO), .jump(Jump), .branchDest(EX_MEM_OUT), .jumpBase(ID_EX_RD1), .jalrFlag(ID_opcode==7'b1100111), .pc(pc));
     //instruction memory 
-    instructionMemory instrMem(.readAddress(pc), .instruction(IF_ID_INSTRUCTION));
-    //control unit + ALU control unit
-    controlUnit ctrlUnit(.instruction(opcode), .Branch(ID_EX_M), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
-    aluControl aluCtrlUnit(.ALUOp(ALUOp), .funct3(funct3), .funct7(funct7), .ALUControl(ALUControl));
-    //immediate generator
-    immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_EX_IMM));
-    //register file
-    regfile regFile(.clk(clk), .rst(rst), .readReg1(readReg1), .readReg2(readReg2), .writeReg(writeReg), .writeData(dmemALU_wb), .rd_we(RegWrite), .regOut1(ID_EX_RD1), .regOut2(ID_EX_RD2));
-    //ALU instance
-    alu32 alu(.A(ID_EX_RD1), .B(ALU_Bin), .Op(ALUControl), .Result(EX_MEM_OUT), .Zero(EX_MEM_ZERO), .Cout(alu_cout));
+    instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
+    //control unit + immediate generator + regfile
+    regfile regFile(.clk(clk), .rst(rst), .readReg1(ID_readData1), .readReg2(ID_readData2), .writeReg(MEM_WB_RD), .writeData(MEM_WB_WB), .rd_we(WB_regWrite), .regOut1(ID_EX_regOut1), .regOut2(ID_EX_regOut2));
+    controlUnit ctrlUnit(.instruction(ID_opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
+    immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_imm));
+    //alu and alu control
+    aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[1:0]), .funct3(ID_EX_IMM[14:12]), .funct7(ID_EX_IMM[30]), .ALUControl(fixLater));
+    alu32 alu(.A(EX_aluA), .B(EX_aluB), .Op(fixLater), .Result(EX_out), .Zero(EX_zero), .Cout(alu_cout));
+    
     //data memory instance
-    dataMemory dataMem(.clk(clk), .MemWrite(MemWrite), .MemRead(MEM_WB_RD), .address(MEM_WB_ALUOUT), .writeData(ID_EX_RD2), .readData(dmem_out));
+    dataMemory dataMem(.clk(clk), .MemWrite(EX_MEM_M[0]), .MemRead(EX_MEM_M[1]), .address(MEM_WB_ALUOUT), .writeData(ID_EX_RD2), .readData(MEM_readData));
+
+    assign WB_memToReg = MEM_WB_WB[0];
+    assign WB_regWrite = MEM_WB_WB[1];
+    assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT
+
 endmodule
