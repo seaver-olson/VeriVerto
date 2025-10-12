@@ -19,9 +19,9 @@ module pcUnit(
     assign branchSelect = branch & zero; //AND gate seen top right of diagram
     assign jumpTarget = (jalrFlag) ? ((jumpBase + branchDest) & ~32'h1) : (pc + branchDest);
     assign pcNext = (jump) ? jumpTarget : (branchSelect) ? (pc + branchDest) : pcPlus4;//If branchSelect then pc = branch dest else pc = pc + 4
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
-            pc <= 32'h0;
+            pc <= 0;
         end else begin
             pc <= pcNext;
         end

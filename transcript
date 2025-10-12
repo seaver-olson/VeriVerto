@@ -1,56 +1,18 @@
 # vsim tb_cpu 
-# Start time: 12:04:02 on Oct 09,2025
+# Start time: 19:41:17 on Oct 11,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
 # Loading work.instructionMemory
-# Loading work.controlUnit
-# Loading work.aluControl
-# Loading work.immgen
 # Loading work.regfile
+# Loading work.controlUnit
+# Loading work.immgen
+# Loading work.aluControl
 # Loading work.alu32
 # Loading work.BitALU
 # Loading work.dataMemory
-run
 add wave -position end sim:/tb_cpu/dut/*
-restart
 run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-# End time: 12:08:06 on Oct 09,2025, Elapsed time: 0:04:04
+# WARNING: No extended dataflow license exists
+# End time: 19:45:23 on Oct 11,2025, Elapsed time: 0:04:06
 # Errors: 0, Warnings: 0

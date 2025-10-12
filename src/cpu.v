@@ -24,8 +24,8 @@ module cpu(input wire clk, input wire rst);
     wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
     wire ID_funct7 = IF_ID_INSTRUCTION[30];
 
-    wire [31:0] ID_EX_regOut1;
-    wire [31:0] ID_EX_regOut2;
+    wire [31:0] ID_regOut1;
+    wire [31:0] ID_regOut2;
     wire [31:0] ID_imm;
 
     //id/ex pipeline
@@ -36,7 +36,7 @@ module cpu(input wire clk, input wire rst);
 
     reg [1:0] ID_EX_WB;//writeback stage: regWrite+memtoreg
     reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
-    reg [5:0] ID_EX_EX;//execution/address calculation stage: ALUOp + ALUSrc
+    reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
     reg [2:0] ID_EX_F3;//funct3
     reg [4:0] ID_EX_readData1;
     reg [4:0] ID_EX_readData2;
@@ -76,13 +76,14 @@ module cpu(input wire clk, input wire rst);
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
     //control unit + immediate generator + regfile
-    regfile regFile(.clk(clk), .rst(rst), .readReg1(ID_readData1), .readReg2(ID_readData2), .writeReg(WB_writeData), .writeData(MEM_WB_WB), .rd_we(WB_regWrite), .regOut1(ID_EX_regOut1), .regOut2(ID_EX_regOut2));
+    regfile regFile(.clk(clk), .rst(rst), .readReg1(ID_readData1), .readReg2(ID_readData2), .writeReg(MEM_WB_writeReg), .writeData(WB_writeData), .rd_we(WB_regWrite), .regOut1(ID_regOut1), .regOut2(ID_regOut2));
     controlUnit ctrlUnit(.instruction(ID_opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite), .ALUSrc(ALUSrc), .RegWrite(RegWrite));
     immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_imm));
     //alu and alu control
     assign EX_aluA = ID_EX_RD1;
+    
     assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : ID_EX_RD2;
-    aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[1:0]), .funct3(ID_EX_IMM[14:12]), .funct7(ID_EX_IMM[30]), .ALUControl(ALUControl));
+    aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), .funct3(ID_EX_F3), .funct7(ID_EX_EX[0]), .ALUControl(ALUControl));
     alu32 alu(.A(EX_aluA), .B(EX_aluB), .Op(ALUControl), .Result(EX_out), .Zero(EX_zero), .Cout(alu_cout));
     
     //data memory instance
@@ -96,7 +97,7 @@ module cpu(input wire clk, input wire rst);
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             IF_ID_PC <= 0;
-            IF_ID_INSTRUCTION <= 32'h13;
+            IF_ID_INSTRUCTION <= 32'h13;    
         end else begin
             IF_ID_PC <= pc;
             IF_ID_INSTRUCTION <= instr_fetch;
@@ -112,7 +113,7 @@ module cpu(input wire clk, input wire rst);
             ID_EX_WB <= 0;
             ID_EX_M <= 0;
             ID_EX_EX <= 0;
-            ID_EX_F3 <= 0
+            ID_EX_F3 <= 0;
             ID_EX_readData1 <= 0;
             ID_EX_readData2 <= 0;
             ID_EX_writeReg <= 0;
@@ -124,7 +125,7 @@ module cpu(input wire clk, input wire rst);
             ID_EX_WB <= {RegWrite, MemtoReg};
             ID_EX_M <= {Branch, MemRead, MemWrite};
             ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
-            ID_EX_F3 <= ID_funct3
+            ID_EX_F3 <= ID_funct3;
             ID_EX_readData1 <= ID_readData1;
             ID_EX_readData2 <= ID_readData2;
             ID_EX_writeReg <= ID_writeReg;
@@ -164,6 +165,4 @@ module cpu(input wire clk, input wire rst);
             MEM_WB_writeReg <= EX_MEM_writeReg;
         end
     end
-
-
 endmodule
