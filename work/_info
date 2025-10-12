@@ -10,7 +10,7 @@ z2
 cModel Technology
 Z0 dC:/Users/sjols/Desktop/veriVerto
 valu32
-Z1 !s110 1760229672
+Z1 !s110 1760289465
 !i10b 1
 !s100 e?J1CRmV:=Vgo7RUMWOBT2
 Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
@@ -20,13 +20,13 @@ R0
 w1760033880
 Z4 8src/alu32.v
 Z5 Fsrc/alu32.v
-!i122 63
+!i122 65
 L0 1 36
 Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
-Z7 !s108 1760229672.000000
+Z7 !s108 1760289465.000000
 !s107 .\tb\cpu_tb.v|.\src\regfile.v|.\src\pc.v|.\src\instructionMemory.v|.\src\immGen.v|.\src\dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu32.v|src/alu1.v|
 Z8 !s90 src/alu1.v|src/alu32.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|.\src\dataMemory.v|.\src\immGen.v|.\src\instructionMemory.v|.\src\pc.v|.\src\regfile.v|.\tb\cpu_tb.v|
 !i113 1
@@ -87,7 +87,7 @@ R0
 w1759899354
 8src/aluCtrl.v
 Fsrc/aluCtrl.v
-!i122 63
+!i122 65
 L0 1 32
 R6
 r1
@@ -110,7 +110,7 @@ R0
 w1759976428
 8src/alu1.v
 Fsrc/alu1.v
-!i122 63
+!i122 65
 Z12 L0 1 25
 R6
 r1
@@ -125,16 +125,16 @@ n@bit@a@l@u
 vcontrolUnit
 R1
 !i10b 1
-!s100 EGEAd7OP49]U7^a7o[X[n1
+!s100 ]ooJ?7J[Rk0o1;4bHWcT`2
 R2
-IUTzYW;P>E=QCe;5S]oGKM1
+IIdfTXmcCbkVOcLQ]e_B0W0
 R3
 R0
-w1760026313
+w1760289278
 8src/controlUnit.v
 Fsrc/controlUnit.v
-!i122 63
-L0 1 116
+!i122 65
+L0 1 127
 R6
 r1
 !s85 0
@@ -148,16 +148,16 @@ ncontrol@unit
 vcpu
 R1
 !i10b 1
-!s100 5Agi:b31@jHgH38I]P4?42
+!s100 Wg5?nkkT028T4IUT>3KK;1
 R2
-I9S?B3E=H]FPWfz3hRK=370
+InBz:WNBhUNUBfXzn2CEW22
 R3
 R0
-w1760229202
+w1760289442
 8src/cpu.v
 Fsrc/cpu.v
-!i122 63
-L0 1 168
+!i122 65
+L0 1 176
 R6
 r1
 !s85 0
@@ -178,7 +178,7 @@ R0
 w1760033893
 8.\src\dataMemory.v
 F.\src\dataMemory.v
-!i122 63
+!i122 65
 R12
 R6
 r1
@@ -201,7 +201,7 @@ R0
 w1760028606
 8.\src\immGen.v
 F.\src\immGen.v
-!i122 63
+!i122 65
 L0 1 42
 R6
 r1
@@ -223,7 +223,7 @@ R0
 w1759641822
 8.\src\instructionMemory.v
 F.\src\instructionMemory.v
-!i122 63
+!i122 65
 L0 2 18
 R6
 r1
@@ -246,7 +246,7 @@ R0
 w1760229664
 8.\src\pc.v
 F.\src\pc.v
-!i122 63
+!i122 65
 L0 1 29
 R6
 r1
@@ -269,7 +269,7 @@ R0
 w1760026314
 8.\src\regfile.v
 F.\src\regfile.v
-!i122 63
+!i122 65
 R10
 R6
 r1
@@ -291,7 +291,7 @@ R0
 w1760028983
 8.\tb\cpu_tb.v
 F.\tb\cpu_tb.v
-!i122 63
+!i122 65
 L0 3 24
 R6
 r1

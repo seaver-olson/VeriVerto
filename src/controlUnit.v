@@ -6,7 +6,8 @@ module controlUnit(
     output reg [1:0] ALUOp,
     output reg MemWrite,//enables writing data memory
     output reg ALUSrc, // Chooses ALU's 2nd input: 0 = register file2, 1= immediate
-    output reg RegWrite // enables writing to register file
+    output reg RegWrite, // enables writing to register file
+    output reg Jump
 );
     always @(*) begin
         //I found the instruction opcodes for rv32I systems at https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf
@@ -20,6 +21,7 @@ module controlUnit(
                 ALUSrc = 1'b0;
                 RegWrite = 1'b1;
                 ALUOp = 2'b10;
+                Jump = 1'b0;
             end
             //I-Type
             7'b0010011: begin
@@ -30,6 +32,7 @@ module controlUnit(
                 ALUSrc = 1'b1; //Use immediate instead of reg read 2
                 RegWrite = 1'b1;
                 ALUOp = 2'b10;
+                Jump = 1'b0;
             end
             //LOAD
             7'b0000011: begin
@@ -40,6 +43,7 @@ module controlUnit(
                 ALUSrc = 1'b1; //Use immediate for offset
                 RegWrite = 1'b1;
                 ALUOp = 2'b00; // add operation, pc + immediate offset
+                Jump = 1'b0;
             end
             //STORE
             7'b0100011: begin
@@ -50,6 +54,7 @@ module controlUnit(
                 ALUSrc = 1'b1;
                 RegWrite = 1'b0;
                 ALUOp = 2'b00;// add for address
+                Jump = 1'b0;
             end
             //BRANCH
             7'b1100011: begin
@@ -60,6 +65,7 @@ module controlUnit(
                 ALUSrc = 1'b0;
                 RegWrite = 1'b0;
                 ALUOp = 2'b01;//subtract for comp
+                Jump = 1'b0;
             end
             //JAL (referenced page 241)
             7'b1101111: begin
@@ -70,6 +76,7 @@ module controlUnit(
                 ALUSrc = 1'b0;
                 RegWrite = 1'b1;
                 ALUOp = 2'b10;
+                Jump = 1'b1;
             end
             //LUI
             7'b0110111: begin
@@ -80,6 +87,7 @@ module controlUnit(
                 ALUSrc = 1'b1;
                 RegWrite = 1'b1;
                 ALUOp = 2'b11;
+                Jump = 1'b0;
             end
             //JALR / SB-Type Instruction
             7'b1100111: begin
@@ -90,6 +98,7 @@ module controlUnit(
                 ALUSrc = 1'b1;
                 RegWrite = 1'b1;
                 ALUOp = 2'b00;
+                Jump = 1'b1;
             end
             //AUIPC
             7'b0010111: begin
@@ -100,6 +109,7 @@ module controlUnit(
                 ALUSrc = 1'b1;
                 RegWrite = 1'b1;
                 ALUOp = 2'b00;
+                Jump = 1'b0;
             end
             //Environmental calls need implementation later at 1110011 : ecall, ebreak
             default: begin
@@ -110,6 +120,7 @@ module controlUnit(
                 ALUSrc = 1'b0;
                 RegWrite = 1'b0;
                 ALUOp = 2'b00;
+                Jump = 1'b0;
             end
         endcase
     end
