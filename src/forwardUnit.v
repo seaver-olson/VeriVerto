@@ -12,7 +12,6 @@ module forwardingUnit(
     output reg [1:0] ForwardA,
     output reg [1:0] ForwardB
 );
-
     always @(*) begin
         //reset forwards every check
         ForwardA = 2'b00;
