@@ -90,14 +90,15 @@ module cpu(input wire clk, input wire rst);
     immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_imm));
     
     forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), .ID_EX_readData2(ID_EX_readData2), .EX_MEM_writeReg(EX_MEM_writeReg), .EX_MEM_regWrite(EX_MEM_WB[1]), .MEM_WB_writeReg(MEM_WB_writeReg),.MEM_WB_regWrite(MEM_WB_WB[1]), .ForwardA(ForwardA), .ForwardB(ForwardB));
-    //alu and alu control
+    
+    //Mux A and B seen on Page 577 of Patterson
     assign EX_aluA = (ForwardA == 2'b10) ? EX_MEM_OUT:
                      (ForwardA == 2'b01) ? WB_writeData:
                      ID_EX_RD1;
     
     assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : (ForwardB == 2'b10) ? EX_MEM_OUT:
                     (ForwardB == 2'b01) ? WB_writeData: ID_EX_RD2;
-                    
+
     aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), .funct3(ID_EX_F3), .funct7(ID_EX_EX[0]), .ALUControl(ALUControl));
     alu32 alu(.A(EX_aluA), .B(EX_aluB), .Op(ALUControl), .Result(EX_out), .Zero(EX_zero), .Cout(alu_cout));
     

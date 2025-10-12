@@ -19,12 +19,35 @@ module forwardingUnit(
         ForwardB = 2'b00;
 
         //forwardA
-        if (EX_MEM_regWrite && EX_MEM_writeReg == ID_EX_readData1) begin ForwardA = 2'b10; end
-        else if (MEM_WB_regWrite && MEM_WB_writeReg == ID_EX_readData1) begin ForwardA = 2'b01; end
+        if (EX_MEM_regWrite && 
+            EX_MEM_writeReg != 5'b00000 && 
+            EX_MEM_writeReg == ID_EX_readData1
+        ) begin 
+            ForwardA = 2'b10; 
+        end
+        else if (MEM_WB_regWrite && 
+                MEM_WB_writeReg != 5'b00000 && 
+                !(EX_MEM_regWrite && EX_MEM_writeReg != 5'b00000 && EX_MEM_writeReg == ID_EX_readData1) &&
+                MEM_WB_writeReg == ID_EX_readData1
+        ) begin 
+            ForwardA = 2'b01;
+        end
 
         //forwardB
-        if (EX_MEM_regWrite && EX_MEM_writeReg == ID_EX_readData2) begin ForwardB = 2'b10; end
-        else if (MEM_WB_regWrite && MEM_WB_writeReg == ID_EX_readData2) begin ForwardB = 2'b01; end
+        if (EX_MEM_regWrite && 
+            EX_MEM_writeReg != 5'b00000 &&
+            EX_MEM_writeReg == ID_EX_readData2
+        ) begin 
+            ForwardB = 2'b10; 
+        end
+        else if (MEM_WB_regWrite && 
+                MEM_WB_writeReg != 5'b00000 && 
+                !(EX_MEM_regWrite && EX_MEM_writeReg != 5'b00000 && EX_MEM_writeReg == ID_EX_readData2) &&
+                MEM_WB_writeReg == ID_EX_readData2
+        ) begin 
+            ForwardB = 2'b01; 
+        end
     end
 
 endmodule
+//Note:  && logic was found on page 578 of Patterson

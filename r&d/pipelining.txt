@@ -76,3 +76,20 @@ Pipeline Hazards:
                         guesses depending on the behavior of each conditional branch and may change predictions for a conditional branch over the life of a program
                     Delayed:
                         stalls branch until conditional is decided
+The fordwarding control will be in the EX stage since the ALU forwarding mux's are there as well.
+because of this we must pass the operand register num from ID stage via teh ID_EX pipeline
+
+The WB stage is assumed to have no hazards because the register file supplies the correct result if the isntruction in the ID stage reads the same reg written by the instruction in the WB stage
+One complication is potential data hazards between the res of the instruction in WB stage, the result of the instruction the MEM stage and teh source operand of the instruction in the ALU stage
+
+
+Mux Control from forwarding unit:
+    The first ALU operand comes from:
+        ForwardA=00 :  the register file
+        ForwardA=01 :  the data memory or earlier ALU result
+        ForwardA=10 :  the prior ALU result
+    The second ALU operand comes from: 
+        ForwardB=00 :  the register file
+        ForwardB=01 :  the data memory or earlier ALU result
+        ForwardB=10 :  the prior ALU result
+
