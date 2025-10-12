@@ -1,6 +1,28 @@
-test:
-	riscv64-unknown-elf-gcc -g -o test.elf test.c -O0 -march=rv32ima -mabi=ilp32 -nostdlib -T cpu.ld
-	riscv64-unknown-elf-objcopy -O verilog test.elf loadfile_all.img
+CC = riscv64-unknown-elf-gcc
+OBJCOPY = riscv64-unknown-elf-objcopy
+OBJDUMP = riscv64-unknown-elf-objdump
+CFLAGS = -march=rv32i -mabi=ilp32 -O0 -nostdlib -ffreestanding
+LDFLAGS = -T linker.ld
+
+SOURCE = testcases/test1.c
+
+ELF = program.elf
+IMG = loadfile_all.img
+DUMP = program.dump
+
+all: compile
+
+compile: $(IMG)
+
+$(ELF): $(SOURCE) linker.ld
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SOURCE) -o $(ELF)
+
+$(IMG): $(ELF)
+	$(OBJCOPY) -O verilog $(ELF) $(IMG)
+	$(OBJDUMP) -d $(ELF) > $(DUMP)
 
 clean:
-	rm -f test.elf loadfile_all.img
+	rm -f $(ELF) $(IMG) $(DUMP)
+
+disasm: $(DUMP)
+	@less $(DUMP)

@@ -1,0 +1,4 @@
+To compile new img file:
+    compile c to obj: riscv64-unknown-elf-gcc -march=rv32i -mabi=ilp32 -O0 -nostdlib -ffreestanding -c testfile -o test.o
+    link: riscv64-unknown-elf-ld -melf32lriscv -T linker.ld test.o -o test.elf   (make sure to specify 32 bit or it will fail)
+    extract hex: riscv64-unknown-elf-objcopy -O verilog test.elf test.hex

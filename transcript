@@ -1,6 +1,5 @@
-# ERROR: No extended dataflow license exists
 # vsim tb_cpu 
-# Start time: 12:17:56 on Oct 12,2025
+# Start time: 12:31:09 on Oct 12,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
@@ -12,6 +11,8 @@
 # Loading work.alu32
 # Loading work.BitALU
 # Loading work.dataMemory
+run
+restart
 add wave -position end sim:/tb_cpu/dut/*
 run
 run
@@ -21,5 +22,7 @@ run
 run
 run
 run
-# End time: 12:19:48 on Oct 12,2025, Elapsed time: 0:01:52
+run
+# Break key hit
+# End time: 12:35:49 on Oct 12,2025, Elapsed time: 0:04:40
 # Errors: 0, Warnings: 0
