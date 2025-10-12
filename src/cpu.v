@@ -12,6 +12,10 @@ module cpu(input wire clk, input wire rst);
     wire MemWrite;
     wire Branch;
 
+    //forwarding unit output wires
+    wire [1:0] ForwardA;
+    wire [1:0] ForwardB;
+
     wire [1:0] ALUOp;
     wire [3:0] ALUControl;
     
@@ -41,6 +45,7 @@ module cpu(input wire clk, input wire rst);
     reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
     reg [2:0] ID_EX_F3;//funct3
     reg ID_EX_JUMP;
+
     reg [4:0] ID_EX_readData1;
     reg [4:0] ID_EX_readData2;
     reg [4:0] ID_EX_writeReg;
@@ -83,10 +88,16 @@ module cpu(input wire clk, input wire rst);
     regfile regFile(.clk(clk), .rst(rst), .readReg1(ID_readData1), .readReg2(ID_readData2), .writeReg(MEM_WB_writeReg), .writeData(WB_writeData), .rd_we(WB_regWrite), .regOut1(ID_regOut1), .regOut2(ID_regOut2));
     controlUnit ctrlUnit(.instruction(ID_opcode), .Branch(Branch), .MemRead(MemRead), .MemtoReg(MemtoReg), .ALUOp(ALUOp), .MemWrite(MemWrite),.ALUSrc(ALUSrc), .RegWrite(RegWrite), .Jump(Jump));
     immgen immediateGen(.instruction(IF_ID_INSTRUCTION), .immgenOut(ID_imm));
-    //alu and alu control
-    assign EX_aluA = ID_EX_RD1;
     
-    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : ID_EX_RD2;
+    forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), .ID_EX_readData2(ID_EX_readData2), .EX_MEM_writeReg(EX_MEM_writeReg), .EX_MEM_regWrite(EX_MEM_WB[1]), .MEM_WB_writeReg(MEM_WB_writeReg),.MEM_WB_regWrite(MEM_WB_WB[1]), .ForwardA(ForwardA), .ForwardB(ForwardB));
+    //alu and alu control
+    assign EX_aluA = (ForwardA == 2'b10) ? EX_MEM_OUT:
+                     (ForwardA == 2'b01) ? WB_writeData:
+                     ID_EX_RD1;
+    
+    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : (ForwardB == 2'b10) ? EX_MEM_OUT:
+                    (ForwardB == 2'b01) ? WB_writeData: ID_EX_RD2;
+                    
     aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), .funct3(ID_EX_F3), .funct7(ID_EX_EX[0]), .ALUControl(ALUControl));
     alu32 alu(.A(EX_aluA), .B(EX_aluB), .Op(ALUControl), .Result(EX_out), .Zero(EX_zero), .Cout(alu_cout));
     
