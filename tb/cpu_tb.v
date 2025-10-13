@@ -19,8 +19,10 @@ module tb_cpu;
         @(posedge clk);
 
         rst = 1'b0;
-
+        
         #20000
         $finish;
     end 
+
+    
 endmodule

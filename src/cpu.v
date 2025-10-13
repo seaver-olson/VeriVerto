@@ -92,6 +92,7 @@ module cpu(input wire clk, input wire rst);
                           .pc(pc));
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
+    
     //control unit + immediate generator + regfile
     regfile regFile(.clk(clk), 
                     .rst(rst), 
