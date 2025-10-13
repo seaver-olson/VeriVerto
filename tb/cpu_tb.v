@@ -15,11 +15,11 @@ module tb_cpu;
     initial begin
         rst = 1'b1;
         //wait for 2 cycles
-        @(posedge clk); 
-        @(posedge clk);
+        #5
 
         rst = 1'b0;
         
+
         #20000
         $finish;
     end 

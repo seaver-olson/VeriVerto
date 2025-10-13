@@ -20,7 +20,7 @@ module barrelShifter(
     //etc
     assign s2 = shift[2] ? {arithmetic ? {4{signBit}} : 4'b0, dataIn[31:4]} : s1;
     assign s3 = shift[3] ? {arithmetic ? {8{signBit}} : 8'b0, dataIn[31:8]} : s2;
-    assign s3 = shift[4] ? {arithmetic ? {16{signBit}} : 16'b0, dataIn[31:16]} : s3;
+    assign s4 = shift[4] ? {arithmetic ? {16{signBit}} : 16'b0, dataIn[31:16]} : s3;
     
     //mux to select output
     assign dataOut = shiftLeft ? leftShift : s4;

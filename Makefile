@@ -4,7 +4,7 @@ OBJDUMP = riscv64-unknown-elf-objdump
 CFLAGS = -march=rv32i -mabi=ilp32 -O0 -nostdlib -ffreestanding
 LDFLAGS = -T linker.ld
 
-SOURCE = testcases/fib.c
+SOURCE = testcases/test1.c
 
 ELF = program.elf
 IMG = loadfile_all.img

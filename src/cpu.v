@@ -64,7 +64,7 @@ module cpu(input wire clk, input wire rst);
 
     reg [1:0]EX_MEM_WB;
     reg [2:0]EX_MEM_M;
-
+    
     wire [31:0] MEM_readData;
 
     //mem/wb pipeline

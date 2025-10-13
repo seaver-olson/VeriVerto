@@ -17,7 +17,7 @@ module aluControl(
                     3'b001: begin ALUControl = 4'b0010; end
                     3'b010: begin ALUControl = 4'b0111; end
                     3'b011: begin ALUControl = 4'b1000; end
-                    3'b100: begin ALUControl = 4'b0110; end
+                    3'b100: begin ALUControl = 4'b0100; end
                     3'b101: begin ALUControl = (funct7) ? 4'b1001 : 4'b0101; end
                     3'b110: begin ALUControl = 4'b0001; end
                     3'b111: begin ALUControl = 4'b0000; end

@@ -14,6 +14,6 @@ module instructionMemory(
         $readmemh("loadfile_all.img", memory);
     end
 
-    assign instruction = memory[readAddress[15:2]]; //word - 2 bit offset
+    assign instruction = memory[readAddress];
 
 endmodule
