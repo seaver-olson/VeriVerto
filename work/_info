@@ -9,42 +9,20 @@ z2
 !i10f 100
 cModel Technology
 Z0 dC:/Users/sjols/Desktop/veriVerto
-valu32
-Z1 !s110 1760322652
-!i10b 1
-!s100 e?J1CRmV:=Vgo7RUMWOBT2
-Z2 !s11b Dg1SIo80bB@j0V0VzS_@n1
-IGP@aQfA2RNllae8W6:;DX3
-Z3 VDg1SIo80bB@j0V0VzS_@n1
-R0
-w1760033880
-Z4 8src/alu32.v
-Z5 Fsrc/alu32.v
-!i122 75
-L0 1 36
-Z6 OV;L;2020.1;71
-r1
-!s85 0
-31
-Z7 !s108 1760322652.000000
-!s107 .\tb\cpu_tb.v|src/regfile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu32.v|src/alu1.v|
-Z8 !s90 src/alu1.v|src/alu32.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src/forwardUnit.v|src/hazardDetection.v|src/immGen.v|src/instructionMemory.v|src/pc.v|src/regfile.v|.\tb\cpu_tb.v|
-!i113 1
-Z9 tCvgOpt 0
 vALU32
 !s110 1759642031
 !i10b 1
 !s100 5iJRBc9Hl07eMf7;DKX=K1
-R2
+Z1 !s11b Dg1SIo80bB@j0V0VzS_@n1
 IJAiFTSW43[_FV=FaVZYbY2
-R3
+Z2 VDg1SIo80bB@j0V0VzS_@n1
 R0
 w1759637403
-R4
-R5
+Z3 8src/alu32.v
+Z4 Fsrc/alu32.v
 !i122 18
-Z10 L0 1 33
-R6
+Z5 L0 1 33
+Z6 OV;L;2020.1;71
 r1
 !s85 0
 31
@@ -52,15 +30,37 @@ r1
 !s107 .\tb\cpu_tb.v|src/regfile.v|src/instructionMemory.v|src/immGen.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu32.v|
 !s90 src/alu32.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src/immGen.v|src/instructionMemory.v|src/regfile.v|.\tb\cpu_tb.v|
 !i113 1
-R9
+Z7 tCvgOpt 0
 n@a@l@u32
+valu32
+Z8 !s110 1760378783
+!i10b 1
+!s100 ALHG673A9`Q9>;VC4d3mm2
+R1
+I:;KR5UNUK`BZDcCcUSM7]1
+R2
+R0
+w1760378703
+R3
+R4
+!i122 80
+L0 1 45
+R6
+r1
+!s85 0
+31
+Z9 !s108 1760378782.000000
+!s107 .\tb\cpu_tb.v|src/regfile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/barrelShifter.v|src/aluCtrl.v|src/alu32.v|src/alu1.v|
+Z10 !s90 src/alu1.v|src/alu32.v|src/aluCtrl.v|src/barrelShifter.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src/forwardUnit.v|src/hazardDetection.v|src/immGen.v|src/instructionMemory.v|src/pc.v|src/regfile.v|.\tb\cpu_tb.v|
+!i113 1
+R7
 valu32_tb
 !s110 1758765683
 !i10b 1
 !s100 4nhln20?Fk[PG<7QHJ7Xd3
-R2
+R1
 I1fJeU9YBe9CBlhiNd56H72
-R3
+R2
 R0
 w1758765441
 8.\tb\alu_tb.v
@@ -75,286 +75,309 @@ r1
 !s107 .\tb\alu_tb.v|.\src\alu32.v|.\src\alu1.v|
 !s90 .\src\alu1.v|.\src\alu32.v|.\tb\alu_tb.v|
 !i113 1
-R9
+R7
 valuControl
-R1
+R8
 !i10b 1
-!s100 D@7N8joI[:^a3643c5CWR1
+!s100 jD@:cjk:eXg9T_`oM63b]3
+R1
+In?WRlTOPS:N6VRHA]ln861
 R2
-I2Je8R6YzRVoFgD44lnTZ23
-R3
 R0
-w1759899354
+w1760377828
 8src/aluCtrl.v
 Fsrc/aluCtrl.v
-!i122 75
+!i122 80
 L0 1 32
 R6
 r1
 !s85 0
 31
-R7
-Z11 !s107 .\tb\cpu_tb.v|src/regfile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu32.v|src/alu1.v|
-R8
-!i113 1
 R9
+Z11 !s107 .\tb\cpu_tb.v|src/regfile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/barrelShifter.v|src/aluCtrl.v|src/alu32.v|src/alu1.v|
+R10
+!i113 1
+R7
 nalu@control
-vBitALU
-R1
+vbarrelShifter
+R8
 !i10b 1
-!s100 XSPJ:UA2zm?JcAYP;Y:YW1
+!s100 jeLZ_6>W<2[eRmzA^fFH?1
+R1
+I9L]GhNEAb:oa[8WHoULNb0
 R2
-I<TO_^^V>jbh;zJ9O@oZ<U2
-R3
 R0
-w1759976428
-8src/alu1.v
-Fsrc/alu1.v
-!i122 75
-Z12 L0 1 25
+w1760378780
+8src/barrelShifter.v
+Fsrc/barrelShifter.v
+!i122 80
+L0 1 27
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
+nbarrel@shifter
+vBitALU
+R8
+!i10b 1
+!s100 95XZ_?XdHgeDYd1Xb_SV_3
+R1
+Ik2feX;Y<VK2zE=b94`Oo<2
+R2
+R0
+w1760377409
+8src/alu1.v
+Fsrc/alu1.v
+!i122 80
+L0 1 26
+R6
+r1
+!s85 0
+31
+R9
+R11
+R10
+!i113 1
+R7
 n@bit@a@l@u
 vcontrolUnit
-R1
+R8
 !i10b 1
 !s100 ]ooJ?7J[Rk0o1;4bHWcT`2
-R2
+R1
 IIdfTXmcCbkVOcLQ]e_B0W0
-R3
+R2
 R0
 w1760289278
 8src/controlUnit.v
 Fsrc/controlUnit.v
-!i122 75
+!i122 80
 L0 1 127
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 ncontrol@unit
 vcpu
-R1
+R8
 !i10b 1
 !s100 BNO5EX9d6k5JZab6O0H3`1
-R2
+R1
 I:Z<59eLPM6H=gZz?OPkSU3
-R3
+R2
 R0
 w1760310461
 8src/cpu.v
 Fsrc/cpu.v
-!i122 75
+!i122 80
 L0 1 236
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 vdataMemory
-R1
+R8
 !i10b 1
 !s100 XMXM4:BdRS5zES:1IDPh93
-R2
+R1
 IZH4`2F=TC15E@V4`;zPTa2
-R3
+R2
 R0
 w1760310378
 8src/dataMemory.v
 Fsrc/dataMemory.v
-!i122 75
-R12
+!i122 80
+L0 1 25
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 ndata@memory
 vforwardingUnit
-R1
+R8
 !i10b 1
 !s100 g6:RmCLCnn9M]7[cmIdaC1
-R2
+R1
 I47UCL5<:Zfl:TSLd3A@541
-R3
+R2
 R0
 w1760321517
 8src/forwardUnit.v
 Fsrc/forwardUnit.v
-!i122 75
+!i122 80
 L0 1 51
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 nforwarding@unit
 vhazardDetectionUnit
-R1
+R8
 !i10b 1
 !s100 8l[E8:XR[?`75Wgg]iYEL3
-R2
+R1
 Im]Kndb@@V0b421]E0cmYc1
-R3
+R2
 R0
 w1760322267
 8src/hazardDetection.v
 Fsrc/hazardDetection.v
-!i122 75
+!i122 80
 L0 1 5
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 nhazard@detection@unit
 vimmgen
-R1
+R8
 !i10b 1
 !s100 DaOi5L_:o4;6^7m_gJDf:1
-R2
+R1
 I2Nj?JNTITWKnQo:c`YgHk3
-R3
+R2
 R0
 w1760028606
 8src/immGen.v
 Fsrc/immGen.v
-!i122 75
+!i122 80
 L0 1 42
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 vinstructionMemory
-R1
+R8
 !i10b 1
 !s100 26S?J>d`[?RZO1YfF<mR[0
-R2
+R1
 Inl^lKWc@:m<ZkR=:]Y0NT2
-R3
+R2
 R0
 w1759641822
 8src/instructionMemory.v
 Fsrc/instructionMemory.v
-!i122 75
+!i122 80
 L0 2 18
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 ninstruction@memory
 vpcUnit
-R1
+R8
 !i10b 1
 !s100 UaNBW?Iz<Hl:EXGV=]UTX0
-R2
+R1
 ILj1j?iYmOTFaBd6HDg8`z2
-R3
+R2
 R0
 w1760229664
 8src/pc.v
 Fsrc/pc.v
-!i122 75
+!i122 80
 L0 1 29
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 npc@unit
 vregfile
-R1
+R8
 !i10b 1
 !s100 PRnmHEJ<KK:HE?KOFo1QM2
-R2
+R1
 IRBBMP5I70eh8QGzW760lS3
-R3
+R2
 R0
-w1760026314
+w1760377764
 8src/regfile.v
 Fsrc/regfile.v
-!i122 75
-R10
+!i122 80
+R5
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 vtb_cpu
-R1
+R8
 !i10b 1
 !s100 FRWj=9NQc0=28;:G?>4C52
-R2
+R1
 IZH`4P5O_Io7TM1GQFbgUe2
-R3
+R2
 R0
 w1760322627
 8.\tb\cpu_tb.v
 F.\tb\cpu_tb.v
-!i122 75
+!i122 80
 L0 3 26
 R6
 r1
 !s85 0
 31
-R7
-R11
-R8
-!i113 1
 R9
+R11
+R10
+!i113 1
+R7
 vtb_regfile
 !s110 1759351522
 !i10b 1
 !s100 CYcHTIeN7WVRGI[ABDJm62
-R2
+R1
 ICkFIG5cBDSX[ofX9URLeg1
-R3
+R2
 R0
 w1759351413
 8.\tb\regfile_tb.v
@@ -369,4 +392,4 @@ r1
 !s107 .\tb\regfile_tb.v|src/regfile.v|
 !s90 src/regfile.v|.\tb\regfile_tb.v|
 !i113 1
-R9
+R7
