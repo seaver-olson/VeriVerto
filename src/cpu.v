@@ -98,6 +98,7 @@ module cpu(input wire clk, input wire rst);
                           .branchDest(EX_MEM_OUT), 
                           .jumpBase(ID_EX_RD1), 
                           .jalrFlag(ID_EX_JALR), 
+                          .PCWrite(PCWrite),
                           .pc(pc));
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
@@ -173,7 +174,7 @@ module cpu(input wire clk, input wire rst);
         if (rst) begin
             IF_ID_PC <= 0;
             IF_ID_INSTRUCTION <= nop;    
-        end else begin
+        end else if (IF_ID_Write) begin
             IF_ID_PC <= pc;
             IF_ID_INSTRUCTION <= (Jump) ? nop : instr_fetch;
         end

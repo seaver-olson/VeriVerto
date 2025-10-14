@@ -9,6 +9,7 @@ module pcUnit(
     input wire [31:0] branchDest, // from ex/mem
     input wire [31:0] jumpBase, //JALR requires a base add from regOut1
     input wire jalrFlag,
+    input wire PCWrite,
     output reg [31:0] pc
 );  
     wire [31:0] pcPlus4;
@@ -24,11 +25,11 @@ module pcUnit(
                     jump       ? jumpDest   :
                     branchSelect ? (pc + branchDest) :
                     pcPlus4;
-                    
+
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             pc <= 0;
-        end else begin
+        end else if (PCWrite) begin
             pc <= pcNext;
         end
     end
