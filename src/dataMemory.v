@@ -17,10 +17,10 @@ module dataMemory(
 
     always @(posedge clk) begin
         if (MemWrite) begin
-            memory[address+3] = writeData[31:24];  
-	        memory[address+2] = writeData[23:16]; 
-	        memory[address+1] = writeData[15:8]; 
-	        memory[address] = writeData[7:0];
+            memory[address+3] <= writeData[31:24];  
+	        memory[address+2] <= writeData[23:16]; 
+	        memory[address+1] <= writeData[15:8]; 
+	        memory[address] <= writeData[7:0];
         end
     end 
     

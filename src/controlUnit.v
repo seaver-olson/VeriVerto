@@ -67,7 +67,7 @@ module controlUnit(
                 ALUOp = 2'b01;//subtract for comp
                 Jump = 1'b0;
             end
-            //JAL (referenced page 241)
+            //JAL (referenced page 241) 1101111 
             7'b1101111: begin
                 Branch = 1'b0;
                 MemRead = 1'b0;

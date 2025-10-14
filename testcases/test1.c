@@ -8,10 +8,7 @@ __attribute__((naked)) void _start() {
 }
 
 int main () {
-    int x=67;
-    for (int i = 0; i < 420;i++){
-      if (x > 670) x=0;
-      else x+=67;
-    }
+    int x = 0;
+    while (1) x++;
     return 0;
 }

@@ -33,6 +33,8 @@ module cpu(input wire clk, input wire rst);
     wire [31:0] ID_regOut1;
     wire [31:0] ID_regOut2;
     wire [31:0] ID_imm;
+    wire [31:0] ID_jumpDest;
+    assign ID_jumpDest = IF_ID_PC + ID_imm;
 
     //id/ex pipeline
     reg [31:0] ID_EX_PC;
@@ -86,7 +88,8 @@ module cpu(input wire clk, input wire rst);
                           .rst(rst), 
                           .branch(EX_MEM_M[2]), 
                           .zero(EX_MEM_ZERO), 
-                          .jump(EX_MEM_JUMP), 
+                          .jump(Jump), 
+                          .jumpDest(IF_ID_PC+ID_imm),
                           .branchDest(EX_MEM_OUT), 
                           .jumpBase(ID_EX_RD1), 
                           .jalrFlag(ID_EX_JALR), 
@@ -105,7 +108,7 @@ module cpu(input wire clk, input wire rst);
                     .regOut1(ID_regOut1), 
                     .regOut2(ID_regOut2));
 
-    controlUnit ctrlUnit(.instruction(ID_opcode), 
+    controlUnit ctrlUnit(.instruction(IF_ID_INSTRUCTION[6:0]), 
                          .Branch(Branch), 
                          .MemRead(MemRead), 
                          .MemtoReg(MemtoReg), 
@@ -165,7 +168,7 @@ module cpu(input wire clk, input wire rst);
             IF_ID_INSTRUCTION <= nop;    
         end else begin
             IF_ID_PC <= pc;
-            IF_ID_INSTRUCTION <= instr_fetch;
+            IF_ID_INSTRUCTION <= (Jump) ? nop : instr_fetch;
         end
     end
     //ID/EX

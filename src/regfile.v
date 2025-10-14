@@ -11,23 +11,24 @@ module regfile(
         output wire[31:0] regOut1, //Read Data 1
         output wire[31:0] regOut2 //Read Data 2
 );
-    reg [31:0] registers [1:31];//31 - 32bit registers
+    reg [31:0] registers [0:31];//31 - 32bit registers
     integer counter;
     //writes only happen on positive clock edge to sync
     always @(posedge clk) begin
         if (rst) begin
             //accounts for garbage starting in the registers
-            for (counter=1;counter<32;counter=counter+1) begin
+            for (counter=0;counter<32;counter=counter+1) begin
                 registers[counter] <= 32'b0;//wipe all 32 bits in each register
             end
         end else begin
             //if opCode and system isn't trying to write r0
-            if (rd_we && (writeReg != 5'b0)) begin
+            if (rd_we) begin
                 registers[writeReg] <= writeData;//non-blocking assignment
             end
+                registers[0] <= 32'b0;
         end
     end
 
-    assign regOut1 = (readReg1 == 5'd0) ? 32'b0 : registers[readReg1];
-    assign regOut2 = (readReg2 == 5'd0) ? 32'b0 : registers[readReg2];
+    assign regOut1 = registers[readReg1];
+    assign regOut2 = registers[readReg2];
 endmodule 

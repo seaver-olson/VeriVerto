@@ -7,7 +7,7 @@ module BitALU (
     output wire result,
     output wire cout    
 );
-
+    
     wire b_in, sum, carryOut;
     assign b_in = (op == 4'b0110 || op == 4'b0111) ? ~b : b;//flips B for sub and SLT
     assign sum = a ^ b_in ^ cin;
