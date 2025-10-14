@@ -12,6 +12,11 @@ module cpu(input wire clk, input wire rst);
     wire MemWrite;
     wire Branch;
 
+
+    //hazard regs
+    wire PCWrite;
+    wire IF_ID_Write;
+    wire muxSelect;
     //forwarding unit output wires
     wire [1:0] ForwardA;
     wire [1:0] ForwardB;
@@ -97,6 +102,8 @@ module cpu(input wire clk, input wire rst);
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
     
+    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(ID_EX_M[1]), .IF_ID_ReadData1(ID_readData1), .IF_ID_ReadData2(ID_readData2), .ID_EX_writeReg(ID_EX_writeReg), .IF_ID_Write(IF_ID_Write), .PCWrite(PCWrite), .muxSelect(muxSelect));
+
     //control unit + immediate generator + regfile
     regfile regFile(.clk(clk), 
                     .rst(rst), 
