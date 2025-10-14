@@ -16,7 +16,7 @@ module alu32 (
     wire leftShift, arithmetic;
     assign leftShift = (Op == 4'b1000);
     assign arithmetic = (Op == 4'b1010);
-    barrelShifter bs(.dataIn(A), .shift(B[4:0]), .shiftLeft(shiftLeft), .arithmetic(arithmetic), .dataOut(shiftResult));
+    barrelShifter bs(.dataIn(A), .shift(B[4:0]), .shiftLeft(leftShift), .arithmetic(arithmetic), .dataOut(shiftResult));
     //first bit, slt requires cin = 1
     BitALU alu_bit0 (.a(A[0]), 
                     .b(B[0]),

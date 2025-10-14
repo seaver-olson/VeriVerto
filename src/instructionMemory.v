@@ -3,17 +3,16 @@ module instructionMemory(
     input wire [31:0] readAddress, //hook to PC later
     output wire [31:0] instruction
 );
-    reg [31:0] memory [0:16383];//64K bytes of memory
+    reg [7:0] mem [0:65535];//64K bytes of memory
     integer i;
     
+    assign instruction = {mem[readAddress+3],mem[readAddress+2],mem[readAddress+1],mem[readAddress]};
     initial begin
         
-        for (i = 0; i < 16384; i=i+1) begin
-            memory[i] = 32'd0;
+        for (i = 0; i < 65536; i=i+1) begin
+            mem[i] = 8'b0;
         end
-        $readmemh("loadfile_all.img", memory);
+        $readmemh("loadfile_all.img", mem);
     end
-
-    assign instruction = memory[readAddress];
 
 endmodule

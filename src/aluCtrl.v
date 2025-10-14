@@ -9,7 +9,7 @@ module aluControl(
             //LOAD and STORE
             2'b00: begin ALUControl = 4'b0010; end
             // BRANCH
-            2'b01: begin ALUControl = 4'b0011; end
+            2'b01: begin ALUControl = 4'b0110; end
 
             2'b10: begin
                 case (funct3)

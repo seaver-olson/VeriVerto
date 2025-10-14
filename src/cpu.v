@@ -44,6 +44,7 @@ module cpu(input wire clk, input wire rst);
     reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
     reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
     reg [2:0] ID_EX_F3;//funct3
+    reg ID_EX_JALR;
     reg ID_EX_JUMP;
 
     reg [4:0] ID_EX_readData1;
@@ -88,7 +89,7 @@ module cpu(input wire clk, input wire rst);
                           .jump(EX_MEM_JUMP), 
                           .branchDest(EX_MEM_OUT), 
                           .jumpBase(ID_EX_RD1), 
-                          .jalrFlag(ID_opcode==7'b1100111), 
+                          .jalrFlag(ID_EX_JALR), 
                           .pc(pc));
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
@@ -181,6 +182,7 @@ module cpu(input wire clk, input wire rst);
             ID_EX_JUMP <= 0;
             ID_EX_readData1 <= 0;
             ID_EX_readData2 <= 0;
+            ID_EX_JALR <= 0;
             ID_EX_writeReg <= 0;
         end else begin
             ID_EX_PC <= IF_ID_PC;
@@ -192,6 +194,7 @@ module cpu(input wire clk, input wire rst);
             ID_EX_M <= {Branch, MemRead, MemWrite};
             ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
             ID_EX_F3 <= ID_funct3;
+            ID_EX_JALR <= (ID_opcode == 7'b1100111);
             ID_EX_readData1 <= ID_readData1;
             ID_EX_readData2 <= ID_readData2;
             ID_EX_writeReg <= ID_writeReg;
