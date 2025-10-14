@@ -1,5 +1,5 @@
 # vsim tb_cpu 
-# Start time: 13:49:54 on Oct 14,2025
+# Start time: 14:21:57 on Oct 14,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
@@ -17,22 +17,26 @@
 add wave -position end sim:/tb_cpu/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlftjrxc2j".
+#           Attempting to use alternate WLF file "./wlft7jija7".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftjrxc2j
-run
-run
-run
-run
-run
-run
-run
-run
-run
-run
+#           Using alternate file: ./wlft7jija7
 run
 restart
 # ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
 run
-# End time: 13:51:15 on Oct 14,2025, Elapsed time: 0:01:21
+# GetModuleFileName: The specified module could not be found.
+# 
+# 
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+run
+# End time: 14:24:42 on Oct 14,2025, Elapsed time: 0:02:45
 # Errors: 0, Warnings: 0

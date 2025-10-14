@@ -1,4 +1,4 @@
-module cpu(input wire clk, input wire rst);
+module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
 
     localparam nop = 32'h13;
 
@@ -168,7 +168,7 @@ module cpu(input wire clk, input wire rst);
     assign WB_memToReg = MEM_WB_WB[0];
     assign WB_regWrite = MEM_WB_WB[1];
     assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT;
-
+    assign WB_RegWrite_O = WB_regWrite; 
     //IF/ID
     always @(posedge clk or posedge rst) begin
         if (rst) begin
@@ -181,7 +181,7 @@ module cpu(input wire clk, input wire rst);
     end
     //ID/EX
     always @(posedge clk or posedge rst) begin
-        if (rst) begin
+        if (rst || muxSelect) begin
             ID_EX_PC <= 0;
             ID_EX_RD1 <= 0;
             ID_EX_RD2 <= 0;
@@ -245,6 +245,7 @@ module cpu(input wire clk, input wire rst);
             MEM_WB_ALUOUT <= EX_MEM_OUT;
             MEM_WB_WB <= EX_MEM_WB;
             MEM_WB_writeReg <= EX_MEM_writeReg;
+            
         end
     end
 endmodule
