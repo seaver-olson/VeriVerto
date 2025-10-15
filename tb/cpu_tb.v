@@ -30,12 +30,8 @@ module tb_cpu;
         rst = 1'b1;
         //wait for 3 cycles
         @(posedge clk);
-        @(posedge clk);
-        @(posedge clk);
-
 
         rst = 1'b0;
-        
 
         #20000
         

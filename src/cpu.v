@@ -31,7 +31,6 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
     wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
     wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
     wire [4:0] ID_writeReg = IF_ID_INSTRUCTION[11:7];
-    wire [6:0] ID_opcode = IF_ID_INSTRUCTION[6:0];
     wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
     wire ID_funct7 = IF_ID_INSTRUCTION[30];
 
@@ -205,7 +204,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
             ID_EX_M <= {Branch, MemRead, MemWrite};
             ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
             ID_EX_F3 <= ID_funct3;
-            ID_EX_JALR <= (ID_opcode == 7'b1100111);
+            ID_EX_JALR <= (IF_ID_INSTRUCTION[6:0] == 7'b1100111);
             ID_EX_readData1 <= ID_readData1;
             ID_EX_readData2 <= ID_readData2;
             ID_EX_writeReg <= ID_writeReg;

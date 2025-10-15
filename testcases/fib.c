@@ -24,7 +24,7 @@ int fib(int n) {
 }
 
 int main() {
-    int n = 10;               // You can change this for testing
+    int n = 1000;              
     int result = fib(n);
     *OUT_ADDR = result;       // Write result to observable memory
     while (1);                // Stop CPU after done

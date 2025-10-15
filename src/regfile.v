@@ -13,6 +13,9 @@ module regfile(
 );
     reg [31:0] registers [0:31];//31 - 32bit registers
     integer counter;
+
+    assign regOut1 = registers[readReg1];
+    assign regOut2 = registers[readReg2];
     //writes only happen on positive clock edge to sync
     always @(posedge clk) begin
         if (rst) begin
@@ -28,7 +31,4 @@ module regfile(
                 registers[0] <= 32'b0;
         end
     end
-
-    assign regOut1 = registers[readReg1];
-    assign regOut2 = registers[readReg2];
 endmodule 
