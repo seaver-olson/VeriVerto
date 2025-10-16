@@ -110,7 +110,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
                     .readReg2(ID_readData2), 
                     .writeReg(MEM_WB_writeReg), 
                     .writeData(WB_writeData), 
-                    .rd_we(WB_regWrite), 
+                    .regWrite(WB_regWrite), 
                     .regOut1(ID_regOut1), 
                     .regOut2(ID_regOut2));
 
@@ -124,7 +124,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
                          .RegWrite(RegWrite), 
                          .Jump(Jump));
 
-    immgen immediateGen(.instruction(IF_ID_INSTRUCTION), 
+    immgen immediateGen(.IF_ID_INSTRUCTION(IF_ID_INSTRUCTION), 
                         .immgenOut(ID_imm));
     
     forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), 
@@ -141,8 +141,10 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
                      (ForwardA == 2'b01) ? WB_writeData:
                      ID_EX_RD1;
     
-    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : (ForwardB == 2'b10) ? EX_MEM_OUT:
-                    (ForwardB == 2'b01) ? WB_writeData: ID_EX_RD2;
+    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : 
+                    (ForwardB == 2'b10) ? EX_MEM_OUT:
+                    (ForwardB == 2'b01) ? WB_writeData: 
+                    ID_EX_RD2;
 
     aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), 
                            .funct3(ID_EX_F3), 

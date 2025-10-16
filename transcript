@@ -1,5 +1,6 @@
+# ERROR: No extended dataflow license exists
 # vsim tb_cpu 
-# Start time: 09:55:23 on Oct 16,2025
+# Start time: 12:51:50 on Oct 16,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.pcUnit
@@ -14,115 +15,13 @@
 # Loading work.barrelShifter
 # Loading work.BitALU
 # Loading work.dataMemory
-run
-# PC=00000000: opcode= 55, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000000: opcode= 55, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=0000007c: opcode= 19, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000080: opcode= 35, rs1= 2, imm=ffffffe0 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=0000008c: opcode= 19, rs1= 2, imm=00000020 
-#  ForwardA=01, EX_aluA=00000020, EX_aluB=00000018, Result=00000038
-# PC=00000090: opcode= 35, rs1= 0, imm=000003e8 
-#  ForwardA=00, EX_aluA=00001000, EX_aluB=00000020, Result=00001020
 add wave -position end sim:/tb_cpu/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlftbkn5g6".
+#           Attempting to use alternate WLF file "./wlftvt6z8e".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftbkn5g6
+#           Using alternate file: ./wlftvt6z8e
 run
-# PC=0000000c: opcode= 19, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000010: opcode= 35, rs1= 2, imm=ffffffe0 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000020: opcode= 35, rs1= 2, imm=00000020 
-#  ForwardA=00, EX_aluA=00000020, EX_aluB=00000014, Result=00000034
 run
-# PC=0000002c: opcode= 99, rs1= 0, imm=00000001 
-#  ForwardA=01, EX_aluA=00000060, EX_aluB=ffffffec, Result=0000004c
-# PC=00000064: opcode= 19, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000068: opcode=  3, rs1=15, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-run
-# PC=00000078: opcode=103, rs1= 2, imm=00000020 
-#  ForwardA=00, EX_aluA=00000040, EX_aluB=00000014, Result=00000054
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-run
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-run
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-run
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-run
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-# PC=00000078: opcode=103, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=0000001c, EX_aluB=00000000, Result=0000001c
-restart
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
-run
-# PC=00000000: opcode= 55, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000000: opcode= 55, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=0000007c: opcode= 19, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000080: opcode= 35, rs1= 2, imm=ffffffe0 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=0000008c: opcode= 19, rs1= 2, imm=00000020 
-#  ForwardA=01, EX_aluA=00000020, EX_aluB=00000018, Result=00000038
-# PC=00000090: opcode= 35, rs1= 0, imm=000003e8 
-#  ForwardA=00, EX_aluA=00001000, EX_aluB=00000020, Result=00001020
-run
-# PC=0000000c: opcode= 19, rs1= 0, imm=00000000 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000010: opcode= 35, rs1= 2, imm=ffffffe0 
-#  ForwardA=00, EX_aluA=00000000, EX_aluB=00000000, Result=00000000
-# PC=00000020: opcode= 35, rs1= 2, imm=00000020 
-#  ForwardA=00, EX_aluA=00000020, EX_aluB=00000014, Result=00000034
-# End time: 09:55:43 on Oct 16,2025, Elapsed time: 0:00:20
-# Errors: 0, Warnings: 0
+# End time: 12:52:11 on Oct 16,2025, Elapsed time: 0:00:21
+# Errors: 0, Warnings: 2

@@ -43,11 +43,4 @@ module tb_cpu;
         $finish;
     end 
 
-    always @(posedge clk) begin
-    if (dut.IF_ID_INSTRUCTION[6:0] == 7'b0010011) begin // I-type
-        $display("PC=%h: opcode=%d, rs1=%d, imm=%h \n ForwardA=%b, EX_aluA=%h, EX_aluB=%h, Result=%h",
-                 dut.pc, dut.instr_fetch[6:0], dut.ID_readData1, dut.ID_imm,
-                 dut.ForwardA, dut.EX_aluA, dut.EX_aluB, dut.EX_out);
-    end
-    end
 endmodule

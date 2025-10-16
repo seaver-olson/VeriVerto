@@ -10,7 +10,7 @@ int main ();
  *
  */
 __attribute__((naked)) void _start() {
-  asm("li sp,4096");  // set up the stack pointer
+  asm("li sp,0x20000");  // set up the stack pointer
   main();             // call main()
   while(1);           // Spin loop when main() returns
 }

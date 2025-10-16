@@ -1,0 +1,26 @@
+# Current time Thu Oct 16 10:20:49 2025
+# ModelSim - Intel FPGA Edition Stack Trace
+# Program = vish
+# Id = "2020.1"
+# Version = "2020.02"
+# Date = "Feb 28 2020"
+# Platform = win32pe
+
+Exception c0000005 has occurred at address 63fc2507. Traceback:
+# 0    0x63fc2507: '<unknown (@0x63fc2507)>'
+# 1    0x76d5964e: 'GetWindowLongW + 0x194e'
+# 2    0x76d5912d: 'GetWindowLongW + 0x142d'
+# 3    0x6d4186b6: 'Ordinal43 + 0x2596'
+# 4    0x6d417858: 'Ordinal43 + 0x1738'
+# 5    0x76d59259: 'GetWindowLongW + 0x1559'
+# 6    0x64bdb0f1: 'Tcl_ServiceAll + 0x11'
+# 7    0x76d59260: 'GetWindowLongW + 0x1560'
+# 8    0x76d59296: 'GetWindowLongW + 0x1596'
+# 9    0x76d59271: 'GetWindowLongW + 0x1571'
+# 10   0x7750b01c: 'RtlDeactivateActivationContextUnsafeFast + 0x9c'
+# 11   0x755b794c: '<unknown (@0x755b794c)>'
+# 12   0x775305d8: 'SbSelectProcedure + 0x108'
+# 13   0x77530626: 'SbSelectProcedure + 0x156'
+StackWalk failed 299
+# End of Stack Trace
+

@@ -1,42 +1,32 @@
 module immgen(
-    input wire [31:0] instruction,
-    output reg [31:0] immgenOut
+    input wire [31:0] IF_ID_INSTRUCTION,
+    output wire [31:0] immgenOut
 );
-    always @(*) begin
-        case (instruction[6:0])
-            //R-Type
-            7'b0110011: immgenOut = 32'h0;
-            
-            //I-Type and LOAD
-            7'b0010011, 
-            7'b0000011: begin
-                immgenOut = {{20{instruction[31]}}, instruction[31:20]};
-            end
-            //S-Type
-            7'b0100011: begin
-                    // Sign-extend imm[11:5|4:0]
-                immgenOut = {{20{instruction[31]}}, instruction[31:25], instruction[11:7]};
-            end
-            //B-Type (conditional branches)
-            7'b1100011: begin
-                immgenOut = {{19{instruction[31]}}, instruction[31], instruction[7], 
-                                instruction[30:25], instruction[11:8], 1'b0};
-            end
-            //U-Type
-            7'b0110111, 
-            7'b0010111: begin
-                immgenOut = {instruction[31:12], 12'b0};
-            end
-                
-            //J-Type 
-            7'b1101111: begin
-                immgenOut = {{11{instruction[31]}}, instruction[31], instruction[19:12], 
-                                instruction[20], instruction[30:21], 1'b0};
-            end
+    wire [6:0] opcode = IF_ID_INSTRUCTION[6:0];
 
-            default: begin
-                immgenOut = 32'h0;
-            end
-        endcase
-    end
+    localparam [6:0] I_TYPE = 7'b0010011;
+    localparam [6:0] JALR = 7'b1100111;
+    localparam [6:0] LOAD = 7'b0000011;
+    wire [31:0] iImm = {{20{IF_ID_INSTRUCTION[31]}}, IF_ID_INSTRUCTION[31:20]};
+    
+    localparam [6:0] STORE = 7'b0100011;
+    wire [31:0] sImm = {{20{IF_ID_INSTRUCTION[31]}}, IF_ID_INSTRUCTION[31:25], IF_ID_INSTRUCTION[11:7]};
+
+    localparam [6:0] BRANCH = 7'b1100011;
+    wire [31:0] bImm = {{19{IF_ID_INSTRUCTION[31]}}, IF_ID_INSTRUCTION[31], IF_ID_INSTRUCTION[7],
+                        IF_ID_INSTRUCTION[30:25], IF_ID_INSTRUCTION[11:8], 1'b0};
+
+    localparam [6:0] LUI = 7'b0110111;
+    localparam [6:0] AUIPC = 7'b0010111;
+    wire [31:0] uImm = {IF_ID_INSTRUCTION[31:12], 12'b0};   
+    
+    localparam [6:0] J_TYPE = 7'b1101111;
+    wire [31:0] jImm = {{11{IF_ID_INSTRUCTION[31]}}, IF_ID_INSTRUCTION[31], IF_ID_INSTRUCTION[19:12],IF_ID_INSTRUCTION[20], IF_ID_INSTRUCTION[30:21], 1'b0};
+
+    assign immgenOut = (opcode == LOAD || opcode == I_TYPE || opcode == JALR) ? iImm :
+                       (opcode == STORE)  ? sImm :
+                       (opcode == BRANCH) ? bImm :
+                       (opcode == LUI || opcode == AUIPC) ? uImm :
+                       (opcode == J_TYPE) ? jImm :
+                       32'h00;
 endmodule
