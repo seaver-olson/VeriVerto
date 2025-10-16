@@ -27,7 +27,6 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
     //if/id pipeline
     reg [31:0] IF_ID_PC;
     reg [31:0] IF_ID_INSTRUCTION;
-
     wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
     wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
     wire [4:0] ID_writeReg = IF_ID_INSTRUCTION[11:7];
@@ -107,7 +106,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
     //control unit + immediate generator + regfile
     regfile regFile(.clk(clk), 
                     .rst(rst), 
-                    .readReg1(ID_readData1), 
+                    .readReg1(IF_ID_INSTRUCTION[19:15]), 
                     .readReg2(ID_readData2), 
                     .writeReg(MEM_WB_writeReg), 
                     .writeData(WB_writeData), 
@@ -224,7 +223,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
         end else begin
             EX_MEM_PC <= ID_EX_PC;
             EX_MEM_OUT <= EX_out;
-            EX_MEM_RD2 <= ID_EX_RD2;
+            EX_MEM_RD2 <= EX_aluB;
             EX_MEM_JUMP <= ID_EX_JUMP;
             EX_MEM_ZERO <= EX_zero;
             EX_MEM_writeReg <= ID_EX_writeReg;
@@ -240,7 +239,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
             MEM_WB_WB <= 0;
             MEM_WB_writeReg <= 0;
         end else begin
-            MEM_WB_RD  <= MEM_readData;
+            MEM_WB_RD <= MEM_readData;
             MEM_WB_ALUOUT <= EX_MEM_OUT;
             MEM_WB_WB <= EX_MEM_WB;
             MEM_WB_writeReg <= EX_MEM_writeReg;

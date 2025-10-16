@@ -4,7 +4,7 @@ module dataMemory(
     input wire MemRead,
     input wire [31:0] address,
     input wire [31:0] writeData,
-    output wire [31:0] readData
+    output reg [31:0] readData
 );
     reg [7:0] memory [0:65535];
     integer i;
@@ -24,5 +24,5 @@ module dataMemory(
         end
     end 
     
-    assign readData = (MemRead) ? {memory[address+3],memory[address+2],memory[address+1],memory[address]}: 32'b0;
+    assign readData = (MemRead && (address < 65532)) ? {memory[address+3],memory[address+2],memory[address+1],memory[address]}: 32'b0;
 endmodule
