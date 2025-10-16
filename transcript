@@ -1,27 +1,27 @@
-# ERROR: No extended dataflow license exists
-# vsim tb_cpu 
-# Start time: 12:51:50 on Oct 16,2025
-# Loading work.tb_cpu
-# Loading work.cpu
-# Loading work.pcUnit
-# Loading work.instructionMemory
-# Loading work.hazardDetectionUnit
-# Loading work.regfile
-# Loading work.controlUnit
-# Loading work.immgen
-# Loading work.forwardingUnit
-# Loading work.aluControl
-# Loading work.alu32
-# Loading work.barrelShifter
-# Loading work.BitALU
-# Loading work.dataMemory
-add wave -position end sim:/tb_cpu/dut/*
+# vsim tb_alu 
+# Start time: 18:48:20 on Oct 16,2025
+# Loading work.tb_alu
+# Loading work.alu
+# Loading work.oneBit
+add wave -position end sim:/tb_alu/uut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlftvt6z8e".
+#           Attempting to use alternate WLF file "./wlftaz9xej".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlftvt6z8e
-run
-run
-# End time: 12:52:11 on Oct 16,2025, Elapsed time: 0:00:21
+#           Using alternate file: ./wlftaz9xej
+run -all
+# ---- Starting ALU Testbench ----
+# OP=          AND (0x0): a=4278255360, b=252645135 | result=251662080 (0xf000f00) | zero=0 | cout=1
+# OP=            OR (0x1): a=4278255360, b=252645135 | result=4279238415 (0xff0fff0f) | zero=0 | cout=1
+# OP=          ADD (0x2): a=10, b=5 | result=15 (0xf) | zero=0 | cout=0
+# OP=       ADD Overflow (0x2): a=4294967295, b=1 | result=0 (0x0) | zero=1 | cout=1
+# OP=          SUB (0x6): a=10, b=5 | result=5 (0x5) | zero=0 | cout=1
+# OP=       SUB Negative (0x6): a=5, b=10 | result=4294967291 (0xfffffffb) | zero=0 | cout=0
+# OP=           SLT (0x7): a=5, b=10 | result=1 (0x1) | zero=0 | cout=0
+# ---- ALU Testbench Complete ----
+# ** Note: $finish    : ./tb/alu_tb.v(57)
+#    Time: 7 ns  Iteration: 0  Instance: /tb_alu
+# 1
+# Break in Module tb_alu at ./tb/alu_tb.v line 57
+# End time: 18:49:00 on Oct 16,2025, Elapsed time: 0:00:40
 # Errors: 0, Warnings: 2
