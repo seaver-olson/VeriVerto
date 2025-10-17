@@ -1,0 +1,251 @@
+module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
+
+    localparam nop = 32'h13;
+
+    wire [31:0] pc;
+    wire [31:0] instr_fetch; 
+
+    wire ALUSrc;
+    wire MemtoReg;
+    wire RegWrite;
+    wire MemRead;
+    wire MemWrite;
+    wire Branch;
+
+
+    //hazard regs
+    wire PCWrite;
+    wire IF_ID_Write;
+    wire muxSelect;
+    //forwarding unit output wires
+    wire [1:0] ForwardA;
+    wire [1:0] ForwardB;
+
+    wire [1:0] ALUOp;
+    wire [3:0] ALUControl;
+    
+    //if/id pipeline
+    reg [31:0] IF_ID_PC;
+    reg [31:0] IF_ID_INSTRUCTION;
+    wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
+    wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
+    wire [4:0] ID_writeReg = IF_ID_INSTRUCTION[11:7];
+    wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
+    wire ID_funct7 = IF_ID_INSTRUCTION[30];
+
+    wire [31:0] ID_regOut1;
+    wire [31:0] ID_regOut2;
+    wire [31:0] ID_imm;
+    wire [31:0] ID_jumpDest;
+    assign ID_jumpDest = IF_ID_PC + ID_imm;
+
+    //id/ex pipeline
+    reg [31:0] ID_EX_PC;
+    reg [31:0] ID_EX_RD1;
+    reg [31:0] ID_EX_RD2;
+    reg [31:0] ID_EX_IMM;
+
+    reg [1:0] ID_EX_WB;//writeback stage: regWrite+memtoreg
+    reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
+    reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
+    reg [2:0] ID_EX_F3;//funct3
+    reg ID_EX_JALR;
+    reg ID_EX_JUMP;
+
+    reg [4:0] ID_EX_readData1;
+    reg [4:0] ID_EX_readData2;
+    reg [4:0] ID_EX_writeReg;
+
+    wire [31:0] EX_aluA;
+    wire [31:0] EX_aluB;
+    wire [31:0] EX_out;
+    wire EX_zero;
+    //ex/mem pipeline
+    reg [31:0] EX_MEM_PC;
+    reg EX_MEM_JUMP;
+    reg [31:0] EX_MEM_OUT;//alu output
+    reg [31:0] EX_MEM_RD2;//goes to write data (data memory)
+    reg EX_MEM_ZERO;//zero flag
+    reg [4:0] EX_MEM_writeReg;
+
+    reg [1:0]EX_MEM_WB;
+    reg [2:0]EX_MEM_M;
+    
+    wire [31:0] MEM_readData;
+
+    //mem/wb pipeline
+    reg [31:0] MEM_WB_RD;//data memory read dead
+    reg [31:0] MEM_WB_ALUOUT;
+    reg [1:0] MEM_WB_WB;
+    reg [4:0] MEM_WB_writeReg;
+
+    wire [31:0] WB_writeData;
+    wire WB_regWrite;
+    wire WB_memToReg;
+
+    wire alu_cout;//i need to do this eventually
+    wire Jump;
+    
+    //pc
+    pcUnit programCounter(.clk(clk), 
+                          .rst(rst), 
+                          .branch(EX_MEM_M[2]), 
+                          .zero(EX_MEM_ZERO), 
+                          .jump(Jump), 
+                          .jumpDest(IF_ID_PC+ID_imm),
+                          .branchDest(EX_MEM_OUT), 
+                          .jumpBase(ID_EX_RD1), 
+                          .jalrFlag(ID_EX_JALR), 
+                          .PCWrite(PCWrite),
+                          .pc(pc));
+    //instruction memory 
+    instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
+    
+    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(ID_EX_M[1]), .IF_ID_ReadData1(ID_readData1), .IF_ID_ReadData2(ID_readData2), .ID_EX_writeReg(ID_EX_writeReg), .IF_ID_Write(IF_ID_Write), .PCWrite(PCWrite), .muxSelect(muxSelect));
+
+    //control unit + immediate generator + regfile
+    regfile regFile(.clk(clk), 
+                    .rst(rst), 
+                    .readReg1(IF_ID_INSTRUCTION[19:15]), 
+                    .readReg2(ID_readData2), 
+                    .writeReg(MEM_WB_writeReg), 
+                    .writeData(WB_writeData), 
+                    .regWrite(WB_regWrite), 
+                    .regOut1(ID_regOut1), 
+                    .regOut2(ID_regOut2));
+
+    controlUnit ctrlUnit(.instruction(IF_ID_INSTRUCTION[6:0]), 
+                         .Branch(Branch), 
+                         .MemRead(MemRead), 
+                         .MemtoReg(MemtoReg), 
+                         .ALUOp(ALUOp), 
+                         .MemWrite(MemWrite),
+                         .ALUSrc(ALUSrc), 
+                         .RegWrite(RegWrite), 
+                         .Jump(Jump));
+
+    immgen immediateGen(.IF_ID_INSTRUCTION(IF_ID_INSTRUCTION), 
+                        .immgenOut(ID_imm));
+    
+    forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), 
+                         .ID_EX_readData2(ID_EX_readData2), 
+                         .EX_MEM_writeReg(EX_MEM_writeReg), 
+                         .EX_MEM_regWrite(EX_MEM_WB[1]), 
+                         .MEM_WB_writeReg(MEM_WB_writeReg),
+                         .MEM_WB_regWrite(MEM_WB_WB[1]), 
+                         .ForwardA(ForwardA), 
+                         .ForwardB(ForwardB));
+    
+    //Mux A and B seen on Page 577 of Patterson
+    assign EX_aluA = (ForwardA == 2'b10) ? EX_MEM_OUT:
+                     (ForwardA == 2'b01) ? WB_writeData:
+                     ID_EX_RD1;
+    
+    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : 
+                    (ForwardB == 2'b10) ? EX_MEM_OUT:
+                    (ForwardB == 2'b01) ? WB_writeData: 
+                    ID_EX_RD2;
+
+    aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), 
+                           .funct3(ID_EX_F3), 
+                           .funct7(ID_EX_EX[0]), 
+                           .ALUControl(ALUControl));
+    alu32 alu(.a(EX_aluA), 
+              .b(EX_aluB), 
+              .op(ALUControl), 
+              .result(EX_out), 
+              .zero(EX_zero), 
+              .cout(alu_cout));
+    
+    //data memory instance
+    dataMemory dataMem(.clk(clk), 
+                       .MemWrite(EX_MEM_M[0]), 
+                       .MemRead(EX_MEM_M[1]), 
+                       .address(EX_MEM_OUT), 
+                       .writeData(EX_MEM_RD2), 
+                       .readData(MEM_readData));
+
+    assign WB_memToReg = MEM_WB_WB[0];
+    assign WB_regWrite = MEM_WB_WB[1];
+    assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT;
+    assign WB_RegWrite_O = WB_regWrite; 
+    //IF/ID
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            IF_ID_PC <= 0;
+            IF_ID_INSTRUCTION <= nop;    
+        end else if (IF_ID_Write) begin
+            IF_ID_PC <= pc;
+            IF_ID_INSTRUCTION <= (Jump) ? nop : instr_fetch;
+        end
+    end
+    //ID/EX
+    always @(posedge clk or posedge rst) begin
+        if (rst || muxSelect) begin
+            ID_EX_PC <= 0;
+            ID_EX_RD1 <= 0;
+            ID_EX_RD2 <= 0;
+            ID_EX_IMM <= 0;
+            ID_EX_WB <= 0;
+            ID_EX_M <= 0;
+            ID_EX_EX <= 0;
+            ID_EX_F3 <= 0;
+            ID_EX_JUMP <= 0;
+            ID_EX_readData1 <= 0;
+            ID_EX_readData2 <= 0;
+            ID_EX_JALR <= 0;
+            ID_EX_writeReg <= 0;
+        end else begin
+            ID_EX_PC <= IF_ID_PC;
+            ID_EX_RD1 <= ID_regOut1;
+            ID_EX_RD2 <= ID_regOut2;
+            ID_EX_IMM <= ID_imm;
+            ID_EX_JUMP <= Jump;
+            ID_EX_WB <= {RegWrite, MemtoReg};
+            ID_EX_M <= {Branch, MemRead, MemWrite};
+            ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
+            ID_EX_F3 <= ID_funct3;
+            ID_EX_JALR <= (IF_ID_INSTRUCTION[6:0] == 7'b1100111);
+            ID_EX_readData1 <= ID_readData1;
+            ID_EX_readData2 <= ID_readData2;
+            ID_EX_writeReg <= ID_writeReg;
+        end
+    end
+    //EX/MEM
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            EX_MEM_PC <= 0;
+            EX_MEM_OUT <= 0;
+            EX_MEM_RD2 <= 0;
+            EX_MEM_ZERO <= 0;
+            EX_MEM_JUMP <= 0;
+            EX_MEM_writeReg <= 0;
+            EX_MEM_WB <= 0;
+            EX_MEM_M <= 0;
+        end else begin
+            EX_MEM_PC <= ID_EX_PC;
+            EX_MEM_OUT <= EX_out;
+            EX_MEM_RD2 <= EX_aluB;
+            EX_MEM_JUMP <= ID_EX_JUMP;
+            EX_MEM_ZERO <= EX_zero;
+            EX_MEM_writeReg <= ID_EX_writeReg;
+            EX_MEM_WB <= ID_EX_WB;
+            EX_MEM_M <= ID_EX_M;
+        end
+    end
+    //MEM/WB
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            MEM_WB_RD  <= 0;
+            MEM_WB_ALUOUT <= 0;
+            MEM_WB_WB <= 0;
+            MEM_WB_writeReg <= 0;
+        end else begin
+            MEM_WB_RD <= MEM_readData;
+            MEM_WB_ALUOUT <= EX_MEM_OUT;
+            MEM_WB_WB <= EX_MEM_WB;
+            MEM_WB_writeReg <= EX_MEM_writeReg;
+            
+        end
+    end
+endmodule

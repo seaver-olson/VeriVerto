@@ -8,7 +8,6 @@ __attribute__((naked)) void _start() {
 }
 
 int main () {
-    int x = 0;
-    while (1) x++;
+    while (1) asm("addi a1, a1, 1");
     return 0;
 }

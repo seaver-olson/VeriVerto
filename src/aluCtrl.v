@@ -14,9 +14,9 @@ module aluControl(
             2'b10: begin
                 case (funct3)
                     3'b000: begin ALUControl = (funct7) ? 4'b0110 : 4'b0010; end  //SUB : ADD
-                    3'b001: begin ALUControl = 4'b1000; end  // SLL (shift left)
-                    3'b010: begin ALUControl = 4'b0111; end  // SLT
-                    3'b011: begin ALUControl = 4'b0111; end  //SLTU (use SLT for now)
+                    3'b001: begin ALUControl = 4'b1000; end  //SLL
+                    3'b010: begin ALUControl = 4'b0111; end  //SLT
+                    3'b011: begin ALUControl = 4'b0111; end  //SLTU
                     3'b100: begin ALUControl = 4'b0100; end  //XOR
                     3'b101: begin ALUControl = (funct7) ? 4'b1010 : 4'b1001; end  //SRA : SRL
                     3'b110: begin ALUControl = 4'b0001; end  //OR

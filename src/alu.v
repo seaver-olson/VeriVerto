@@ -14,9 +14,9 @@ module alu32(
     wire [1:0] shiftctrl;
     wire slt;
 
-    assign shiftctrl = (op == 4'b0011) ? 2'b00 : //SLL
-                       (op == 4'b0101) ? 2'b01 : //SRL
-                       (op == 4'b1101) ? 2'b10 : //SRA
+    assign shiftctrl = (op == 4'b1000) ? 2'b00 : //SLL
+                       (op == 4'b1001) ? 2'b01 : //SRL
+                       (op == 4'b1010) ? 2'b10 : //SRA
                        2'b00;
 
     assign b_in = (op == 4'b0110 || op == 4'b0111) ? ~b : b;
@@ -52,7 +52,7 @@ module alu32(
 
     assign slt = resHold[31] ^ (carry[30] ^ carry[31]);
     assign result = (op == 4'b0111) ? {31'b0, slt} : 
-                    (op == 4'b0011 || op == 4'b0101 || op == 4'b1101) ? shiftHold :
+                    (op == 4'b1000 || op == 4'b1010 || op == 4'b1001) ? shiftHold :
                     resHold;
     assign zero = (result == 32'h00);
     assign cout = carry[31];
