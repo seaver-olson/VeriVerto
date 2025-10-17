@@ -150,12 +150,12 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
                            .funct3(ID_EX_F3), 
                            .funct7(ID_EX_EX[0]), 
                            .ALUControl(ALUControl));
-    alu32 alu(.A(EX_aluA), 
-              .B(EX_aluB), 
-              .Op(ALUControl), 
-              .Result(EX_out), 
-              .Zero(EX_zero), 
-              .Cout(alu_cout));
+    alu32 alu(.a(EX_aluA), 
+              .b(EX_aluB), 
+              .op(ALUControl), 
+              .result(EX_out), 
+              .zero(EX_zero), 
+              .cout(alu_cout));
     
     //data memory instance
     dataMemory dataMem(.clk(clk), 
