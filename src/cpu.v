@@ -86,6 +86,8 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
     wire alu_cout;//i need to do this eventually
     wire Jump;
     
+    equalityTestUnit equalityUnit(.a(EX_aluA), .b(EX_aluB), .zero(EX_zero));
+
     //pc
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
@@ -154,7 +156,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
               .b(EX_aluB), 
               .op(ALUControl), 
               .result(EX_out), 
-              .zero(EX_zero), 
+              //.zero(EX_zero), 
               .cout(alu_cout));
     
     //data memory instance

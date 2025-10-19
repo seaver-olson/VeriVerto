@@ -1,7 +1,8 @@
 # vsim tb_cpu 
-# Start time: 15:55:44 on Oct 17,2025
+# Start time: 20:16:11 on Oct 18,2025
 # Loading work.tb_cpu
 # Loading work.cpu
+# Loading work.equalityTestUnit
 # Loading work.pcUnit
 # Loading work.instructionMemory
 # Loading work.hazardDetectionUnit
@@ -14,24 +15,18 @@
 # Loading work.barrelShifter
 # Loading work.oneBit
 # Loading work.dataMemory
+run
 add wave -position end sim:/tb_cpu/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlft09fwz4".
+#           Attempting to use alternate WLF file "./wlftr06yar".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft09fwz4
+#           Using alternate file: ./wlftr06yar
 run
 run
 run
 run
 run
 run
-run
-run
-run
-run
-run
-run
-run
-# End time: 15:58:48 on Oct 17,2025, Elapsed time: 0:03:04
+# End time: 20:16:27 on Oct 18,2025, Elapsed time: 0:00:16
 # Errors: 0, Warnings: 2

@@ -32,23 +32,23 @@ Z7 !s90 src/alu.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src
 !i113 1
 Z8 tCvgOpt 0
 valu32
-Z9 !s110 1760734539
+Z9 !s110 1760836495
 !i10b 1
-!s100 Z<MUl>5<YGR4B<O::o4CB2
+!s100 `=aXo:ohAOLQ=kfo3bYcH3
 R1
-IO6gPz>oc5Wo5XQO^f9`fd1
+I:N>Rd5zh20nQ:bPETnDTW1
 R2
 R0
-Z10 w1760733967
+Z10 w1760836464
 R3
 R4
-!i122 11
+!i122 19
 R5
 R6
 r1
 !s85 0
 31
-Z11 !s108 1760734538.000000
+Z11 !s108 1760836494.000000
 Z12 !s107 .\tb\cpu_tb.v|src/regFile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/equalityUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu.v|
 R7
 !i113 1
@@ -86,7 +86,7 @@ R0
 w1760707569
 8src/aluCtrl.v
 Fsrc/aluCtrl.v
-!i122 11
+!i122 19
 Z15 L0 1 32
 R6
 r1
@@ -109,7 +109,7 @@ R0
 R10
 R3
 R4
-!i122 11
+!i122 19
 L0 61 39
 R6
 r1
@@ -132,7 +132,7 @@ R0
 w1760706963
 8src/controlUnit.v
 Fsrc/controlUnit.v
-!i122 11
+!i122 19
 L0 1 127
 R6
 r1
@@ -147,16 +147,16 @@ ncontrol@unit
 vcpu
 R9
 !i10b 1
-!s100 ?gT^;iMJ4ZEOd^JXSkA^P2
+!s100 3<Y0DK3lZB`@7O>XeZ`Uj0
 R1
-IMF_EmN>Dl_<G8bKZW;82B0
+I8LmRJ?K9=TdD@<K?]gUTP3
 R2
 R0
-w1760707578
+w1760836447
 8src/cpu.v
 Fsrc/cpu.v
-!i122 11
-L0 1 251
+!i122 19
+L0 1 253
 R6
 r1
 !s85 0
@@ -177,7 +177,7 @@ R0
 w1760636853
 8src/dataMemory.v
 Fsrc/dataMemory.v
-!i122 11
+!i122 19
 R15
 R6
 r1
@@ -192,16 +192,16 @@ ndata@memory
 vequalityTestUnit
 R9
 !i10b 1
-!s100 a?8Pb98Y>@bfYlVd4e^@>1
+!s100 zWGnMo1fXXjYY^:X?>KG]3
 R1
-IE3j9WcZkR`_IMNnEzQgWH0
+I_fcRH[Fb0VUz70?K64`zL1
 R2
 R0
-w1760557953
+w1760836492
 8src/equalityUnit.v
 Fsrc/equalityUnit.v
-!i122 11
-L0 1 3
+!i122 19
+L0 1 7
 R6
 r1
 !s85 0
@@ -212,6 +212,29 @@ R7
 !i113 1
 R8
 nequality@test@unit
+vEX_MEM
+Z16 !s110 1760746405
+!i10b 1
+!s100 SIGj>2h_jZ@j?97LHBWZk2
+R1
+INRXY5ck`IQ^@CU5YDF_DJ2
+R2
+R0
+w1760742855
+8src/exmem.v
+Fsrc/exmem.v
+!i122 16
+Z17 L0 1 5
+R6
+r1
+!s85 0
+31
+Z18 !s108 1760746405.000000
+Z19 !s107 .\tb\cpu_tb.v|src/regFile.v|src/pc.v|src/memwb.v|src/instructionMemory.v|src/immGen.v|src/ifid.v|src/idex.v|src/hazardDetection.v|src/forwardUnit.v|src/exmem.v|src/equalityUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu.v|
+Z20 !s90 src/alu.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src/equalityUnit.v|src/exmem.v|src/forwardUnit.v|src/hazardDetection.v|src/idex.v|src/ifid.v|src/immGen.v|src/instructionMemory.v|src/memwb.v|src/pc.v|src/regFile.v|.\tb\cpu_tb.v|
+!i113 1
+R8
+n@e@x_@m@e@m
 vforwardingUnit
 R9
 !i10b 1
@@ -223,7 +246,7 @@ R0
 w1760386235
 8src/forwardUnit.v
 Fsrc/forwardUnit.v
-!i122 11
+!i122 19
 L0 1 51
 R6
 r1
@@ -246,7 +269,7 @@ R0
 w1760467060
 8src/hazardDetection.v
 Fsrc/hazardDetection.v
-!i122 11
+!i122 19
 L0 1 20
 R6
 r1
@@ -258,6 +281,52 @@ R7
 !i113 1
 R8
 nhazard@detection@unit
+vID_EX
+R16
+!i10b 1
+!s100 IOBkc:=?4ohccSW]_5I5J3
+R1
+IIZLBcRa[^oKT:TdhEGP4Y2
+R2
+R0
+w1760734959
+8src/idex.v
+Fsrc/idex.v
+!i122 16
+R17
+R6
+r1
+!s85 0
+31
+R18
+R19
+R20
+!i113 1
+R8
+n@i@d_@e@x
+vIF_ID
+R16
+!i10b 1
+!s100 ze:IA447PTKeZj0aJ>=:Y2
+R1
+ION=09B:>CZ1KCPkLU9Z0S3
+R2
+R0
+w1760746362
+8src/ifid.v
+Fsrc/ifid.v
+!i122 16
+L0 1 13
+R6
+r1
+!s85 0
+31
+R18
+R19
+R20
+!i113 1
+R8
+n@i@f_@i@d
 vimmgen
 R9
 !i10b 1
@@ -269,7 +338,7 @@ R0
 w1760706952
 8src/immGen.v
 Fsrc/immGen.v
-!i122 11
+!i122 19
 R15
 R6
 r1
@@ -291,7 +360,7 @@ R0
 w1760649067
 8src/instructionMemory.v
 Fsrc/instructionMemory.v
-!i122 11
+!i122 19
 L0 2 16
 R6
 r1
@@ -303,6 +372,29 @@ R7
 !i113 1
 R8
 ninstruction@memory
+vMEM_WB
+R16
+!i10b 1
+!s100 :X:50SfQgWdM`cYF`PD_H2
+R1
+IanPBV:BllJM3KkBTbM<0X2
+R2
+R0
+w1760734905
+8src/memwb.v
+Fsrc/memwb.v
+!i122 16
+R17
+R6
+r1
+!s85 0
+31
+R18
+R19
+R20
+!i113 1
+R8
+n@m@e@m_@w@b
 voneBit
 R9
 !i10b 1
@@ -314,7 +406,7 @@ R0
 R10
 R3
 R4
-!i122 11
+!i122 19
 L0 101 19
 R6
 r1
@@ -337,7 +429,7 @@ R0
 w1760620855
 8src/pc.v
 Fsrc/pc.v
-!i122 11
+!i122 19
 L0 1 36
 R6
 r1
@@ -360,7 +452,7 @@ R0
 w1760650355
 8src/regFile.v
 Fsrc/regFile.v
-!i122 11
+!i122 19
 R15
 R6
 r1
@@ -404,7 +496,7 @@ R0
 w1760629123
 8.\tb\cpu_tb.v
 F.\tb\cpu_tb.v
-!i122 11
+!i122 19
 L0 3 44
 R6
 r1

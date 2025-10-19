@@ -3,10 +3,10 @@ module alu32(
     input wire [31:0] b,
     input wire [3:0] op,
     output wire [31:0] result,
-    output wire zero,
+    //output wire zero,
     output wire cout
 );
-
+    wire zero;
     wire [31:0] carry;
     wire [31:0] resHold;
     wire [31:0] shiftHold;
@@ -29,12 +29,12 @@ module alu32(
     );
 
     oneBit aluBit0(
-                    .a(a[0]), 
-                    .b(b_in[0]),
-                    .cin((op == 4'b0110 || op == 4'b0111) ? 1'b1 : 1'b0),
-                    .op(op),
-                    .result(resHold[0]),
-                    .cout(carry[0])
+        .a(a[0]), 
+        .b(b_in[0]),
+        .cin((op == 4'b0110 || op == 4'b0111) ? 1'b1 : 1'b0),
+        .op(op),
+        .result(resHold[0]),
+        .cout(carry[0])
     );
 
     genvar i;
