@@ -1,0 +1,10 @@
+Linker Scripts:
+    C Code:
+        Functions (.text)
+        Constants (.rodata)
+        Variables (.data, .bss)
+
+    MEMORY - declares one or more memory regions with attributes
+        specifies permissions, ORIGIN and LENGTH
+            example: RAM (wx) : org = 0x00100000, len = 1M
+    SECTIONS - tells the linker to place code from various sections

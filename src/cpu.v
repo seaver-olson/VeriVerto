@@ -1,4 +1,4 @@
-module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
+module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_RegWrite_O);
 
     localparam nop = 32'h13;
 
@@ -112,6 +112,7 @@ module cpu(input wire clk, input wire rst, output wire WB_RegWrite_O);
                     .readReg2(ID_readData2), 
                     .writeReg(MEM_WB_writeReg), 
                     .writeData(WB_writeData), 
+                    .regDump(regDump),
                     .regWrite(WB_regWrite), 
                     .regOut1(ID_regOut1), 
                     .regOut2(ID_regOut2));

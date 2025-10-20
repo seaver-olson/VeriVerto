@@ -23,7 +23,7 @@ module pcUnit(
 
     assign pcNext = jalrFlag   ? jalrTarget :
                     jump       ? jumpDest   :
-                    branchSelect ? (pc + branchDest) :
+                    branchSelect ? (branchDest) :
                     pcPlus4;
 
     always @(posedge clk or posedge rst) begin

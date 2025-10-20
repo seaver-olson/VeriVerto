@@ -1,6 +1,7 @@
 module regfile(
     input wire clk,
     input wire rst,
+    input wire regDump,
     //input ports
     input wire[4:0] readReg1,//instruction[19:15]
     input wire[4:0] readReg2,//instruction[24:20]
@@ -17,7 +18,7 @@ module regfile(
     assign regOut1 = (readReg1 != 5'b0) ? registers[readReg1] : 32'h00;
     assign regOut2 = (readReg2 != 5'b0) ? registers[readReg2] : 32'h00;
 
-    always @(posedge clk, rst) begin 
+    always @(posedge clk or posedge rst) begin
         if (rst) begin
             for (i = 1; i<32;i=i+1) begin
                 registers[i] <= 32'h00;//wipe all regs
@@ -27,6 +28,14 @@ module regfile(
                 registers[writeReg] <= writeData;
             end
         end
+    end
+
+    always @(posedge regDump) begin
+        $display("Reg File Dump: ");
+        for (i = 0; i < 32; i = i + 1) begin
+            $display("x%0d: %h", i, registers[i]);
+        end
+        $display("------------");
     end
     
 endmodule

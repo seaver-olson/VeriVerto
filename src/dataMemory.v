@@ -20,13 +20,13 @@ module dataMemory(
             if (address == 32'hFFFF0000) begin
                 $display(">>> PROGRAM OUTPUT: %0d", writeData);
             end else begin
-                memory[address+3] <= writeData[31:24];  
-                memory[address+2] <= writeData[23:16]; 
-                memory[address+1] <= writeData[15:8]; 
-                memory[address] <= writeData[7:0];
+                memory[address+3] = writeData[31:24];  
+                memory[address+2] = writeData[23:16]; 
+                memory[address+1] = writeData[15:8]; 
+                memory[address] = writeData[7:0];
             end
         end
     end 
-    
-    assign readData = (MemRead) ? {memory[address+3],memory[address+2],memory[address+1],memory[address]}: 32'b0;
+    //this is almost 100% breaking the output of my program by flushing negative numbers at a edge case so come back later 
+    assign readData = (MemRead && address < 131068) ? {memory[address+3],memory[address+2],memory[address+1],memory[address]}: 32'b0;
 endmodule

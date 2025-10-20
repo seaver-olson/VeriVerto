@@ -4,15 +4,21 @@ module tb_cpu;
 
     reg clk;
     reg rst;
+    reg regDump;
     wire instrCompleted;
     reg [31:0] totalCycles;
     reg [31:0] totalInstr;
-    cpu dut(.clk(clk), .rst(rst), .WB_RegWrite_O(instrCompleted));
+    cpu dut(.clk(clk), .rst(rst), .regDump(regDump) , .WB_RegWrite_O(instrCompleted));
 
     initial begin
         clk = 1'b0;
         forever #(5) clk = ~clk;
     end 
+
+    initial begin
+        regDump = 1'b0;
+        forever #(100) regDump = ~regDump;
+    end
 
     always @(posedge clk) begin
         if (rst) begin
@@ -32,7 +38,6 @@ module tb_cpu;
         @(posedge clk);
 
         rst = 1'b0;
-
         #20000
         
         $display("\n--- Performance Data ---");
