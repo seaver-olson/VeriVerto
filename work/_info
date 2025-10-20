@@ -32,7 +32,7 @@ Z7 !s90 src/alu.v|src/aluCtrl.v|src/controlUnit.v|src/cpu.v|src/dataMemory.v|src
 !i113 1
 Z8 tCvgOpt 0
 valu32
-Z9 !s110 1760982480
+Z9 !s110 1760986914
 !i10b 1
 !s100 `=aXo:ohAOLQ=kfo3bYcH3
 R1
@@ -42,13 +42,13 @@ R0
 Z10 w1760979523
 R3
 R4
-!i122 30
+!i122 36
 R5
 R6
 r1
 !s85 0
 31
-Z11 !s108 1760982480.000000
+Z11 !s108 1760986914.000000
 Z12 !s107 .\tb\cpu_tb.v|src/regFile.v|src/pc.v|src/instructionMemory.v|src/immGen.v|src/hazardDetection.v|src/forwardUnit.v|src/equalityUnit.v|src/dataMemory.v|src/cpu.v|src/controlUnit.v|src/aluCtrl.v|src/alu.v|
 R7
 !i113 1
@@ -86,7 +86,7 @@ R0
 w1760707569
 8src/aluCtrl.v
 Fsrc/aluCtrl.v
-!i122 30
+!i122 36
 Z15 L0 1 32
 R6
 r1
@@ -109,7 +109,7 @@ R0
 R10
 R3
 R4
-!i122 30
+!i122 36
 L0 61 39
 R6
 r1
@@ -132,7 +132,7 @@ R0
 w1760706963
 8src/controlUnit.v
 Fsrc/controlUnit.v
-!i122 30
+!i122 36
 L0 1 127
 R6
 r1
@@ -155,7 +155,7 @@ R0
 w1760982343
 8src/cpu.v
 Fsrc/cpu.v
-!i122 30
+!i122 36
 L0 1 254
 R6
 r1
@@ -169,16 +169,16 @@ R8
 vdataMemory
 R9
 !i10b 1
-!s100 f;HO5J<50`[Z7hkE3@9bk3
+!s100 cm?_YKlHU8CBQi>khE4fW3
 R1
-I6Ml8W`WgPjj^nE:<laKmU1
+IKIg7LTUK`8oAB8iEzQAVU1
 R2
 R0
-w1760982208
+w1760986911
 8src/dataMemory.v
 Fsrc/dataMemory.v
-!i122 30
-R15
+!i122 36
+L0 1 25
 R6
 r1
 !s85 0
@@ -200,7 +200,7 @@ R0
 w1760839546
 8src/equalityUnit.v
 Fsrc/equalityUnit.v
-!i122 30
+!i122 36
 L0 1 7
 R6
 r1
@@ -246,7 +246,7 @@ R0
 w1760386235
 8src/forwardUnit.v
 Fsrc/forwardUnit.v
-!i122 30
+!i122 36
 L0 1 51
 R6
 r1
@@ -269,7 +269,7 @@ R0
 w1760467060
 8src/hazardDetection.v
 Fsrc/hazardDetection.v
-!i122 30
+!i122 36
 L0 1 20
 R6
 r1
@@ -338,7 +338,7 @@ R0
 w1760706952
 8src/immGen.v
 Fsrc/immGen.v
-!i122 30
+!i122 36
 R15
 R6
 r1
@@ -360,7 +360,7 @@ R0
 w1760982016
 8src/instructionMemory.v
 Fsrc/instructionMemory.v
-!i122 30
+!i122 36
 L0 2 16
 R6
 r1
@@ -406,7 +406,7 @@ R0
 R10
 R3
 R4
-!i122 30
+!i122 36
 L0 101 19
 R6
 r1
@@ -429,7 +429,7 @@ R0
 w1760979742
 8src/pc.v
 Fsrc/pc.v
-!i122 30
+!i122 36
 L0 1 36
 R6
 r1
@@ -444,16 +444,16 @@ npc@unit
 vregfile
 R9
 !i10b 1
-!s100 [56zzdeaABK84>NNOim1b0
+!s100 aH=l]FbbHi2RzTLnAXDgk0
 R1
-IY6:CXC0AV<<HXe^4@WFo71
+I@o1K^j>zS0EQo4D7C4zaH2
 R2
 R0
-w1760982201
+w1760982927
 8src/regFile.v
 Fsrc/regFile.v
-!i122 30
-L0 1 44
+!i122 36
+L0 1 41
 R6
 r1
 !s85 0
@@ -496,7 +496,7 @@ R0
 w1760982478
 8.\tb\cpu_tb.v
 F.\tb\cpu_tb.v
-!i122 30
+!i122 36
 L0 3 49
 R6
 r1
