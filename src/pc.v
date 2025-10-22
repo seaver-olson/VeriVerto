@@ -19,10 +19,10 @@ module pcUnit(
 
     assign pcPlus4 = pc+4;
     assign branchSelect = branch & zero; //AND gate seen top right of diagram
-    assign jalrTarget = (jumpBase + branchDest) & ~32'h1;
+    assign jalrTarget = (jumpBase + jumpDest);
 
     assign pcNext = jalrFlag   ? jalrTarget :
-                    jump       ? jumpDest   :
+                    jump       ? jumpDest :
                     branchSelect ? (branchDest) :
                     pcPlus4;
 

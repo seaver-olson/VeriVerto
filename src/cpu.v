@@ -12,7 +12,6 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire MemWrite;
     wire Branch;
 
-
     //hazard regs
     wire PCWrite;
     wire IF_ID_Write;
@@ -37,6 +36,7 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire [31:0] ID_regOut2;
     wire [31:0] ID_imm;
     wire [31:0] ID_jumpDest;
+    wire ID_zero;
     assign ID_jumpDest = IF_ID_PC + ID_imm;
 
     //id/ex pipeline
@@ -86,7 +86,7 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire alu_cout;//i need to do this eventually
     wire Jump;
     
-    equalityTestUnit equalityUnit(.a(EX_aluA), .b(EX_aluB), .zero(EX_zero));
+    equalityTestUnit equalityUnit(.a(ID_regOut1), .b(ID_regOut2), .zero(ID_zero));
 
     //pc
     pcUnit programCounter(.clk(clk), 
@@ -156,8 +156,8 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     alu32 alu(.a(EX_aluA), 
               .b(EX_aluB), 
               .op(ALUControl), 
-              .result(EX_out), 
-              //.zero(EX_zero), 
+              .result(EX_out),
+              .zero(EX_zero), 
               .cout(alu_cout));
     
     //data memory instance

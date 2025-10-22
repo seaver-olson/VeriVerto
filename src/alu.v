@@ -3,10 +3,10 @@ module alu32(
     input wire [31:0] b,
     input wire [3:0] op,
     output wire [31:0] result,
-    //output wire zero,
+    output wire zero,
     output wire cout
 );
-    wire zero;
+
     wire [31:0] carry;
     wire [31:0] resHold;
     wire [31:0] shiftHold;

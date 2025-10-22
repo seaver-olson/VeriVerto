@@ -15,18 +15,14 @@ __attribute__((naked)) void _start() {
   while(1);           // Spin loop when main() returns
 }
 
-#define OUT_ADDR ((volatile int*)0xFFFF0000)
-
-// Recursive Fibonacci (simple for testing)
-int fib(int n) {
-    if (n <= 1) return n;
-    return fib(n - 1) + fib(n - 2);
+__attribute__((naked)) int recursive(){
+  asm("addi a0, a0, 0x64");//adds 100 recursively
+  asm("lui a0,0xFFFF0");
+  return 0;
 }
 
-int main() {
-    int n = 1000;              
-    int result = fib(n);
-    *OUT_ADDR = result;       // Write result to observable memory
-    while (1);                // Stop CPU after done
-    return 0;
+int main(){
+  asm("addi a0, x0, 0x43");
+  recursive();
+  return 0;
 }

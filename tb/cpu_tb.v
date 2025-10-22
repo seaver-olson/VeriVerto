@@ -17,7 +17,7 @@ module tb_cpu;
 
     initial begin
         regDump = 1'b0;
-        forever #(100) regDump = ~regDump;
+        //forever #(100) regDump = ~regDump;
     end
 
     always @(posedge clk) begin

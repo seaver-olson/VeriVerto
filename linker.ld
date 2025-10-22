@@ -21,6 +21,7 @@ SECTIONS
     _end_bss = ADDR(.bss) + SIZEOF(.bss);
     . = ALIGN(16);
     . = ORIGIN(DMEM) + LENGTH(DMEM);
+    
      _stack_top = .;
 
 }

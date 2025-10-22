@@ -5,7 +5,7 @@ module instructionMemory(
 );
     reg [7:0] mem [0:65535];//64K bytes of memory
     integer i;
-    wire [15:0] effAddr = readAddress[15:0];
+    wire [15:0] effAddr = readAddress[15:0];//2^16 == 65535
     //PC is byte addressable so it's easier to break instructions up like this
     assign instruction = {mem[effAddr+3],mem[effAddr+2],mem[effAddr+1],mem[effAddr]};
     initial begin
