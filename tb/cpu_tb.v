@@ -5,10 +5,7 @@ module tb_cpu;
     reg clk;
     reg rst;
     reg regDump;
-    wire instrCompleted;
-    reg [31:0] totalCycles;
-    reg [31:0] totalInstr;
-    cpu dut(.clk(clk), .rst(rst), .regDump(regDump) , .WB_RegWrite_O(instrCompleted));
+    cpu dut(.clk(clk), .rst(rst), .regDump(regDump) );
 
     initial begin
         clk = 1'b0;
@@ -20,17 +17,6 @@ module tb_cpu;
         //forever #(100) regDump = ~regDump;
     end
 
-    always @(posedge clk) begin
-        if (rst) begin
-            totalCycles <= 0;
-            totalInstr <= 0;
-        end else begin
-            totalCycles <= totalCycles + 1;
-            if (instrCompleted) begin
-                totalInstr <= totalInstr +1;
-            end
-        end
-    end
 
     initial begin
         rst = 1'b1;
@@ -39,12 +25,7 @@ module tb_cpu;
 
         rst = 1'b0;
         #20000
-        
-        $display("\n--- Performance Data ---");
-        $display("Clock Period:                    10 ps");
-        $display("Total Instructions Executed (I): %0d", totalInstr);
-        $display("Total Clock Cycles (C):          %0d", totalCycles);
-       
+
         $finish;
     end 
 

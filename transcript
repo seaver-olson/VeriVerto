@@ -1,9 +1,10 @@
 # vsim tb_cpu 
-# Start time: 13:23:19 on Oct 22,2025
+# Start time: 15:38:01 on Oct 27,2025
 # Loading work.tb_cpu
 # Loading work.cpu
 # Loading work.equalityTestUnit
 # Loading work.pcUnit
+# Loading work.IF_ID
 # Loading work.instructionMemory
 # Loading work.hazardDetectionUnit
 # Loading work.regfile
@@ -18,66 +19,21 @@
 add wave -position end sim:/tb_cpu/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlft6wsgjc".
+#           Attempting to use alternate WLF file "./wlfttm2f2c".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft6wsgjc
+#           Using alternate file: ./wlfttm2f2c
 run
 run
 run
 run
 run
 run
-run
-run
-run
-# NonExposed Address: 0000001c
-# 
-run
-# NonExposed Address: 00000018
-# 
+restart
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
 run
 run
 run
 run
 run
-run
-run
-run
-run
-run
-# NonExposed Address: 0000002c
-# 
-run
-# NonExposed Address: 00000028
-# 
-run
-run
-run
-run
-# NonExposed Address: 0000003c
-# 
-# NonExposed Address: 00000038
-# 
-run
-# NonExposed Address: 0000004c
-# 
-# NonExposed Address: 00000048
-# 
-run
-# NonExposed Address: 0000005c
-# 
-# NonExposed Address: 00000058
-# 
-run
-# NonExposed Address: 0000006c
-# 
-run
-# NonExposed Address: 00000068
-# 
-run
-# NonExposed Address: 0000007c
-# 
-# NonExposed Address: 00000078
-# 
-# End time: 13:24:20 on Oct 22,2025, Elapsed time: 0:01:01
-# Errors: 0, Warnings: 2
+# End time: 15:39:34 on Oct 27,2025, Elapsed time: 0:01:33
+# Errors: 0, Warnings: 0

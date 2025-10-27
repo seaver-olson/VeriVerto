@@ -1,4 +1,4 @@
-module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_RegWrite_O);
+module cpu(input wire clk, input wire rst, input wire regDump);
 
     localparam nop = 32'h13;
 
@@ -23,21 +23,27 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire [1:0] ALUOp;
     wire [3:0] ALUControl;
     
-    //if/id pipeline
-    reg [31:0] IF_ID_PC;
-    reg [31:0] IF_ID_INSTRUCTION;
-    wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
-    wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
-    wire [4:0] ID_writeReg = IF_ID_INSTRUCTION[11:7];
-    wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
-    wire ID_funct7 = IF_ID_INSTRUCTION[30];
+    wire [6:0] ID_opcode;
+    wire [4:0] ID_readData1;
+    wire [4:0] ID_readData2;
+    wire [4:0] ID_writeReg;
+    wire [2:0] ID_funct3;
+    wire ID_funct7;
+    wire [31:0] ID_instruction;
+    wire [31:0] ID_pc;
 
     wire [31:0] ID_regOut1;
     wire [31:0] ID_regOut2;
     wire [31:0] ID_imm;
     wire [31:0] ID_jumpDest;
     wire ID_zero;
-    assign ID_jumpDest = IF_ID_PC + ID_imm;
+    wire ID_jalr;
+    wire ID_BranchTaken;
+    wire Jump;
+
+    assign ID_jumpDest = ID_pc + ID_imm;
+    assign ID_jalr = (ID_opcode==7'b1100111);//if SB-Type
+    assign ID_BranchTaken = Branch & ID_zero;
 
     //id/ex pipeline
     reg [31:0] ID_EX_PC;
@@ -46,11 +52,9 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     reg [31:0] ID_EX_IMM;
 
     reg [1:0] ID_EX_WB;//writeback stage: regWrite+memtoreg
-    reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
+    reg [1:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
     reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
     reg [2:0] ID_EX_F3;//funct3
-    reg ID_EX_JALR;
-    reg ID_EX_JUMP;
 
     reg [4:0] ID_EX_readData1;
     reg [4:0] ID_EX_readData2;
@@ -60,16 +64,13 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire [31:0] EX_aluB;
     wire [31:0] EX_out;
     wire EX_zero;
+
     //ex/mem pipeline
-    reg [31:0] EX_MEM_PC;
-    reg EX_MEM_JUMP;
     reg [31:0] EX_MEM_OUT;//alu output
     reg [31:0] EX_MEM_RD2;//goes to write data (data memory)
-    reg EX_MEM_ZERO;//zero flag
     reg [4:0] EX_MEM_writeReg;
-
     reg [1:0]EX_MEM_WB;
-    reg [2:0]EX_MEM_M;
+    reg [1:0]EX_MEM_M;
     
     wire [31:0] MEM_readData;
 
@@ -84,31 +85,51 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire WB_memToReg;
 
     wire alu_cout;//i need to do this eventually
-    wire Jump;
-    
-    equalityTestUnit equalityUnit(.a(ID_regOut1), .b(ID_regOut2), .zero(ID_zero));
+
+    equalityTestUnit equalityUnit(.a(ID_regOut1), .b(ID_regOut2), .funct3(ID_funct3), .zero(ID_zero));
 
     //pc
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
-                          .branch(EX_MEM_M[2]), 
-                          .zero(EX_MEM_ZERO), 
+                          .branchTaken(ID_BranchTaken),
                           .jump(Jump), 
-                          .jumpDest(IF_ID_PC+ID_imm),
-                          .branchDest(EX_MEM_OUT), 
-                          .jumpBase(ID_EX_RD1), 
-                          .jalrFlag(ID_EX_JALR), 
+                          .jumpDest(ID_jumpDest),
+                          .jumpBase(ID_regOut1), 
+                          .jalrFlag(ID_jalr), 
                           .PCWrite(PCWrite),
                           .pc(pc));
+    IF_ID IF_ID_pipeline(.clk(clk),
+                         .rst(rst),
+                         .IF_pc(pc), 
+                         .IF_ID_Write(IF_ID_Write),
+                         .Jump(Jump),
+                         .IF_instruction(instr_fetch), 
+                         .readData1(ID_readData1), 
+                         .readData2(ID_readData2), 
+                         .writeReg(ID_writeReg), 
+                         .ID_pc(ID_pc),
+                         .opcode(ID_opcode),
+                         .funct3(ID_funct3), 
+                         .funct7(ID_funct7),
+                         .ID_instruction(ID_instruction)
+                         );
+
     //instruction memory 
     instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
     
-    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(ID_EX_M[1]), .IF_ID_ReadData1(ID_readData1), .IF_ID_ReadData2(ID_readData2), .ID_EX_writeReg(ID_EX_writeReg), .IF_ID_Write(IF_ID_Write), .PCWrite(PCWrite), .muxSelect(muxSelect));
+    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(ID_EX_M[1]), 
+                                   .IF_ID_ReadData1(ID_readData1), 
+                                   .IF_ID_ReadData2(ID_readData2), 
+                                   .ID_EX_writeReg(ID_EX_writeReg), 
+                                   .IF_ID_Write(IF_ID_Write), 
+                                   .PCWrite(PCWrite), 
+                                   .muxSelect(muxSelect)
+                                   );
 
     //control unit + immediate generator + regfile
     regfile regFile(.clk(clk), 
                     .rst(rst), 
-                    .readReg1(IF_ID_INSTRUCTION[19:15]), 
+                    .readReg1(ID_readData1), 
                     .readReg2(ID_readData2), 
                     .writeReg(MEM_WB_writeReg), 
                     .writeData(WB_writeData), 
@@ -117,7 +138,7 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
                     .regOut1(ID_regOut1), 
                     .regOut2(ID_regOut2));
 
-    controlUnit ctrlUnit(.instruction(IF_ID_INSTRUCTION[6:0]), 
+    controlUnit ctrlUnit(.instruction(ID_opcode), 
                          .Branch(Branch), 
                          .MemRead(MemRead), 
                          .MemtoReg(MemtoReg), 
@@ -127,7 +148,7 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
                          .RegWrite(RegWrite), 
                          .Jump(Jump));
 
-    immgen immediateGen(.IF_ID_INSTRUCTION(IF_ID_INSTRUCTION), 
+    immgen immediateGen(.IF_ID_INSTRUCTION(ID_instruction), 
                         .immgenOut(ID_imm));
     
     forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), 
@@ -171,17 +192,6 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     assign WB_memToReg = MEM_WB_WB[0];
     assign WB_regWrite = MEM_WB_WB[1];
     assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT;
-    assign WB_RegWrite_O = WB_regWrite; 
-    //IF/ID
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            IF_ID_PC <= 0;
-            IF_ID_INSTRUCTION <= nop;    
-        end else if (IF_ID_Write) begin
-            IF_ID_PC <= pc;
-            IF_ID_INSTRUCTION <= (Jump) ? nop : instr_fetch;
-        end
-    end
     //ID/EX
     always @(posedge clk or posedge rst) begin
         if (rst || muxSelect) begin
@@ -193,22 +203,18 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
             ID_EX_M <= 0;
             ID_EX_EX <= 0;
             ID_EX_F3 <= 0;
-            ID_EX_JUMP <= 0;
             ID_EX_readData1 <= 0;
             ID_EX_readData2 <= 0;
-            ID_EX_JALR <= 0;
             ID_EX_writeReg <= 0;
         end else begin
-            ID_EX_PC <= IF_ID_PC;
+            ID_EX_PC <= ID_pc;
             ID_EX_RD1 <= ID_regOut1;
             ID_EX_RD2 <= ID_regOut2;
             ID_EX_IMM <= ID_imm;
-            ID_EX_JUMP <= Jump;
             ID_EX_WB <= {RegWrite, MemtoReg};
-            ID_EX_M <= {Branch, MemRead, MemWrite};
+            ID_EX_M <= {MemRead, MemWrite};
             ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
             ID_EX_F3 <= ID_funct3;
-            ID_EX_JALR <= (IF_ID_INSTRUCTION[6:0] == 7'b1100111);
             ID_EX_readData1 <= ID_readData1;
             ID_EX_readData2 <= ID_readData2;
             ID_EX_writeReg <= ID_writeReg;
@@ -217,20 +223,14 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     //EX/MEM
     always @(posedge clk or posedge rst) begin
         if (rst) begin
-            EX_MEM_PC <= 0;
             EX_MEM_OUT <= 0;
             EX_MEM_RD2 <= 0;
-            EX_MEM_ZERO <= 0;
-            EX_MEM_JUMP <= 0;
             EX_MEM_writeReg <= 0;
             EX_MEM_WB <= 0;
             EX_MEM_M <= 0;
         end else begin
-            EX_MEM_PC <= ID_EX_PC;
             EX_MEM_OUT <= EX_out;
             EX_MEM_RD2 <= EX_aluB;
-            EX_MEM_JUMP <= ID_EX_JUMP;
-            EX_MEM_ZERO <= EX_zero;
             EX_MEM_writeReg <= ID_EX_writeReg;
             EX_MEM_WB <= ID_EX_WB;
             EX_MEM_M <= ID_EX_M;
