@@ -4,10 +4,13 @@ module equalityTestUnit(
     input wire [2:0] funct3,
     output wire zero
 );
-    wire [31:0] eqCheck;
+    wire eqCheck;
+    wire lts;
+    wire ltu;
+
     assign eqCheck = (a==b);
-    wire lts=($signed(a) < $signed(b));
-    wire ltu=(a<b);
+    assign lts=($signed(a) < $signed(b));
+    assign ltu=(a<b);
     //codes from RV32IRef.png in PattersonDocs folder
     assign zero =   (funct3 == 3'b000) ? eqCheck :
                     (funct3 == 3'b001) ? ~eqCheck :

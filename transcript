@@ -1,39 +1,37 @@
 # vsim tb_cpu 
-# Start time: 15:38:01 on Oct 27,2025
+# Start time: 14:04:54 on Oct 28,2025
 # Loading work.tb_cpu
 # Loading work.cpu
-# Loading work.equalityTestUnit
 # Loading work.pcUnit
-# Loading work.IF_ID
 # Loading work.instructionMemory
 # Loading work.hazardDetectionUnit
-# Loading work.regfile
-# Loading work.controlUnit
+# Loading work.IF_ID
 # Loading work.immgen
+# Loading work.controlUnit
+# Loading work.regfile
+# Loading work.equalityTestUnit
+# Loading work.ID_EX
 # Loading work.forwardingUnit
 # Loading work.aluControl
 # Loading work.alu32
 # Loading work.barrelShifter
 # Loading work.oneBit
+# Loading work.EX_MEM
 # Loading work.dataMemory
+# Loading work.MEM_WB
 add wave -position end sim:/tb_cpu/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlfttm2f2c".
+#           Attempting to use alternate WLF file "./wlfth6v18d".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlfttm2f2c
+#           Using alternate file: ./wlfth6v18d
 run
 run
 run
 run
 run
 run
-restart
-# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
 run
 run
-run
-run
-run
-# End time: 15:39:34 on Oct 27,2025, Elapsed time: 0:01:33
-# Errors: 0, Warnings: 0
+# End time: 14:05:55 on Oct 28,2025, Elapsed time: 0:01:01
+# Errors: 0, Warnings: 2
