@@ -373,71 +373,71 @@ R13
 R7
 ninstruction@memory
 vL1
-R16
+Z22 !s110 1762275881
 !i10b 1
-!s100 iklQfbcSAgCXfoeVc8RnA0
+!s100 XXJ9^lZPO:0YXM0:N[b;?0
 R1
-I`cE`n]_H4@nj6XE3XSaO:1
+IgNdDV9A5Q3oi^;8GoPN7[3
 R2
 R9
-w1762200068
-Z22 8src/cache.v
-Z23 Fsrc/cache.v
-!i122 146
-L0 3 10
+Z23 w1762275858
+Z24 8.\src\cache.v
+Z25 F.\src\cache.v
+!i122 152
+L0 3 149
 R6
 r1
 !s85 0
 31
-R11
-R12
-R13
+Z26 !s108 1762275881.000000
+!s107 .\tb\l1_tb.v|.\src\cache.v|
+Z27 !s90 .\src\cache.v|.\tb\l1_tb.v|
 !i113 1
 R7
 n@l1
 vL2
-Z24 !s110 1761771347
+!s110 1761771347
 !i10b 1
 !s100 PVXk]L3nZRfQTEa<CHUe@0
 R1
 ITXb_SJSOB0f`k:YOD]MJP1
 R2
 R9
-Z25 w1761680516
-R22
-R23
+w1761680516
+8src/cache.v
+Fsrc/cache.v
 !i122 144
 L0 8 3
 R6
 r1
 !s85 0
 31
-Z26 !s108 1761771347.000000
+!s108 1761771347.000000
 R12
 R13
 !i113 1
 R7
 n@l2
 vMainMemory
-R24
+R22
 !i10b 1
-!s100 I4b<`^@>6ef?5d8@hMTS41
+!s100 REkLX>h>DOQ63ia5;z`951
 R1
-I;dF@3=C5m=DnJAYOf@lm^3
+I^B3lfP?A3HT2We6B6Xd:=3
 R2
 R9
-R25
-R22
 R23
-!i122 144
-L0 12 17
+R24
+R25
+!i122 152
+L0 153 29
 R6
 r1
 !s85 0
 31
 R26
-R12
-R13
+Z28 !s107 .\tb\l1_tb.v|.\src\cache.v|
+R27
 !i113 1
 R7
 n@main@memory
@@ -576,3 +576,26 @@ R12
 R13
 !i113 1
 R7
+vtb_L1
+R22
+!i10b 1
+!s100 :A:ljN9P7Giz?CBz<QBJ63
+R1
+I=kHHVOU8Q@5e9EgBWkDYE0
+R2
+R9
+w1762275860
+8.\tb\l1_tb.v
+F.\tb\l1_tb.v
+!i122 152
+L0 3 96
+R6
+r1
+!s85 0
+31
+R26
+R28
+R27
+!i113 1
+R7
+ntb_@l1

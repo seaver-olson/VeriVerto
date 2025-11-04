@@ -24,6 +24,12 @@ the signals between cache and processor:
 finite state machine:
     idle:
         This state waits for a valid read or write request from the processor, this moves the FSM to compare tag state
+        if a valid bit is found but the cache misses we check the dirty bit to determine whether to go to write-back or allocate state  
+        if the cache line is clean, the data in the cache matches the memory, if you remove it you can throw it away, memory already has a copy
+        this means no write back is needed
+
+        otherwise if the dirty bit is set, the data in the cache has been modified and does not match memory, so we need to write it back to memory before allocating new data 
+    
     compare tag:
 
     write-back:
