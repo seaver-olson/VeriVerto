@@ -1,20 +1,36 @@
 # vsim tb_L1Cache 
-# Start time: 12:19:35 on Nov 07,2025
+# Start time: 14:43:12 on Nov 07,2025
 # Loading work.tb_L1Cache
 # Loading work.L1Cache
 # Loading work.MainMemory
 # Loading work.comparator
-# ** Warning: (vsim-2685) [TFMPC] - Too few port connections for 'cache_inst'.  Expected 16, found 15.
-#    Time: 0 ps  Iteration: 0  Instance: /tb_L1Cache/cache_inst File: ./tb/l1_tb.v Line: 26
-# ** Warning: (vsim-3722) ./tb/l1_tb.v(26): [TFMPC] - Missing connection for port 'cache_ready'.
 add wave -position end sim:/tb_L1Cache/mem_inst/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlft7kknyn".
+#           Attempting to use alternate WLF file "./wlftgj0kq3".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft7kknyn
+#           Using alternate file: ./wlftgj0kq3
 add wave -position end sim:/tb_L1Cache/cache_inst/*
 run
+# ** Warning: (vsim-PLI-3410) Illegal character '-' in data on line 7 of file "loadfile_all.img".    : src/cache.v(191)
+#    Time: 0 ps  Iteration: 1  Instance: /tb_L1Cache/mem_inst
+run
+run
+run
+run
+run
+run
+# ** Warning: (vsim-PLI-3410) Illegal character '-' in data on line 7 of file "loadfile_all.img".    : src/cache.v(191)
+#    Time: 5 ns  Iteration: 1  Instance: /tb_L1Cache/mem_inst
+# ** Warning: (vsim-PLI-3410) Illegal character '-' in data on line 7 of file "loadfile_all.img".    : src/cache.v(191)
+#    Time: 15 ns  Iteration: 1  Instance: /tb_L1Cache/mem_inst
 # Starting Testbench
-# End time: 12:20:03 on Nov 07,2025, Elapsed time: 0:00:28
-# Errors: 0, Warnings: 4
+# MainMemory: Reading from address 00000000
+# MainMemory: Reading from address 00000000
+run
+run
+run
+run
+run
+# End time: 14:43:45 on Nov 07,2025, Elapsed time: 0:00:33
+# Errors: 0, Warnings: 5

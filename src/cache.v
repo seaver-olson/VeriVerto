@@ -1,5 +1,5 @@
 //block size : 16 bytes (128 bits) or 4 words
-//Direct-mapped, write-back, write-allocate cache
+//fully associative cache
 module L1Cache(
     input wire clk,
     input wire rst,
@@ -10,7 +10,7 @@ module L1Cache(
     input wire [31:0] proc_address,
     input wire [31:0] proc_write_data,
     output reg [31:0] proc_read_data,
-    output reg cache_ready,
+    output wire cache_ready,
 
     //memory interface
     input wire [127:0] mem_read_data,
@@ -36,8 +36,12 @@ module L1Cache(
     
     reg [3:0] evictIndex;//for next block to evict
     reg [3:0] hitIndex;//for hit block index
-    wire muxMatch [0:15];
+    wire [15:0] muxMatch;
     reg match;
+
+    reg [31:0] saved_proc_address;
+    reg saved_read;
+    reg saved_write;
 
     genvar index;
     generate
@@ -46,13 +50,15 @@ module L1Cache(
         end
     endgenerate
 
-    //find which index hit
+    //reads data from cache on hit
     integer i;
     always @(*) begin
+        match = 1'b0;
+        hitIndex = 4'b0000;
         for (i = 0; i < 16; i = i + 1) begin
             if (muxMatch[i] & validBit[i]) begin
-                hitIndex <= i;
-                match <= 1'b1;
+                match = 1'b1;
+                hitIndex = i;
             end
         end
         case (proc_address[3:2])
@@ -77,6 +83,9 @@ module L1Cache(
             mem_valid <= 1'b0;
             mem_address <= 32'b0;
             mem_write_data <= 128'b0;
+            saved_proc_address <= 32'b0;
+            saved_read <= 1'b0;
+            saved_write <= 1'b0;
             match <= 1'b0;
             proc_read_data <= 32'b0;
             state <= IDLE;
@@ -84,65 +93,68 @@ module L1Cache(
             case (state)
                 IDLE: begin
                     if (proc_valid) begin
+                        saved_proc_address <= proc_address;
+                        saved_read <= proc_read;
+                        saved_write <= proc_write;
                         state <= COMPARE_TAG;
                     end
                 end
                 COMPARE_TAG: begin
-                    if (proc_valid) begin
-                        if (match) begin
-                            if (proc_write) begin
-                                dirtyBit[hitIndex] <= 1'b1;
-                                case (proc_address[3:2])
-                                    2'b00: cacheMem[hitIndex][31:0] <= proc_write_data;
-                                    2'b01: cacheMem[hitIndex][63:32] <= proc_write_data;
-                                    2'b10: cacheMem[hitIndex][95:64] <= proc_write_data;
-                                    2'b11: cacheMem[hitIndex][127:96] <= proc_write_data;
-                                endcase
-                            end
-                            state <= IDLE;
-                        end else begin
-                            if (dirtyBit[evictIndex]) begin
-                                //write back
-                                mem_write <= 1'b1;
-                                mem_valid <= 1'b1;
-                                mem_address <= {tagMem[evictIndex], evictIndex, 4'b0000};
-                                mem_write_data <= cacheMem[evictIndex];
-                                state <= WRITE_BACK;
-                            end else begin
-                                //allocate
-                                mem_read <= 1'b1;
-                                mem_valid <= 1'b1;
-                                mem_address <= {proc_address[31:4], 4'b0000};
-                                state <= ALLOCATE;
-                            end
+                    if (match) begin
+                        if (saved_write) begin
+                            dirtyBit[hitIndex] <= 1'b1;
+                            case (saved_proc_address[3:2])
+                                2'b00: cacheMem[hitIndex][31:0] <= proc_write_data;
+                                2'b01: cacheMem[hitIndex][63:32] <= proc_write_data;
+                                2'b10: cacheMem[hitIndex][95:64] <= proc_write_data;
+                                2'b11: cacheMem[hitIndex][127:96] <= proc_write_data;
+                            endcase
                         end
-                    end 
-                end
+                        state <= IDLE;
+                    end else begin
+                        if (dirtyBit[evictIndex]) begin//if the evict block is dirty
+                            //write back
+                            mem_write <= 1'b1;
+                            mem_valid <= 1'b1;
+                            mem_address <= {tagMem[evictIndex], 4'b0000};
+                            mem_write_data <= cacheMem[evictIndex];
+                            state <= WRITE_BACK;
+                        end else begin
+                            //allocate
+                            mem_read <= 1'b1;
+                            mem_valid <= 1'b1;
+                            mem_address <= {saved_proc_address[31:4], 4'b0000};
+                            state <= ALLOCATE;
+                        end
+                    end
+                end 
                 WRITE_BACK: begin
+                    mem_write <= 1'b1;
+                    mem_address <= {tagMem[evictIndex], 4'b0000};
+                    mem_write_data <= cacheMem[evictIndex];
+                    
                     if (mem_ready) begin
-                        //after write back, allocate
                         mem_write <= 1'b0;
-                        mem_valid <= 1'b0;
-                        mem_read <= 1'b1;
-                        mem_valid <= 1'b1;
-                        mem_address <= {proc_address[31:4], 4'b0000};
                         state <= ALLOCATE;
                     end
                 end
                 ALLOCATE: begin
+                    mem_read <= 1'b1;
+                    mem_address <= {saved_proc_address[31:4], 4'b0000};
+                    
                     if (mem_ready) begin
-                        //load block into cache
+                        //Load block into cache
                         cacheMem[evictIndex] <= mem_read_data;
-                        tagMem[evictIndex] <= proc_address[31:4];
+                        tagMem[evictIndex] <= saved_proc_address[31:4];
                         validBit[evictIndex] <= 1'b1;
                         dirtyBit[evictIndex] <= 1'b0;
+                        
+                        
                         //update evict index
-                        evictIndex <= evictIndex + 1;
-                        //reset memory interface signals
+                        evictIndex <= evictIndex + 1;//fix later
+                        
                         mem_read <= 1'b0;
-                        mem_valid <= 1'b0;
-                        //after allocation, go to COMPARE_TAG to recheck for hit
-                        state <= COMPARE_TAG;
+                        state <= COMPARE_TAG; //Retry the access
                     end
                 end
             endcase
@@ -156,7 +168,6 @@ module comparator(input wire [27:0] tag1, input wire [27:0] tag2, output wire ma
     assign match = (tag1 == tag2) ? 1'b1 : 1'b0;
 endmodule
 
-//Byte Addressable
 module MainMemory(
     input wire clk,
     input wire rst,
@@ -171,18 +182,23 @@ module MainMemory(
     output reg mem_ready 
 );
     reg [127:0] memoryArray [0:1023]; //1024 blocks of 128 bits = 16KB memory
-
+    integer i;
     always @(posedge clk or posedge rst) begin
         if (rst) begin
+            for (i = 0; i < 1024; i = i + 1) begin
+                memoryArray[i] <= 128'b0;
+            end
+            $readmemh("loadfile_all.img", memoryArray);
             mem_ready <= 1'b0;
             mem_read_data <= 128'b0;
         end else begin
             if (mem_valid) begin
                 if (mem_read) begin
-                    mem_read_data <= memoryArray[mem_address[11:4]]; //block aligned
+                    $display("MainMemory: Reading from address %h", mem_address);
+                    mem_read_data <= memoryArray[mem_address[13:4]];
                     mem_ready <= 1'b1;
                 end else if (mem_write) begin
-                    memoryArray[mem_address[11:4]] <= mem_write_data; //block aligned
+                    memoryArray[mem_address[13:4]] <= mem_write_data; //block aligned
                     mem_ready <= 1'b1;
                 end
             end else begin

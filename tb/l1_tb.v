@@ -32,6 +32,7 @@ module tb_L1Cache();
         .proc_address(proc_address),
         .proc_write_data(proc_write_data),
         .proc_read_data(proc_read_data),
+        .cache_ready(proc_ready),
         .mem_read(mem_read),
         .mem_write(mem_write),
         .mem_valid(mem_valid),
@@ -67,11 +68,7 @@ module tb_L1Cache();
         rst = 0;
         $display("Starting Testbench");
         #20;
-        // Write to address 0x00000000
-        proc_write = 1;
-        proc_valid = 1;
-        proc_address = 32'h00000000;
-        proc_write_data = 32'hDEADBEEF;
+    
         #20;
         proc_valid = 1;
         proc_write = 0;
@@ -79,7 +76,7 @@ module tb_L1Cache();
         #20;
         proc_read = 1;
         proc_valid = 1;
-        proc_address = 32'h00000000;
+        proc_address = 32'h00000001;
         #20;
         
         #4000;
