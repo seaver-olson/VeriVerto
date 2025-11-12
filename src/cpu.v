@@ -97,8 +97,6 @@ module cpu(input wire clk, input wire rst, input wire regDump);
 
     wire alu_cout;//i need to do this eventually
 
-
-
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
                           .branchTaken(ID_BranchTaken),
@@ -107,6 +105,8 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                           .jumpBase(ID_regOut1), 
                           .jalrFlag(ID_jalr), 
                           .PCWrite(PCWrite),
+                          .predict_taken(predict_taken),
+                          .predict_target(predict_target), 
                           .pc(pc)
                         );
 
@@ -120,7 +120,10 @@ module cpu(input wire clk, input wire rst, input wire regDump);
         .fetch_pc(pc),
         .predict_taken(predict_taken),
         .predict_target(predict_target)
-    )
+    );
+
+
+    assign branch_resolved = (Branch || Jump) && !muxSelect;
 
     instructionMemory instrMem(.readAddress(pc), 
                                .instruction(instr_fetch)

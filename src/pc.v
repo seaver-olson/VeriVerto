@@ -8,6 +8,8 @@ module pcUnit(
     input wire [31:0] jumpBase, //JALR requires a base add from regOut1
     input wire jalrFlag,
     input wire PCWrite,
+    input wire predict_taken,
+    input wire [31:0] predict_target,
     output reg [31:0] pc
 );  
     wire [31:0] pcPlus4;
@@ -15,10 +17,16 @@ module pcUnit(
     wire [31:0] jalrTarget;//jumpBase + offset
 
     assign pcPlus4 = pc+4;
-    assign jalrTarget = (jumpBase + jumpDest) & ~32'h1;//left shift by 1
+    assign jalrTarget = (jumpBase + jumpDest) & ~32'h1;//mask LSB to 0
 
-    assign pcNext = jalrFlag   ? jalrTarget :
+    wire misprediction;
+    assign misprediction = (predict_taken != branchTaken) || 
+                       (predict_taken && (predict_target != jumpDest));
+
+    assign pcNext = misprediction ? (branchTaken ? jumpDest : pcPlus4) : 
+                    jalrFlag   ? jalrTarget :
                     (jump | branchTaken) ? jumpDest :
+                    predict_taken ? predict_target :
                     pcPlus4;
 
     always @(posedge clk or posedge rst) begin
