@@ -1,55 +1,68 @@
 module cpu(input wire clk, input wire rst, input wire regDump);
-
     localparam nop = 32'h13;
 
-    wire [31:0] pc;
-    wire [31:0] instr_fetch; 
-
-    wire ALUSrc;
-    wire MemtoReg;
-    wire RegWrite;
-    wire MemRead;
-    wire MemWrite;
-    wire Branch;
+    wire [31:0] pc;//IF Stage wire, should go to plus4, instrMem, BTB
+    wire [31:0] instr_fetch;//IF Stage wire, from instrMem to IF/ID
 
     //BTB wires
-    wire predict_taken;
-    wire [31:0] predict_target;
+    wire predict_taken;//from BTB to pc, if 1, branch taken
+    wire [31:0] predict_target;//from BTB to pc, target address if branch taken
     wire branch_resolved;
+    wire ID_predict_taken;
+    wire [31:0] ID_predict_target;
+
+    //I-Cache wires
+    wire instr_ready;
+    wire imem_read_req;
+    wire [31:0] imem_addr;
+    wire [127:0] imem_data;
+    wire imem_ready;
+    
 
     //hazard regs
-    wire PCWrite;
-    wire IF_ID_Write;
-    wire muxSelect;
-    //forwarding unit output wires
-    wire [1:0] ForwardA;
-    wire [1:0] ForwardB;
+    wire PCWrite;//if 1, pc can be written
+    wire IF_ID_Write;//if 1, IF/ID can be written
+    wire muxSelect;//if 1, insert nop in ID/EX, load-use hazard
 
-    wire [1:0] ALUOp;
-    wire [3:0] ALUControl;
+    //forwarding unit wires
+    wire [1:0] ForwardA;//controls mux before ALU input A 
+    wire [1:0] ForwardB;//controls mux before ALU input B
+
+    //ALU control wires
+    wire [1:0] ALUOp;//from control unit to alu control (ID/EX)
+    wire [3:0] ALUControl;//from alu control to ALU (EX Stage)
+
     //ID Stage - in wires
-    wire [6:0] ID_opcode;
-    wire [4:0] ID_readData1;
-    wire [4:0] ID_readData2;
-    wire [4:0] ID_writeReg;
-    wire [2:0] ID_funct3;
-    wire ID_funct7;
-    wire [31:0] ID_instruction;
-    wire [31:0] ID_pc;
+    wire [6:0] ID_opcode;//from IF/ID to control unit
+    wire [4:0] ID_readData1;//from IF/ID to regfile
+    wire [4:0] ID_readData2;//from IF/ID to regfile
+    wire [4:0] ID_writeReg;//from IF/ID to regfile
+    wire [2:0] ID_funct3;//from IF/ID to equality test and alu control
+    wire ID_funct7;//from IF/ID to alu control
+    wire [31:0] ID_instruction;//from IF/ID to immgen for immediate generation
+    wire [31:0] ID_pc;//from IF/ID to branch target calculation
+
+    //Control Unit Wires
+    wire ALUSrc;//if 1, imm to ALU B
+    wire MemtoReg;//if 1, data memory to regfile
+    wire RegWrite;//if 1, write to regfrile from WB stage
+    wire MemRead;//if 1, read from data memory
+    wire MemWrite;//if 1, write to data memory
+    wire Branch;//if 1, branch instruction
+
     //ID Stage - out wires
-    wire [31:0] ID_regOut1;
-    wire [31:0] ID_regOut2;
-    wire [31:0] ID_imm;
-    wire [31:0] ID_jumpDest;
-    wire ID_zero;
-    wire ID_jalr;
+    wire [31:0] ID_regOut1;//from regfile to ID/EX
+    wire [31:0] ID_regOut2;//from regfile to ID/EX
+    wire [31:0] ID_imm;//from immgen to ID/EX
+    wire [31:0] ID_jumpDest;//from ID/EX to pc and BTB (neil said btb should NOT push non-predicted branches to pc)
+
+    wire ID_zero;//from equality test unit to ID stage for branch decision(timing may be off check later)
+    wire ID_jalr;//from control unit to pc for jalr instruction  
     wire ID_BranchTaken;
     wire Jump;
     wire [1:0] ID_WB;
     wire [2:0] ID_M;
     wire [3:0] ID_EXALU;
-
-
 
     assign ID_jumpDest = ID_pc + ID_imm;
     assign ID_jalr = (ID_opcode==7'b1100111);//if SB-Type
@@ -77,7 +90,6 @@ module cpu(input wire clk, input wire rst, input wire regDump);
 
     wire [31:0] EX_out;
     wire EX_zero;
-    //i think wires are wrong
     //MEM Stage - out wires
     wire [31:0] MEM_readData;
     wire [31:0] MEM_out;
@@ -95,7 +107,7 @@ module cpu(input wire clk, input wire rst, input wire regDump);
     wire WB_regWrite;
     wire WB_memToReg;
 
-    wire alu_cout;//i need to do this eventually
+    wire alu_cout;
 
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
@@ -104,7 +116,7 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                           .jumpDest(ID_jumpDest),
                           .jumpBase(ID_regOut1), 
                           .jalrFlag(ID_jalr), 
-                          .PCWrite(PCWrite),
+                          .PCWrite((PCWrite & instr_ready)),//now stalls on cache misses
                           .predict_taken(predict_taken),
                           .predict_target(predict_target), 
                           .pc(pc)
@@ -125,10 +137,31 @@ module cpu(input wire clk, input wire rst, input wire regDump);
 
     assign branch_resolved = (Branch || Jump) && !muxSelect;
 
-    instructionMemory instrMem(.readAddress(pc), 
+    /*instructionMemory instrMem(.readAddress(pc), 
                                .instruction(instr_fetch)
-                            );
-                            
+                            );*/
+
+    L1_ROM_Cache instrCache(
+        .clk(clk),
+        .rst(rst),
+        .proc_addr(pc),
+        .proc_req(1'b1),//always requesting idk when i wouldnt
+        .proc_data(instr_fetch),
+        .proc_ready(instr_ready),
+        .mem_read_req(imem_read_req),
+        .mem_addr(imem_addr),
+        .mem_data(imem_data),
+        .mem_ready(imem_ready)
+    );
+
+    MainMemory imem(
+        .clk(clk),
+        .rst(rst),
+        .read_req(imem_read_req),
+        .addr(imem_addr),
+        .data_out(imem_data),
+        .ready(imem_ready)
+    );
 
     hazardDetectionUnit hazardUnit(.ID_EX_MemRead(EX_M[1]), 
                                    .IF_ID_ReadData1(ID_readData1), 
@@ -142,13 +175,17 @@ module cpu(input wire clk, input wire rst, input wire regDump);
     IF_ID IF_ID_pipeline(.clk(clk),
                          .rst(rst),
                          .IF_pc(pc), 
-                         .IF_ID_Write(IF_ID_Write),
+                         .IF_ID_Write(IF_ID_Write & instr_ready), //stall on misses
                          .Jump(Jump),
                          .IF_instruction(instr_fetch), 
                          .readData1(ID_readData1), 
                          .readData2(ID_readData2), 
                          .writeReg(ID_writeReg), 
                          .ID_pc(ID_pc),
+                         .IF_predict_taken(predict_taken),
+                         .IF_predict_target(predict_target),
+                         .ID_predict_taken(ID_predict_taken),
+                         .ID_predict_target(ID_predict_target),
                          .opcode(ID_opcode),
                          .funct3(ID_funct3), 
                          .funct7(ID_funct7),
@@ -283,4 +320,12 @@ module cpu(input wire clk, input wire rst, input wire regDump);
     assign WB_memToReg = WB_WB[0];
     assign WB_regWrite = WB_WB[1];
     assign WB_writeData = (WB_memToReg) ? WB_readData : WB_aluOut;
+
+    always @(posedge clk) begin
+        if (branch_resolved ) begin
+            $display("MISPREDICTION at PC=%h: predicted=%b (target=%h), actual=%b (target=%h)",
+                     ID_pc, ID_predict_taken, ID_predict_target, ID_BranchTaken, ID_jumpDest);
+        end
+    end
+
 endmodule

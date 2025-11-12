@@ -9,14 +9,21 @@ __attribute__((naked)) void _start() {
     while(1);
 }
 
-__attribute__((naked)) int recursiveFunc(int x, int n){
-    if (x > n) return x;
-    return recursiveFunc(x++,n);
+__attribute__((naked)) int factorial(int x, int n){
+    if(n <= 1){
+        return 1;
+    } else {
+        int result = 0;
+        for(int i = 0; i < x; i++){
+            result += factorial(x, n - 1);
+        }
+        return result;
+    }
 }
 
 __attribute__((naked)) int main() {
     register int n = 10;
     register int x = 0;
-    recursiveFunc(x,n);
+    factorial(x,n);
     return 0;
 }

@@ -154,7 +154,7 @@ module L1_ROM_Cache(
     
     end
 endmodule
-
+/*
 module L1_RAM_Cache(
     input wire clk,
     input wire rst,
@@ -189,9 +189,105 @@ module L1_RAM_Cache(
     reg [LINE_COUNT-1:0] valid_array;
     reg [LINE_COUNT-1:0] dirty_array;
     reg [7:0] lru_counter [0:LINE_COUNT-1];
-    
-endmodule
 
+    wire [27:0] proc_tag;
+    assign proc_tag = proc_addr[31:4];
+
+    wire [1:0] proc_offset;
+    assign proc_offset = proc_addr[3:2];
+
+    wire [LINE_COUNT-1:0] tag_match;
+    wire [$clog2(LINE_COUNT)-1:0] hit_block;//block with matching tag
+    wire hit;
+    wire [$clog2(LINE_COUNT)-1:0] victim_block;//which block to evict on miss
+
+    function [$clog2(LINE_COUNT)-1:0] find_hit_index(input [LINE_COUNT-1:0] matches);
+        integer idx;
+        begin
+            find_hit_index = 0;
+            for (idx = 0; idx < LINE_COUNT; idx = idx + 1) begin
+                if (matches[idx]) begin
+                    find_hit_index = idx;
+                end
+            end
+        end
+    endfunction
+
+    genvar j;
+    generate
+        for (j = 0; j < LINE_COUNT; j = j + 1) begin : tag_comparators
+            comparator tag_comp(
+                .tag1(tag_array[j]),
+                .validBit(valid_array[j]),
+                .tag2(proc_tag),
+                .match(tag_match[j])
+            );
+        end
+    endgenerate 
+
+    assign hit = |(tag_match);
+    assign hit_block = find_hit_index(tag_match);
+    
+    function [$clog2(LINE_COUNT)-1:0] find_victim(input dummy);
+        integer idx;
+        reg [$clog2(LINE_COUNT)-1:0] max_lru;
+        begin 
+            max_lru = 0;
+            for (idx = 1; idx < LINE_COUNT; idx = idx + 1) begin
+                if (lru_counter[idx] > lru_counter[max_lru]) begin
+                    max_lru = idx;
+                end
+            end
+            find_victim = max_lru;
+        end
+    endfunction
+
+    assign victim_block = find_victim(0);
+    
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+            proc_ready <= 1'b0;
+            proc_data <= 32'b0;
+            mem_addr <= 32'b0;
+            mem_read <= 1'b0;
+            mem_write <= 1'b0;
+            mem_writeData <= 128'b0;
+            for (i = 0; i < LINE_COUNT; i = i + 1) begin
+                valid_array[i] <= 1'b0;
+                dirty_array[i] <= 1'b0;
+                cache_mem[i] <= 128'b0;
+                tag_array[i] <= 28'b0;
+                lru_counter[i] <= 0;
+            end
+        end else begin
+            case (state)
+                IDLE: begin
+                    proc_ready <= 1'b0;
+                    mem_read <= 1'b0;
+                    mem_write <= 1'b0;
+
+                    if (proc_valid && (proc_read || proc_write)) begin
+                        state <= TAG_CHECK;
+                    end
+                end
+                
+                TAG_CHECK: begin 
+                    state <= IDLE;
+                end
+
+                ALLOCATE: begin
+                    state <= WRITEBACK;
+                end
+
+                WRITEBACK: begin
+                    state <= IDLE;
+                end
+            endcase
+        end
+    end
+endmodule
+*/
 module comparator(
     input wire [27:0] tag1,
     input wire validBit,
@@ -210,31 +306,48 @@ module MainMemory(
     output reg [127:0] data_out,
     output reg ready
 );
-    reg [127:0] memory [0:1023];
+    // Byte-addressable memory (like instructionMemory)
+    reg [7:0] mem [0:65535];  // ← 8-bit bytes, 64KB
     integer i;
 
     initial begin
-        for (i = 0; i < 1024; i = i + 1) begin
-            memory[i] = 128'b0;
+        for (i = 0; i < 65536; i = i + 1) begin
+            mem[i] = 8'b0;
         end
+        $readmemh("loadfile_all.img", mem);  // ← Load bytes correctly
     end
 
-    initial begin
-        memory[0]  = 128'h0000_1111_2222_3333_4444_5555_6666_7777;
-        memory[1]  = 128'hAAAA_BBBB_CCCC_DDDD_EEEE_FFFF_1111_2222;
-        memory[2]  = 128'h1234_5678_9ABC_DEF0_1111_2222_3333_4444;
-    end
+    reg [3:0] delay_counter;
+    localparam MEM_LATENCY = 10;
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin
             ready <= 1'b0;
             data_out <= 128'b0;
+            delay_counter <= 0;
         end else begin
-            if (read_req) begin
-                data_out <= memory[addr[11:4]];
-                ready <= 1'b1;
-            end else begin
+            if (read_req && !ready) begin
+                if (delay_counter < MEM_LATENCY) begin
+                    delay_counter <= delay_counter + 1;
+                    ready <= 1'b0;
+                end else begin
+                    // Read 16 consecutive bytes and pack into 128 bits
+                    data_out <= {
+                        mem[addr[15:0] + 15], mem[addr[15:0] + 14], 
+                        mem[addr[15:0] + 13], mem[addr[15:0] + 12],
+                        mem[addr[15:0] + 11], mem[addr[15:0] + 10], 
+                        mem[addr[15:0] + 9],  mem[addr[15:0] + 8],
+                        mem[addr[15:0] + 7],  mem[addr[15:0] + 6],  
+                        mem[addr[15:0] + 5],  mem[addr[15:0] + 4],
+                        mem[addr[15:0] + 3],  mem[addr[15:0] + 2],  
+                        mem[addr[15:0] + 1],  mem[addr[15:0] + 0]
+                    };
+                    ready <= 1'b1;
+                    delay_counter <= 0;
+                end
+            end else if (!read_req) begin
                 ready <= 1'b0;
+                delay_counter <= 0;
             end
         end
     end
