@@ -12,6 +12,11 @@ module cpu(input wire clk, input wire rst, input wire regDump);
     wire MemWrite;
     wire Branch;
 
+    //BTB wires
+    wire predict_taken;
+    wire [31:0] predict_target;
+    wire branch_resolved;
+
     //hazard regs
     wire PCWrite;
     wire IF_ID_Write;
@@ -105,6 +110,18 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                           .pc(pc)
                         );
 
+    BTB branchTargetBuffer(
+        .clk(clk),
+        .rst(rst),
+        .branch_resolved(branch_resolved),
+        .branch_taken(ID_BranchTaken),
+        .branch_pc(ID_pc),
+        .branch_target(ID_jumpDest),
+        .fetch_pc(pc),
+        .predict_taken(predict_taken),
+        .predict_target(predict_target)
+    )
+
     instructionMemory instrMem(.readAddress(pc), 
                                .instruction(instr_fetch)
                             );
@@ -139,7 +156,8 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                         .immgenOut(ID_imm)
                     );
 
-    controlUnit ctrlUnit(.instruction(ID_opcode), 
+    controlUnit ctrlUnit(
+                         .instruction(ID_opcode), 
                          .Branch(Branch), 
                          .MemRead(MemRead), 
                          .MemtoReg(MemtoReg), 
@@ -149,6 +167,7 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                          .RegWrite(RegWrite), 
                          .Jump(Jump)
                         );
+
     regfile regFile(.clk(clk), 
                 .rst(rst), 
                 .readReg1(ID_readData1), 
