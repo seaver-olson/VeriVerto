@@ -1,0 +1,37 @@
+Block size is four words(16 bytes). 
+
+Cache size is 16 KiB (1024 blocks) 
+
+32-bit addresses in storage
+
+the cache includes a valid bit and dirty bit per block
+
+cache index is 10 bits
+block offset is 4 bits
+tag size is 32-(10+4) or 18 bits
+        ^ this is given from address - (index+blockOffset)
+
+the signals between cache and processor:
+    - 1 bit Read or Write signal
+    - 1 bit Valid signal, saying whether there is a cache op or not
+    - 32 bit address
+    - 32 bit data from processor to cache
+    - 32 bit data from cache to processor
+    - 1 bit ready signal, saying cache op is complete
+(the interface between the mem and cache carry same fields except data fields are 128 bits wide)
+
+
+finite state machine:
+    idle:
+        This state waits for a valid read or write request from the processor, this moves the FSM to compare tag state
+        if a valid bit is found but the cache misses we check the dirty bit to determine whether to go to write-back or allocate state  
+        if the cache line is clean, the data in the cache matches the memory, if you remove it you can throw it away, memory already has a copy
+        this means no write back is needed
+
+        otherwise if the dirty bit is set, the data in the cache has been modified and does not match memory, so we need to write it back to memory before allocating new data 
+    
+    compare tag:
+
+    write-back:
+
+    allocate:

@@ -1,4 +1,4 @@
-module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_RegWrite_O);
+module cpu(input wire clk, input wire rst, input wire regDump);
 
     localparam nop = 32'h13;
 
@@ -12,6 +12,11 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
     wire MemWrite;
     wire Branch;
 
+    //BTB wires
+    wire predict_taken;
+    wire [31:0] predict_target;
+    wire branch_resolved;
+
     //hazard regs
     wire PCWrite;
     wire IF_ID_Write;
@@ -22,102 +27,137 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
 
     wire [1:0] ALUOp;
     wire [3:0] ALUControl;
-    
-    //if/id pipeline
-    reg [31:0] IF_ID_PC;
-    reg [31:0] IF_ID_INSTRUCTION;
-    wire [4:0] ID_readData1 = IF_ID_INSTRUCTION[19:15];
-    wire [4:0] ID_readData2 = IF_ID_INSTRUCTION[24:20];
-    wire [4:0] ID_writeReg = IF_ID_INSTRUCTION[11:7];
-    wire [2:0] ID_funct3 = IF_ID_INSTRUCTION[14:12];
-    wire ID_funct7 = IF_ID_INSTRUCTION[30];
-
+    //ID Stage - in wires
+    wire [6:0] ID_opcode;
+    wire [4:0] ID_readData1;
+    wire [4:0] ID_readData2;
+    wire [4:0] ID_writeReg;
+    wire [2:0] ID_funct3;
+    wire ID_funct7;
+    wire [31:0] ID_instruction;
+    wire [31:0] ID_pc;
+    //ID Stage - out wires
     wire [31:0] ID_regOut1;
     wire [31:0] ID_regOut2;
     wire [31:0] ID_imm;
     wire [31:0] ID_jumpDest;
     wire ID_zero;
-    assign ID_jumpDest = IF_ID_PC + ID_imm;
+    wire ID_jalr;
+    wire ID_BranchTaken;
+    wire Jump;
+    wire [1:0] ID_WB;
+    wire [2:0] ID_M;
+    wire [3:0] ID_EXALU;
 
-    //id/ex pipeline
-    reg [31:0] ID_EX_PC;
-    reg [31:0] ID_EX_RD1;
-    reg [31:0] ID_EX_RD2;
-    reg [31:0] ID_EX_IMM;
 
-    reg [1:0] ID_EX_WB;//writeback stage: regWrite+memtoreg
-    reg [2:0] ID_EX_M;//memory access stage: branch + memRead + memWrite
-    reg [3:0] ID_EX_EX;//execution/address calculation stage: ALUOp[1:0] + ALUSrc
-    reg [2:0] ID_EX_F3;//funct3
-    reg ID_EX_JALR;
-    reg ID_EX_JUMP;
 
-    reg [4:0] ID_EX_readData1;
-    reg [4:0] ID_EX_readData2;
-    reg [4:0] ID_EX_writeReg;
+    assign ID_jumpDest = ID_pc + ID_imm;
+    assign ID_jalr = (ID_opcode==7'b1100111);//if SB-Type
+    assign ID_BranchTaken = Branch & ID_zero;
+    assign ID_WB = {RegWrite, MemtoReg};
+    assign ID_M = {Branch, MemRead, MemWrite};
+    assign ID_EXALU = {ALUOp, ALUSrc, ID_funct7};//4 bits
+ 
 
+    //EX Stage - in wires
+    wire [31:0] EX_regOut1;
+    wire [31:0] EX_regOut2;
+    wire [4:0] EX_readData1;
+    wire [4:0] EX_readData2;
+    wire [4:0] EX_writeReg;
+    wire [31:0] EX_imm;
+    wire [1:0] EX_WB;
+    wire [2:0] EX_funct3;
+    wire [2:0] EX_M;
+    wire [3:0] EX_EX;
+
+    //internal wires for EX Stage
     wire [31:0] EX_aluA;
     wire [31:0] EX_aluB;
+
     wire [31:0] EX_out;
     wire EX_zero;
-    //ex/mem pipeline
-    reg [31:0] EX_MEM_PC;
-    reg EX_MEM_JUMP;
-    reg [31:0] EX_MEM_OUT;//alu output
-    reg [31:0] EX_MEM_RD2;//goes to write data (data memory)
-    reg EX_MEM_ZERO;//zero flag
-    reg [4:0] EX_MEM_writeReg;
-
-    reg [1:0]EX_MEM_WB;
-    reg [2:0]EX_MEM_M;
-    
+    //i think wires are wrong
+    //MEM Stage - out wires
     wire [31:0] MEM_readData;
-
-    //mem/wb pipeline
-    reg [31:0] MEM_WB_RD;//data memory read dead
-    reg [31:0] MEM_WB_ALUOUT;
-    reg [1:0] MEM_WB_WB;
-    reg [4:0] MEM_WB_writeReg;
+    wire [31:0] MEM_out;
+    wire [31:0] MEM_regOut2;
+    wire [1:0] MEM_wb;
+    wire [4:0] MEM_writeReg;
+    wire [2:0] MEM_M;
+    //WB Stage - in wires
+    wire [31:0] WB_readData;
+    wire [31:0] WB_aluOut;
+    wire [1:0] WB_WB;
+    wire [4:0] WB_writeReg;
 
     wire [31:0] WB_writeData;
     wire WB_regWrite;
     wire WB_memToReg;
 
     wire alu_cout;//i need to do this eventually
-    wire Jump;
-    
-    equalityTestUnit equalityUnit(.a(ID_regOut1), .b(ID_regOut2), .zero(ID_zero));
 
-    //pc
+
+
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
-                          .branch(EX_MEM_M[2]), 
-                          .zero(EX_MEM_ZERO), 
+                          .branchTaken(ID_BranchTaken),
                           .jump(Jump), 
-                          .jumpDest(IF_ID_PC+ID_imm),
-                          .branchDest(EX_MEM_OUT), 
-                          .jumpBase(ID_EX_RD1), 
-                          .jalrFlag(ID_EX_JALR), 
+                          .jumpDest(ID_jumpDest),
+                          .jumpBase(ID_regOut1), 
+                          .jalrFlag(ID_jalr), 
                           .PCWrite(PCWrite),
-                          .pc(pc));
-    //instruction memory 
-    instructionMemory instrMem(.readAddress(pc), .instruction(instr_fetch));
-    
-    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(ID_EX_M[1]), .IF_ID_ReadData1(ID_readData1), .IF_ID_ReadData2(ID_readData2), .ID_EX_writeReg(ID_EX_writeReg), .IF_ID_Write(IF_ID_Write), .PCWrite(PCWrite), .muxSelect(muxSelect));
+                          .pc(pc)
+                        );
 
-    //control unit + immediate generator + regfile
-    regfile regFile(.clk(clk), 
-                    .rst(rst), 
-                    .readReg1(IF_ID_INSTRUCTION[19:15]), 
-                    .readReg2(ID_readData2), 
-                    .writeReg(MEM_WB_writeReg), 
-                    .writeData(WB_writeData), 
-                    .regDump(regDump),
-                    .regWrite(WB_regWrite), 
-                    .regOut1(ID_regOut1), 
-                    .regOut2(ID_regOut2));
+    BTB branchTargetBuffer(
+        .clk(clk),
+        .rst(rst),
+        .branch_resolved(branch_resolved),
+        .branch_taken(ID_BranchTaken),
+        .branch_pc(ID_pc),
+        .branch_target(ID_jumpDest),
+        .fetch_pc(pc),
+        .predict_taken(predict_taken),
+        .predict_target(predict_target)
+    )
 
-    controlUnit ctrlUnit(.instruction(IF_ID_INSTRUCTION[6:0]), 
+    instructionMemory instrMem(.readAddress(pc), 
+                               .instruction(instr_fetch)
+                            );
+                            
+
+    hazardDetectionUnit hazardUnit(.ID_EX_MemRead(EX_M[1]), 
+                                   .IF_ID_ReadData1(ID_readData1), 
+                                   .IF_ID_ReadData2(ID_readData2), 
+                                   .ID_EX_writeReg(EX_writeReg), 
+                                   .IF_ID_Write(IF_ID_Write), 
+                                   .PCWrite(PCWrite), 
+                                   .muxSelect(muxSelect)
+                                );
+
+    IF_ID IF_ID_pipeline(.clk(clk),
+                         .rst(rst),
+                         .IF_pc(pc), 
+                         .IF_ID_Write(IF_ID_Write),
+                         .Jump(Jump),
+                         .IF_instruction(instr_fetch), 
+                         .readData1(ID_readData1), 
+                         .readData2(ID_readData2), 
+                         .writeReg(ID_writeReg), 
+                         .ID_pc(ID_pc),
+                         .opcode(ID_opcode),
+                         .funct3(ID_funct3), 
+                         .funct7(ID_funct7),
+                         .ID_instruction(ID_instruction)
+                        );
+
+    immgen immediateGen(.IF_ID_INSTRUCTION(ID_instruction), 
+                        .immgenOut(ID_imm)
+                    );
+
+    controlUnit ctrlUnit(
+                         .instruction(ID_opcode), 
                          .Branch(Branch), 
                          .MemRead(MemRead), 
                          .MemtoReg(MemtoReg), 
@@ -125,33 +165,76 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
                          .MemWrite(MemWrite),
                          .ALUSrc(ALUSrc), 
                          .RegWrite(RegWrite), 
-                         .Jump(Jump));
+                         .Jump(Jump)
+                        );
 
-    immgen immediateGen(.IF_ID_INSTRUCTION(IF_ID_INSTRUCTION), 
-                        .immgenOut(ID_imm));
-    
-    forwardingUnit FUnit(.ID_EX_readData1(ID_EX_readData1), 
-                         .ID_EX_readData2(ID_EX_readData2), 
-                         .EX_MEM_writeReg(EX_MEM_writeReg), 
-                         .EX_MEM_regWrite(EX_MEM_WB[1]), 
-                         .MEM_WB_writeReg(MEM_WB_writeReg),
-                         .MEM_WB_regWrite(MEM_WB_WB[1]), 
+    regfile regFile(.clk(clk), 
+                .rst(rst), 
+                .readReg1(ID_readData1), 
+                .readReg2(ID_readData2), 
+                .writeReg(WB_writeReg), 
+                .writeData(WB_writeData), 
+                .regDump(regDump),
+                .regWrite(WB_regWrite), 
+                .regOut1(ID_regOut1), 
+                .regOut2(ID_regOut2)
+            );
+
+    equalityTestUnit equalityUnit(.a(ID_regOut1), 
+                                  .b(ID_regOut2), 
+                                  .funct3(ID_funct3), 
+                                  .zero(ID_zero)
+                                );
+
+    ID_EX ID_EX_pipeline(.clk(clk),
+                         .rst(rst),
+                         .muxSelect(muxSelect),
+                         .ID_regOut1(ID_regOut1),
+                         .ID_regOut2(ID_regOut2),
+                         .ID_readData1(ID_readData1),
+                         .ID_readData2(ID_readData2),
+                         .ID_writeReg(ID_writeReg),
+                         .ID_pc(ID_pc),
+                         .ID_imm(ID_imm),
+                         .ID_WB(ID_WB),
+                         .ID_M(ID_M),
+                         .ID_EXALU(ID_EXALU),
+                         .ID_F3(ID_funct3),
+                         .EX_imm(EX_imm),
+                         .EX_regOut1(EX_regOut1),
+                         .EX_regOut2(EX_regOut2),
+                         .EX_readData1(EX_readData1),
+                         .EX_readData2(EX_readData2),
+                         .EX_writeReg(EX_writeReg),
+                         .EX_WB(EX_WB),
+                         .EX_M(EX_M),
+                         .EX_EX(EX_EX),
+                         .EX_F3(EX_funct3)
+                        );
+
+    forwardingUnit FUnit(.ID_EX_readData1(EX_readData1), 
+                         .ID_EX_readData2(EX_readData2),
+                         .EX_MEM_writeReg(MEM_writeReg), 
+                         .EX_MEM_regWrite(MEM_wb[1]), 
+                         .MEM_WB_writeReg(WB_writeReg),
+                         .MEM_WB_regWrite(WB_WB[1]), 
                          .ForwardA(ForwardA), 
-                         .ForwardB(ForwardB));
+                         .ForwardB(ForwardB)
+                        );
     
     //Mux A and B seen on Page 577 of Patterson
-    assign EX_aluA = (ForwardA == 2'b10) ? EX_MEM_OUT:
+    assign EX_aluA = (ForwardA == 2'b10) ? MEM_out:
                      (ForwardA == 2'b01) ? WB_writeData:
-                     ID_EX_RD1;
+                     EX_regOut1;
     
-    assign EX_aluB = ID_EX_EX[1] ? ID_EX_IMM : 
-                    (ForwardB == 2'b10) ? EX_MEM_OUT:
+    assign EX_aluB = EX_EX[1] ? EX_imm : 
+                    (ForwardB == 2'b10) ? MEM_out:
                     (ForwardB == 2'b01) ? WB_writeData: 
-                    ID_EX_RD2;
+                    EX_regOut2;
 
-    aluControl aluCtrlUnit(.ALUOp(ID_EX_EX[3:2]), 
-                           .funct3(ID_EX_F3), 
-                           .funct7(ID_EX_EX[0]), 
+    aluControl aluCtrlUnit(.ALUOp(EX_EX[3:2]), 
+                           .funct3(EX_funct3), 
+                           .funct7(EX_EX[0]), 
                            .ALUControl(ALUControl));
     alu32 alu(.a(EX_aluA), 
               .b(EX_aluB), 
@@ -160,95 +243,41 @@ module cpu(input wire clk, input wire rst, input wire regDump,output wire WB_Reg
               .zero(EX_zero), 
               .cout(alu_cout));
     
+    EX_MEM EX_MEM_pipeline(.clk(clk),
+                           .rst(rst),
+                           .EX_out(EX_out),
+                           .EX_aluB(EX_aluB),
+                           .EX_writeReg(EX_writeReg),
+                           .EX_WB(EX_WB),
+                           .EX_M(EX_M),
+                           .MEM_OUT(MEM_out),
+                           .MEM_RD2(MEM_regOut2),
+                           .MEM_writeReg(MEM_writeReg),
+                           .MEM_WB(MEM_wb),
+                           .MEM_M(MEM_M)
+    );
+
     //data memory instance
     dataMemory dataMem(.clk(clk), 
-                       .MemWrite(EX_MEM_M[0]), 
-                       .MemRead(EX_MEM_M[1]), 
-                       .address(EX_MEM_OUT), 
-                       .writeData(EX_MEM_RD2), 
+                       .MemWrite(MEM_M[0]), 
+                       .MemRead(MEM_M[1]), 
+                       .address(MEM_out), 
+                       .writeData(MEM_regOut2), 
                        .readData(MEM_readData));
 
-    assign WB_memToReg = MEM_WB_WB[0];
-    assign WB_regWrite = MEM_WB_WB[1];
-    assign WB_writeData = (WB_memToReg) ? MEM_WB_RD : MEM_WB_ALUOUT;
-    assign WB_RegWrite_O = WB_regWrite; 
-    //IF/ID
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            IF_ID_PC <= 0;
-            IF_ID_INSTRUCTION <= nop;    
-        end else if (IF_ID_Write) begin
-            IF_ID_PC <= pc;
-            IF_ID_INSTRUCTION <= (Jump) ? nop : instr_fetch;
-        end
-    end
-    //ID/EX
-    always @(posedge clk or posedge rst) begin
-        if (rst || muxSelect) begin
-            ID_EX_PC <= 0;
-            ID_EX_RD1 <= 0;
-            ID_EX_RD2 <= 0;
-            ID_EX_IMM <= 0;
-            ID_EX_WB <= 0;
-            ID_EX_M <= 0;
-            ID_EX_EX <= 0;
-            ID_EX_F3 <= 0;
-            ID_EX_JUMP <= 0;
-            ID_EX_readData1 <= 0;
-            ID_EX_readData2 <= 0;
-            ID_EX_JALR <= 0;
-            ID_EX_writeReg <= 0;
-        end else begin
-            ID_EX_PC <= IF_ID_PC;
-            ID_EX_RD1 <= ID_regOut1;
-            ID_EX_RD2 <= ID_regOut2;
-            ID_EX_IMM <= ID_imm;
-            ID_EX_JUMP <= Jump;
-            ID_EX_WB <= {RegWrite, MemtoReg};
-            ID_EX_M <= {Branch, MemRead, MemWrite};
-            ID_EX_EX <= {ALUOp, ALUSrc, ID_funct7};
-            ID_EX_F3 <= ID_funct3;
-            ID_EX_JALR <= (IF_ID_INSTRUCTION[6:0] == 7'b1100111);
-            ID_EX_readData1 <= ID_readData1;
-            ID_EX_readData2 <= ID_readData2;
-            ID_EX_writeReg <= ID_writeReg;
-        end
-    end
-    //EX/MEM
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            EX_MEM_PC <= 0;
-            EX_MEM_OUT <= 0;
-            EX_MEM_RD2 <= 0;
-            EX_MEM_ZERO <= 0;
-            EX_MEM_JUMP <= 0;
-            EX_MEM_writeReg <= 0;
-            EX_MEM_WB <= 0;
-            EX_MEM_M <= 0;
-        end else begin
-            EX_MEM_PC <= ID_EX_PC;
-            EX_MEM_OUT <= EX_out;
-            EX_MEM_RD2 <= EX_aluB;
-            EX_MEM_JUMP <= ID_EX_JUMP;
-            EX_MEM_ZERO <= EX_zero;
-            EX_MEM_writeReg <= ID_EX_writeReg;
-            EX_MEM_WB <= ID_EX_WB;
-            EX_MEM_M <= ID_EX_M;
-        end
-    end
-    //MEM/WB
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            MEM_WB_RD  <= 0;
-            MEM_WB_ALUOUT <= 0;
-            MEM_WB_WB <= 0;
-            MEM_WB_writeReg <= 0;
-        end else begin
-            MEM_WB_RD <= MEM_readData;
-            MEM_WB_ALUOUT <= EX_MEM_OUT;
-            MEM_WB_WB <= EX_MEM_WB;
-            MEM_WB_writeReg <= EX_MEM_writeReg;
-            
-        end
-    end
+    MEM_WB MEM_WB_pipeline(.clk(clk),
+                           .rst(rst),
+                           .MEM_readData(MEM_readData),
+                           .MEM_OUT(MEM_out),
+                           .MEM_writeReg(MEM_writeReg),
+                           .MEM_WB(MEM_wb),//lowercase to not mess up function
+                           .WB_RD(WB_readData),
+                           .WB_ALUOUT(WB_aluOut),
+                           .WB_WB(WB_WB),
+                           .WB_writeReg(WB_writeReg)
+    );
+
+    assign WB_memToReg = WB_WB[0];
+    assign WB_regWrite = WB_WB[1];
+    assign WB_writeData = (WB_memToReg) ? WB_readData : WB_aluOut;
 endmodule

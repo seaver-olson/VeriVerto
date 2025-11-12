@@ -32,4 +32,5 @@ module dataMemory(
     //this is almost 100% breaking the output of my program by flushing negative numbers at a edge case so come back later 
     assign readData =   (MemRead) ? {memory[address[15:0]+3], memory[address[15:0]+2], memory[address[15:0]+1], memory[address[15:0]]}
                         : 32'b0;
+                        
 endmodule

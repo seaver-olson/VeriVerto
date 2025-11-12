@@ -1,83 +1,77 @@
-# vsim tb_cpu 
-# Start time: 13:23:19 on Oct 22,2025
-# Loading work.tb_cpu
-# Loading work.cpu
-# Loading work.equalityTestUnit
-# Loading work.pcUnit
-# Loading work.instructionMemory
-# Loading work.hazardDetectionUnit
-# Loading work.regfile
-# Loading work.controlUnit
-# Loading work.immgen
-# Loading work.forwardingUnit
-# Loading work.aluControl
-# Loading work.alu32
-# Loading work.barrelShifter
-# Loading work.oneBit
-# Loading work.dataMemory
-add wave -position end sim:/tb_cpu/dut/*
+# vsim BTB_tb 
+# Start time: 15:30:23 on Nov 10,2025
+# Loading work.BTB_tb
+# Loading work.BTB
+# ** Warning: (vsim-3013) A parameter override is not allowed for localparam 'BTB_tb.dut.ENTRIES'.
+#    Time: 0 ps  Iteration: 0  Instance: /BTB_tb File: ./tb/btb_tb.v
+# ** Warning: (vsim-3013) A parameter override is not allowed for localparam 'BTB_tb.dut.ENTRIES'.
+#    Time: 0 ps  Iteration: 0  Instance: /BTB_tb File: ./tb/btb_tb.v
+add wave -position end sim:/BTB_tb/dut/*
 # ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
 #           File in use by: sjols  Hostname: SEAVER-PC  ProcessID: 35620
-#           Attempting to use alternate WLF file "./wlft6wsgjc".
+#           Attempting to use alternate WLF file "./wlft43gvv8".
 # ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
-#           Using alternate file: ./wlft6wsgjc
+#           Using alternate file: ./wlft43gvv8
+run
+# ==== BTB TEST BEGIN ====
 run
 run
 run
 run
 run
 run
-run
-run
-run
-# NonExposed Address: 0000001c
 # 
-run
-# NonExposed Address: 00000018
+# [Test 1] Insert PC=0x1000 -> Target=0x2000 (taken)
+# Predict_taken=0  Predict_target=00000000
 # 
+# [Test 3] Strengthen prediction (multiple taken)
 run
-run
-run
-run
-run
-run
-run
-run
-run
-run
-# NonExposed Address: 0000002c
+# After training: Predict_taken=1 Target=00002000
 # 
+# [Test 4] Train NOT taken several times
 run
-# NonExposed Address: 00000028
+# After not-taken training: Predict_taken=0
 # 
+# [Test 5] Fill BTB to cause replacement
 run
 run
 run
+# BTB should now have tested replacement.
+# Predict_taken=0 Predict_target=00000000
+# 
+# ==== BTB TEST COMPLETE ====
 run
-# NonExposed Address: 0000003c
+# ** Note: $finish    : ./tb/btb_tb.v(128)
+#    Time: 630 ns  Iteration: 0  Instance: /BTB_tb
+# 1
+# Break in Module BTB_tb at ./tb/btb_tb.v line 128
+restart
+# Closing VCD file "btb_tb.vcd"
+# ** Note: (vsim-12125) Error and warning message counts have been reset to '0' because of 'restart'.
+# ** Warning: (vsim-3013) A parameter override is not allowed for localparam 'BTB_tb.dut.ENTRIES'.
+#    Time: 0 ps  Iteration: 0  Instance: /BTB_tb File: ./tb/btb_tb.v
+# ** Warning: (vsim-3013) A parameter override is not allowed for localparam 'BTB_tb.dut.ENTRIES'.
+#    Time: 0 ps  Iteration: 0  Instance: /BTB_tb File: ./tb/btb_tb.v
+run -all
+# ==== BTB TEST BEGIN ====
 # 
-# NonExposed Address: 00000038
+# [Test 1] Insert PC=0x1000 -> Target=0x2000 (taken)
+# Predict_taken=0  Predict_target=00000000
 # 
-run
-# NonExposed Address: 0000004c
+# [Test 3] Strengthen prediction (multiple taken)
+# After training: Predict_taken=1 Target=00002000
 # 
-# NonExposed Address: 00000048
+# [Test 4] Train NOT taken several times
+# After not-taken training: Predict_taken=0
 # 
-run
-# NonExposed Address: 0000005c
+# [Test 5] Fill BTB to cause replacement
+# BTB should now have tested replacement.
+# Predict_taken=0 Predict_target=00000000
 # 
-# NonExposed Address: 00000058
-# 
-run
-# NonExposed Address: 0000006c
-# 
-run
-# NonExposed Address: 00000068
-# 
-run
-# NonExposed Address: 0000007c
-# 
-# NonExposed Address: 00000078
-# 
-# End time: 13:24:20 on Oct 22,2025, Elapsed time: 0:01:01
+# ==== BTB TEST COMPLETE ====
+# ** Note: $finish    : ./tb/btb_tb.v(128)
+#    Time: 630 ns  Iteration: 0  Instance: /BTB_tb
+# 1
+# Break in Module BTB_tb at ./tb/btb_tb.v line 128
+# End time: 15:33:11 on Nov 10,2025, Elapsed time: 0:02:48
 # Errors: 0, Warnings: 2

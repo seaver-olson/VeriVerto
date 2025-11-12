@@ -1,0 +1,11 @@
+Full-Associative L1-L2 Cache System Notes
+
+L1_ROM_Cache:
+	Inputs: 
+		clk, rst
+		32-bit Address 
+		1-bit read Signal
+		1-bit valid Signal
+	Output:
+		32-bit Cache Data
+		1-bit cache data ready signal
