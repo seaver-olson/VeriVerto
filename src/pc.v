@@ -8,6 +8,7 @@ module pcUnit(
     input wire [31:0] jumpBase, //JALR requires a base add from regOut1
     input wire jalrFlag,
     input wire PCWrite,
+    output wire branch_resolved,
     output reg [31:0] pc
 );  
     wire [31:0] pcPlus4;
@@ -20,6 +21,8 @@ module pcUnit(
     assign pcNext = jalrFlag   ? jalrTarget :
                     (jump | branchTaken) ? jumpDest :
                     pcPlus4;
+    
+    assign branch_resolved = (jump | branch_taken | jalrFlag);
 
     always @(posedge clk or posedge rst) begin
         if (rst) begin

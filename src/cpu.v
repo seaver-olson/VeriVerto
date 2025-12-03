@@ -97,8 +97,6 @@ module cpu(input wire clk, input wire rst, input wire regDump);
 
     wire alu_cout;//i need to do this eventually
 
-
-
     pcUnit programCounter(.clk(clk), 
                           .rst(rst), 
                           .branchTaken(ID_BranchTaken),
@@ -107,6 +105,7 @@ module cpu(input wire clk, input wire rst, input wire regDump);
                           .jumpBase(ID_regOut1), 
                           .jalrFlag(ID_jalr), 
                           .PCWrite(PCWrite),
+                          .branch_resolved(branch_resolved),
                           .pc(pc)
                         );
 
